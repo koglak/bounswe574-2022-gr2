@@ -26,7 +26,7 @@ Topics
 Steps to Fulfill lecture Instructions
 -----
 
-## Week1:
+### Week1:
 
 <em> Due Date: 8.03.2022 </em> 
 
