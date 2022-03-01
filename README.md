@@ -14,12 +14,19 @@ Topics
 -----
 
 <strong> 1. Week1: </strong> Introduction, Logistics, Overview
+
 <strong> 2. Week2: </strong> Effective use of Software Development Tools
+
 <strong> 3. Week3: </strong> Requirements Specificaiton - Elicitation and SRS preperation
+
 <strong> 4. Week4: </strong> Plan - Work, Milestones, Deliverables
+
 <strong> 5. Week5: </strong> Design: Use case, Class and Sequence diagrams
+
 <strong> 6. Week6: </strong> Implementation: Continuous implementation with proper practices
+
 <strong> 7. Week7: </strong> Testing: User Testing
+
 <strong> 8. Week8: </strong> Virtualization and Deployment
 
 
