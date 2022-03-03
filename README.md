@@ -35,16 +35,18 @@ Weekly Assignments and Due Dates
 
 ### Week1:
 
-Learning git and API test for Wikidata
+**Assignment:** Learning git and API test for Wikidata
+
+**Results:** Check Wiki to learn more what I did! <a href="https://github.com/koglak/SWE573/wiki/SWE573-Week1-Assignment"> Week1 Wiki </a>
 
 <em> Due Date: 8.03.2022 </em> 
-
 
 
 Bibliography
 -----
 
 * [How to Write a Good README File for Your GitHub Project](https://www.freecodecamp.org/news/how-to-write-a-good-readme-file/)
+* [Wiki Markdown Guide](https://daringfireball.net/projects/markdown/syntax#em)
  
 
 ![image](https://cdn.quotesgram.com/img/35/5/1422804884-untitled6.jpg)
