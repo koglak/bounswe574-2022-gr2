@@ -37,23 +37,7 @@ Steps to Fulfill lecture Instructions
 
 <em> Due Date: 8.03.2022 </em> 
 
-1. Create a GitHub repository.
 
-2. Include the GitHub repository on our course gitlab.
-
-3. Modify the readme part of your repository to describe the nature of your repository.
-
-4. Customize the “issues” by specializing them, such as the types and colors of tags.
-
-5. Create issues and assign them to yourself.
-
-6. Create a page to document the following research you will perform:
-
-    • Study git as a version management system. There are many guides and videos you can watch. I recommend Git For Ages 4 And Up (https://youtu.be/1ffBJ4sVUb4). It is long, but very good.
-    
-    • Examine Wikidata (https://www.wikidata.org). Perform some tests with its API.
-    
-    • Document what you have learned by creating a research section of your GitHub repository. Use Wiki Markdown language and use your own words!
 
 Bibliography
 -----
