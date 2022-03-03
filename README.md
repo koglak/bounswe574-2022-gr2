@@ -6,7 +6,7 @@ This file has been created as guide for the project.
 Overview
 -----
 
-Welcome to my repository! 
+<span style="color:green"> Welcome to my repository! </span>
 
 This is a guidance that I will complete whole instructions of the lecture throughout the semester. 
 
