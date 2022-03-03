@@ -36,6 +36,7 @@ Weekly Assignments and Due Dates
 ### Week1:
 
 Learning git and API test for Wikidata
+
 <em> Due Date: 8.03.2022 </em> 
 
 
