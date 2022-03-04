@@ -6,7 +6,7 @@ This file has been created as guide for the project.
 Overview
 -----
 
-**Welcome to my repository! 🥳 **
+**Welcome to my repository!**  🥳
 
 This is a guidance that I will complete whole instructions of the lecture throughout the semester. 
 
