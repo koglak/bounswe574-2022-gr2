@@ -42,11 +42,3 @@ Weekly Assignments and Due Dates
 <em> Due Date: 8.03.2022 </em> 
 
 
-Bibliography
------
-
-* [How to Write a Good README File for Your GitHub Project](https://www.freecodecamp.org/news/how-to-write-a-good-readme-file/)
-* [Wiki Markdown Guide](https://daringfireball.net/projects/markdown/syntax#em)
- 
-
-![image](https://cdn.quotesgram.com/img/35/5/1422804884-untitled6.jpg)
