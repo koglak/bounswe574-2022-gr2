@@ -21,17 +21,17 @@
             <div class="row">
                 <div class="col">
 
-
+                    
                     {% block content %}
-                        {% for post in posts %}
-                            <article class="post">
-                                <time class="date">
-                                    {{ post.published_date }}
-                                </time>
-                                <h2><a href="{% url 'post_detail' pk=post.pk %}">{{ post.title }}</a></h2>
-                                <p>{{ post.text|linebreaksbr }}</p>
-                            </article>
-                        {% endfor %}
+                    <article class="post">
+                        {% if post.published_date %}
+                            <time class="date">
+                                {{ post.published_date }}
+                            </time>
+                        {% endif %}
+                        <h2>{{ post.title }}</h2>
+                        <p>{{ post.text|linebreaksbr }}</p>
+                    </article>
                     {% endblock %}
                 </div>
             </div>
