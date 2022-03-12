@@ -8,7 +8,7 @@ from django.utils import timezone
 
 # Class is special keyword to define object
 # Post is name of our model - start uppercase
-#  models.Model defines it as Django model and save to db
+# models.Model defines it as Django model and save to db
 class Post(models.Model):
    
     # link to another model
