@@ -30,15 +30,4 @@ Topics
 <strong> Week8: </strong> Virtualization and Deployment
 
 
-Weekly Assignments and Due Dates
------
-
-### Week1:
-
-**Assignment:** Learning git and API test for Wikidata, More Detail: <a href="https://github.com/koglak/SWE573/wiki/SWE573-Assignments"> Assignments </a>
-
-**Results:** Check Wiki to learn more what I did! <a href="https://github.com/koglak/SWE573/wiki/SWE573-Week1-Assignment"> Week1 Wiki </a>
-
-<em> Due Date: 8.03.2022 </em> 
-
 ![Image](https://www.channelfutures.com/files/2020/12/Welcome-stick-figures-1-877x432.jpg)
