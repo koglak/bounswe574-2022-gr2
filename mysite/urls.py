@@ -15,11 +15,14 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from register import views as v
 
 # This line means that for every URL that starts with admin/, Django will find a corresponding view.
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('register/',v.register, name="register"),
     path('', include('blog.urls')),
+    path('', include("django.contrib.auth.urls")),
 
 ]
