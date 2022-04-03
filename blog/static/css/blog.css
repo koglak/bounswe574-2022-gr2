@@ -1,7 +1,10 @@
+
+/*
 body {
     padding-left: 15px;
-    background-color: #EBE8E7;
+    background-color: white;
 }
+
 
 .page-header {
     background-color: #388087;
@@ -34,7 +37,7 @@ h4 {
 }
 
 .date {
-    color: #828282;
+    color: white;
 }
 
 .save {
@@ -109,13 +112,35 @@ h4 {
 
   .top-menu:hover{
     transform: scale(1.33);
-    /* animation-play-state: paused; */
   }
   
   .top-menu{
     animation: pulse 2s;
   }
+*/
+  
+.main{
+    margin-left: 100px;
+    padding: 0px 5px;
+}
 
-  nav a{
-      
-  }
+.brand{
+    width: 207px;
+    height: 48px;
+    left: 71px;
+    top: 25px;
+
+    font-family: 'Mogra';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 36px;
+    line-height: 48px;
+    /* identical to box height, or 133% */
+
+    display: flex;
+    align-items: center;
+    letter-spacing: 0.02em;
+
+    color: #000000;
+}
+

@@ -1,0 +1,46 @@
+.main{
+    margin-left: 100px;
+    padding: 0px 5px;
+}
+
+.block{
+    padding:0px 10px;
+    margin:0px;
+    text-align: center;
+    bottom: -0.2px;
+    
+
+}
+
+.navbar-nav a{
+    font-family: 'Poppins' !important;
+}
+
+.brand{
+    display: inline-block;
+    line-height: 0.65em;
+    margin:0px;
+    padding:0px;
+    font-family: 'Mogra';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 36px;
+    /* identical to box height, or 133% */
+    color: #000000;
+}
+
+.brand_label{
+    font-family: 'Roboto Mono';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 12px;
+    /* identical to box height, or 400% */
+    display: inline-block;
+    line-height: 0.1em;
+    color: #000000;
+    margin:0px;
+ 
+}
+
+
+
