@@ -1,0 +1,48 @@
+{% extends 'blog/base.html' %}
+
+{% block title %}
+    Helloworld - Questions
+{% endblock %}
+
+{% block content %}
+
+    {% for post in posts %}
+        <div class="container bootstrap snippets bootdey">
+            <div class="row">
+                <div class="post-list">
+                    <div class="row">
+                        <div class="col-sm-1">
+                            <div class="d-flex flex-start align-items-center">
+                                <img class="rounded-circle shadow-1-strong me-3"
+                                src="https://i.pinimg.com/564x/a6/58/32/a65832155622ac173337874f02b218fb.jpg" alt="avatar" width="60"
+                                height="60" />
+                            </div>
+                        </div>
+                        <div class="col-sm-9">
+                            <h4>
+                                <a hre="#" class="post-author">{{post.author}}</a>
+                            </h4>
+                        </div>
+                        <div class="col-sm-2">
+                            <date> 
+                                {{ post.published_date }}
+                            </date>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <a href="{% url 'question_detail' pk=post.pk %}" class="post-title">{{ post.title }}</a>
+                        <p class="post-text">{{post.text|linebreaksbr}}</p>    
+                    </div>
+                    <div class="row post-footer", style="padding: 4px" >
+                        <form action="{% url 'like_post_list' %}" method="POST">
+                            {% csrf_token %}
+                                <button type="submit", name="post_id", value="{{post.id}}", class="btn btn-outline-primary btn-sm" >Like</button>
+                                <p style="display: inline; font-weight: bold;">{{post.total_likes}}</p>
+                        </form>
+                    </div>                        
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+    
+{% endblock %}

@@ -4,6 +4,7 @@ from django.db import models
 
 from django.conf import settings
 from django.utils import timezone
+from django.contrib.auth.models import User
 
 
 # Class is special keyword to define object
@@ -23,7 +24,10 @@ class Post(models.Model):
     # type is date and time
     created_date = models.DateTimeField(default=timezone.now)
     published_date=models.DateTimeField(blank=True, null=True)
+    likes = models.ManyToManyField(User, related_name='blog_post')
 
+    def total_likes(self):
+        return self.likes.count()
 
     # use lowercase for methods' name
     def publish(self):
@@ -34,4 +38,11 @@ class Post(models.Model):
     def __str__(self):
         return self.title
 
+class Answer(models.Model):
+    post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name="answers")
+    name = models.CharField(max_length=255)
+    body = models.TextField()
+    date_added = models.DateTimeField(auto_now_add=True)
 
+    def __str__(self):
+        return '%s - %s' % (self.post.title, self.name)

@@ -1,22 +1,25 @@
+from django.http import HttpResponseRedirect
 from django.shortcuts import render
-from .models import Post
+from .models import Answer, Post
 from django.utils import timezone
 from django.shortcuts import render, get_object_or_404
-from .forms import PostForm
+from .forms import PostForm, AnswerForm
 from django.shortcuts import redirect
+from django.urls import reverse,reverse_lazy
 
 
 
 # Create your views here.
-def post_list(request):
+def question(request):
     posts=Post.objects.filter(published_date__lte=timezone.now()).order_by('published_date')
-    return render(request, 'blog/post_list.html', {'posts': posts})
+    return render(request, 'blog/question_list.html', {'posts': posts})
 
-def post_detail(request, pk):
+def question_detail(request, pk):
     post = get_object_or_404(Post, pk=pk)
-    return render(request, 'blog/post_detail.html', {'post': post})
+    form = AnswerForm(request.POST)
+    return render(request, 'blog/question_detail.html', {'post': post, "form":form})
 
-def post_new(request):
+def question_new(request):
     if request.method == "POST":
         form = PostForm(request.POST)
         if form.is_valid():
@@ -24,13 +27,13 @@ def post_new(request):
             post.author = request.user
             post.published_date = timezone.now()
             post.save()
-            return redirect('post_detail', pk=post.pk)
+            return redirect('question_detail', pk=post.pk)
     else:
         form = PostForm()
-    return render(request, 'blog/post_edit.html', {'form': form})
+    return render(request, 'blog/question_edit.html', {'form': form})
 
 
-def post_edit(request, pk):
+def question_edit(request, pk):
     post = get_object_or_404(Post, pk=pk)
     if request.method == "POST":
         form = PostForm(request.POST, instance=post)
@@ -39,8 +42,22 @@ def post_edit(request, pk):
             post.author = request.user
             post.published_date = timezone.now()
             post.save()
-            return redirect('post_detail', pk=post.pk)
+            return redirect('question_detail', pk=post.pk)
     else:
         form = PostForm(instance=post)
-    return render(request, 'blog/post_edit.html', {'form': form})
+    return render(request, 'blog/question_edit.html', {'form': form})
 
+def home(response):
+    return render(response, "blog/home.html", {})
+
+
+
+def LikeView(request, pk):
+    post = get_object_or_404(Post, id=request.POST.get('post_id'))
+    post.likes.add(request.user)
+    return redirect('question_detail', pk=pk)
+
+def LikeViewList(request):
+    post = get_object_or_404(Post, id=request.POST.get('post_id'))
+    post.likes.add(request.user)
+    return redirect('question')
