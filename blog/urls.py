@@ -8,7 +8,9 @@ urlpatterns = [
     path('question/<int:pk>/edit/', views.question_edit, name='question_edit'),
     path('question/', views.question, name='question'),
     path('like/<int:pk>', views.LikeView, name='like_post'),
-    path('like/question', views.LikeViewList, name='like_post_list')
+    path('like/question', views.LikeViewList, name='like_post_list'),
+    path('dislike/<int:pk>', views.DislikeView, name='dislike_post'),
+    path('dislike/question', views.DislikeViewList, name='dislike_post_list'),
 
 
 ]

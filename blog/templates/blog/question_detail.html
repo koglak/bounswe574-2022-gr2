@@ -16,12 +16,11 @@
                   <img class="rounded-circle shadow-1-strong me-3"
                       src="https://i.pinimg.com/564x/a6/58/32/a65832155622ac173337874f02b218fb.jpg" alt="avatar" width="60"
                       height="60" />
-                  </div>
                 </div>
+              </div>
             <div class="col-sm-9">
-                  <h4>
-                      <a hre="#" class="post-author">{{post.author}}</a>
-                  </h4>
+                  <a href="#" class="post-author" style="font-family: 'Poppins';font-size:18px; font-weight: 600px; margin-right:5px">{{post.author}}</a>
+                  <a href="#" class="link-success" style="font-family: 'Poppins';font-style: normal;font-weight: 800;font-size: 16px;">Follow</a>
             </div>
             <div class="col-sm-2">
                 {% if post.published_date %}
@@ -29,7 +28,7 @@
                     {{ post.published_date }}
                   </date>
                 {% endif %}
-          </div>
+           </div>
           </div>
           <div class="row">
                 <aside class="actions">
@@ -39,19 +38,32 @@
                           {% include './icons/pencil-fill.svg' %}
                       </a>
                   {% endif %}
-              </aside>
-              <p class="post-text">{{post.text|linebreaksbr}}</p>    
-            </div>
-            <div class="row post-footer", style="padding: 4px" >
-                <form action="{% url 'like_post_list' %}" method="POST">
-                    {% csrf_token %}
-                        <button type="submit", name="post_id", value="{{post.id}}", class="btn btn-outline-primary btn-sm" >Like</button>
-                        <p style="display: inline; font-weight: bold;">{{post.total_likes}}</p>
-                </form>
-            </div>    
+                </aside>
+                <p class="post-text">{{post.text|linebreaksbr}}</p>    
           </div>
-      </div>
-  </div>
+          <div class="row", style="padding: 4px; background: rgba(196, 196, 196, 0.22); margin-top:5px" >
+            <div class="col-sm-1 col-lg-1 col-xl-1">
+              <form action="{% url 'like_post' pk=post.pk %}" method="POST">
+                  {% csrf_token %}
+                      <button type="submit", name="post_id", value="{{post.id}}", class="btn btn-outline-primary btn-sm" >Like</button>
+                      <p style="display: inline; font-weight: bold;">{{post.total_likes}}</p>
+              </form>
+            </div>
+            <div class="col-sm-1 col-lg-1 col-xl-1">
+              <form action="{% url 'dislike_post' pk=post.pk %}" method="POST">
+                {% csrf_token %}
+                    <button type="submit", name="post_id", value="{{post.id}}", class="btn btn-outline-warning btn-sm" >Dislike</button>
+                    <p style="display: inline; font-weight: bold;">{{post.total_dislikes}}</p>
+              </form>
+            </div>
+            <div class="col-sm-1 col-lg-1 col-xl-2">
+              <a class="btn btn-outline-secondary btn-sm"  href="#" role="button">Comment</a>
+              <p style="display: inline; font-weight: bold;">{{post.answers.count}}</p>
+            </div>
+          </div>    
+        </div>
+</div>
+
 
     <hr>
 
@@ -64,7 +76,7 @@
                 <div class="card-body">
 
                     {% if not post.answers.all %}
-                        No Comments Yet ... <a href="#">Add One!</a>
+                        No Comments Yet ... 
                     {% else %}
                         {% for answer in post.answers.all %}
                             <div class="d-flex flex-start align-items-center">
@@ -86,7 +98,9 @@
                                         </p>
                         {% endfor %}
                     {% endif %}
-      
+                  
+                  {% if post.answers.all %}
+
                   <div class="small d-flex justify-content-start">
                     <a href="#!" class="d-flex align-items-center me-3">
                       <i class="far fa-thumbs-up me-2"></i>
@@ -101,6 +115,8 @@
                       <p class="mb-0">Share</p>
                     </a>
                   </div>
+
+                  {% endif %}
                 </div>
                 <div class="card-footer py-3 border-0" style="background-color: #f8f9fa;">
                   <div class="d-flex flex-start w-100">

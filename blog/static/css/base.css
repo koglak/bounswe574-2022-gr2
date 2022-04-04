@@ -119,5 +119,6 @@ date{
 
 .post-footer{
     background: rgba(196, 196, 196, 0.22);
-    
+    float:left;
+    margin-top: 10x;
 }

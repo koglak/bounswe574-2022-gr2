@@ -6,11 +6,29 @@
 
 {% block content %}
 
+
+<!-- Search and create new question button-->
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-sm-4">
+                <form class="form-inline my-2 my-lg-0" style="margin:15px;padding-top: 20px;">
+                    <input class="form-control mr-sm-2" style="width:250px; float:left; margin-right:10px" type="search" placeholder="Search" aria-label="Search">
+                    <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+                </form>
+            </div>
+            <div class="col-sm-3" style="padding-top: 20px;">
+                <a class="btn btn-success" href="{% url 'question_new' %}" role="button">Ask A Question!</a>
+            </div>
+        </div>
+    </div>
+ 
+<!--Questions are listed-->
     {% for post in posts %}
         <div class="container bootstrap snippets bootdey">
             <div class="row">
                 <div class="post-list">
                     <div class="row">
+                        <!--Profile Picture-->
                         <div class="col-sm-1">
                             <div class="d-flex flex-start align-items-center">
                                 <img class="rounded-circle shadow-1-strong me-3"
@@ -18,27 +36,46 @@
                                 height="60" />
                             </div>
                         </div>
+                        <!--Author name & Follow Link-->
                         <div class="col-sm-9">
-                            <h4>
-                                <a hre="#" class="post-author">{{post.author}}</a>
-                            </h4>
+                            <a href="#" class="post-author" style="font-family: 'Poppins';font-size:18px; font-weight: 600px; margin-right:5px">{{post.author}}</a>
+                            <a href="#" class="link-success" style="font-family: 'Poppins';font-style: normal;font-weight: 800;font-size: 16px;">Follow</a>
                         </div>
+                        <!--Published Date-->
                         <div class="col-sm-2">
                             <date> 
                                 {{ post.published_date }}
                             </date>
                         </div>
                     </div>
+                    <!--Question text-->
                     <div class="row">
                         <a href="{% url 'question_detail' pk=post.pk %}" class="post-title">{{ post.title }}</a>
                         <p class="post-text">{{post.text|linebreaksbr}}</p>    
                     </div>
-                    <div class="row post-footer", style="padding: 4px" >
-                        <form action="{% url 'like_post_list' %}" method="POST">
-                            {% csrf_token %}
-                                <button type="submit", name="post_id", value="{{post.id}}", class="btn btn-outline-primary btn-sm" >Like</button>
-                                <p style="display: inline; font-weight: bold;">{{post.total_likes}}</p>
-                        </form>
+                    <!--Question Footer-->
+                    <div class="row", style="padding: 4px; background: rgba(196, 196, 196, 0.22); margin-top:5px" >
+                        <!--Like Button-->
+                        <div class="col-sm-1 col-lg-1 col-xl-1">
+                            <form action="{% url 'like_post_list' %}" method="POST">
+                                {% csrf_token %}
+                                    <button type="submit", name="post_id", value="{{post.id}}", class="btn btn-outline-primary btn-sm" >Like</button>
+                                    <p style="display: inline; font-weight: bold;">{{post.total_likes}}</p>
+                            </form>
+                        </div>
+                        <!--Disike Button-->
+                        <div class="col-sm-1 col-lg-1 col-xl-1">
+                            <form action="{% url 'dislike_post_list' %}" method="POST">
+                                {% csrf_token %}
+                                    <button type="submit", name="post_id", value="{{post.id}}", class="btn btn-outline-warning btn-sm" >Dislike</button>
+                                    <p style="display: inline; font-weight: bold;">{{post.total_dislikes}}</p>
+                            </form>
+                        </div>
+                        <!--Comment Button-->
+                        <div class="col-sm-1 col-lg-1 col-xl-2">
+                            <a class="btn btn-outline-secondary btn-sm"  href="{% url 'question_detail' pk=post.pk %}" role="button">Comment</a>
+                            <p style="display: inline; font-weight: bold;">{{post.answers.count}}</p>
+                        </div>
                     </div>                        
                 </div>
             </div>

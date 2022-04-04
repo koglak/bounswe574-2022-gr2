@@ -55,9 +55,23 @@ def home(response):
 def LikeView(request, pk):
     post = get_object_or_404(Post, id=request.POST.get('post_id'))
     post.likes.add(request.user)
+    post.dislikes.remove(request.user)
     return redirect('question_detail', pk=pk)
 
 def LikeViewList(request):
     post = get_object_or_404(Post, id=request.POST.get('post_id'))
     post.likes.add(request.user)
+    post.dislikes.remove(request.user)
+    return redirect('question')
+
+def DislikeView(request, pk):
+    post = get_object_or_404(Post, id=request.POST.get('post_id'))
+    post.dislikes.add(request.user)
+    post.likes.remove(request.user)
+    return redirect('question_detail', pk=pk)
+
+def DislikeViewList(request):
+    post = get_object_or_404(Post, id=request.POST.get('post_id'))
+    post.dislikes.add(request.user)
+    post.likes.remove(request.user)
     return redirect('question')

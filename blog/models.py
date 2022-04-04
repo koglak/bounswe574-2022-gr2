@@ -25,9 +25,15 @@ class Post(models.Model):
     created_date = models.DateTimeField(default=timezone.now)
     published_date=models.DateTimeField(blank=True, null=True)
     likes = models.ManyToManyField(User, related_name='blog_post')
+    dislikes = models.ManyToManyField(User, related_name='blog_post_dislike')
 
     def total_likes(self):
         return self.likes.count()
+
+    def total_dislikes(self):
+        like=self.likes.count()
+        like=like-1
+        return self.dislikes.count()
 
     # use lowercase for methods' name
     def publish(self):
