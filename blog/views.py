@@ -1,6 +1,6 @@
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
-from .models import Answer, Post
+from .models import Answer, Post, Label
 from django.utils import timezone
 from django.shortcuts import render, get_object_or_404
 from .forms import PostForm, AnswerForm
@@ -35,6 +35,7 @@ def question_new(request):
 
 def question_edit(request, pk):
     post = get_object_or_404(Post, pk=pk)
+
     if request.method == "POST":
         form = PostForm(request.POST, instance=post)
         if form.is_valid():
@@ -46,6 +47,15 @@ def question_edit(request, pk):
     else:
         form = PostForm(instance=post)
     return render(request, 'blog/question_edit.html', {'form': form})
+
+
+
+def label_detail(response,name):
+    label=Label.objects.filter(name=name)
+    return render(response, "blog/label_details.html", {'label': label, 'name': name})
+
+
+
 
 def home(response):
     return render(response, "blog/home.html", {})

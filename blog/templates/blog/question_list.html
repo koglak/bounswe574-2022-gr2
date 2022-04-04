@@ -72,9 +72,15 @@
                             </form>
                         </div>
                         <!--Comment Button-->
-                        <div class="col-sm-1 col-lg-1 col-xl-2">
+                        <div class="col-sm-2 col-lg-2 col-xl-2">
                             <a class="btn btn-outline-secondary btn-sm"  href="{% url 'question_detail' pk=post.pk %}" role="button">Comment</a>
                             <p style="display: inline; font-weight: bold;">{{post.answers.count}}</p>
+                        </div>
+                        <div class="col-sm-8 col-lg-8 col-xl-8" style="display: flex; justify-content: flex-end">
+                            {% for label in post.labels.all %}
+                                   
+                                    <a href="{% url 'label_detail' name=label.name %}" type="button" class="btn btn-outline-dark btn-sm" style="margin-left:10px"> {{label}}</a>
+                            {% endfor %}
                         </div>
                     </div>                        
                 </div>

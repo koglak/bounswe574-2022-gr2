@@ -42,25 +42,33 @@
                 <p class="post-text">{{post.text|linebreaksbr}}</p>    
           </div>
           <div class="row", style="padding: 4px; background: rgba(196, 196, 196, 0.22); margin-top:5px" >
+            <!--Like Button-->
             <div class="col-sm-1 col-lg-1 col-xl-1">
-              <form action="{% url 'like_post' pk=post.pk %}" method="POST">
-                  {% csrf_token %}
-                      <button type="submit", name="post_id", value="{{post.id}}", class="btn btn-outline-primary btn-sm" >Like</button>
-                      <p style="display: inline; font-weight: bold;">{{post.total_likes}}</p>
-              </form>
+                <form action="{% url 'like_post_list' %}" method="POST">
+                    {% csrf_token %}
+                        <button type="submit", name="post_id", value="{{post.id}}", class="btn btn-outline-primary btn-sm" >Like</button>
+                        <p style="display: inline; font-weight: bold;">{{post.total_likes}}</p>
+                </form>
             </div>
+            <!--Disike Button-->
             <div class="col-sm-1 col-lg-1 col-xl-1">
-              <form action="{% url 'dislike_post' pk=post.pk %}" method="POST">
-                {% csrf_token %}
-                    <button type="submit", name="post_id", value="{{post.id}}", class="btn btn-outline-warning btn-sm" >Dislike</button>
-                    <p style="display: inline; font-weight: bold;">{{post.total_dislikes}}</p>
-              </form>
+                <form action="{% url 'dislike_post_list' %}" method="POST">
+                    {% csrf_token %}
+                        <button type="submit", name="post_id", value="{{post.id}}", class="btn btn-outline-warning btn-sm" >Dislike</button>
+                        <p style="display: inline; font-weight: bold;">{{post.total_dislikes}}</p>
+                </form>
             </div>
-            <div class="col-sm-1 col-lg-1 col-xl-2">
-              <a class="btn btn-outline-secondary btn-sm"  href="#" role="button">Comment</a>
-              <p style="display: inline; font-weight: bold;">{{post.answers.count}}</p>
+            <!--Comment Button-->
+            <div class="col-sm-2 col-lg-2 col-xl-2">
+                <a class="btn btn-outline-secondary btn-sm"  href="{% url 'question_detail' pk=post.pk %}" role="button">Comment</a>
+                <p style="display: inline; font-weight: bold;">{{post.answers.count}}</p>
             </div>
-          </div>    
+            <div class="col-sm-8 col-lg-8 col-xl-8" style="display: flex; justify-content: flex-end">
+              {% for label in post.labels.all %}                     
+                <a href="{% url 'label_detail' name=label.name %}" type="button" class="btn btn-outline-dark btn-sm" style="margin-left:10px"> {{label}}</a>
+              {% endfor %}
+            </div>
+          </div>              
         </div>
 </div>
 

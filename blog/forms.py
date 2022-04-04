@@ -1,9 +1,8 @@
 from django import forms
 
-from .models import Post, Answer
+from .models import Post, Answer, Label
 
 class PostForm(forms.ModelForm):
-
     class Meta:
         model = Post
         fields = ('title', 'text',)
@@ -14,4 +13,8 @@ class AnswerForm(forms.ModelForm):
         model = Answer
         fields = ('body',)
 
-        
+class LabelForm(forms.ModelForm):
+
+    class Meta:
+        model = Label
+        fields =('name',)       

@@ -7,11 +7,9 @@
 /* navbar styling */
 .block{
     padding:0px 10px;
-    margin:0px;
+    margin:5px 0px;
     text-align: center;
     bottom: -0.2px;
-    
-
 }
 
 .navbar-nav a{
