@@ -1,0 +1,54 @@
+{% extends 'blog/base.html' %}
+
+{% block title %}
+    Myspace
+{% endblock %}
+
+{% block content %}
+
+<div class="container bootstrap snippets bootdey">
+    <div class="row">
+        <div class="col-sm-9">
+            <h3>Courses</h3>
+
+            {% for course in courses %}
+
+                {% if user == course.user %}
+                    <div class="container-fluid post-list"   >
+                        <div class="row">
+                            <div class="col-sm-2">
+                                <div class="d-flex flex-start align-items-center">
+                                    <img src="{{course.img.url}}" style="width: 120px; height: 120px; border-radius: 50%;">
+                                </div>
+                            </div>
+                            <div class="col-sm-8">
+                                <a href="#" class="post-title">{{course.title}}</a>
+                            </div>
+                            <!--Published Date-->
+                            <div class="col-sm-2">
+                                <date> 
+                                    {{course.published_date}}
+                                </date>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <p class="post-text">{{course.description|linebreaksbr}}</p>   
+                        </div>
+                        <div class="row" style="padding: 4px; background: rgba(196, 196, 196, 0.22); margin-top:5px" >
+                            Labels
+                        </div>
+                    </div>  
+                {% endif %}
+            {% endfor %}
+        </div>
+        
+        <div class="col-sm-3">
+            <h3>Profile</h3>
+
+        </div>
+    </div>
+
+
+</div>
+
+{% endblock %}

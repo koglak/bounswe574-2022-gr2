@@ -16,6 +16,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from register import views as v
+from django.conf import settings
 
 # This line means that for every URL that starts with admin/, Django will find a corresponding view.
 
@@ -24,5 +25,12 @@ urlpatterns = [
     path('register/',v.register, name="register"),
     path('', include('blog.urls')),
     path('', include("django.contrib.auth.urls")),
+    path('myspace/', include("userprofile.urls")),
 
 ]
+
+
+if settings.DEBUG:
+    from django.conf.urls.static import static
+    urlpatterns += static(settings.MEDIA_URL,document_root=settings.MEDIA_ROOT)
+
