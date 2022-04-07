@@ -49,6 +49,17 @@ class Answer(models.Model):
     name = models.CharField(max_length=255)
     body = models.TextField()
     date_added = models.DateTimeField(auto_now_add=True)
+    likes = models.ManyToManyField(User, related_name='comment_post')
+    dislikes = models.ManyToManyField(User, related_name='comment_post_dislike')
+
+    def total_likes(self):
+        return self.likes.count()
+
+    def total_dislikes(self):
+        like=self.likes.count()
+        like=like-1
+        return self.dislikes.count()
+
 
     def __str__(self):
         return '%s - %s' % (self.post.title, self.name)

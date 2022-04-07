@@ -12,6 +12,7 @@
     <form method="POST" class="question-form">
         {% csrf_token %}
         {{ form.as_p}}
+        {{label}}
         <button type="submit" class="save btn btn-success">Ask</button>
     </form>
 

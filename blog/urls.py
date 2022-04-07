@@ -13,4 +13,5 @@ urlpatterns = [
     path('dislike/question', views.DislikeViewList, name='dislike_post_list'),
     path('label/<str:name>', views.label_detail, name='label_detail'),
 
+
 ]

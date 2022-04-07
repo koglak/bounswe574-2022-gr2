@@ -1,9 +1,10 @@
+import re
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from .models import Answer, Post, Label
 from django.utils import timezone
 from django.shortcuts import render, get_object_or_404
-from .forms import PostForm, AnswerForm
+from .forms import PostForm, AnswerForm, LabelForm
 from django.shortcuts import redirect
 from django.urls import reverse,reverse_lazy
 
@@ -16,12 +17,23 @@ def question(request):
 
 def question_detail(request, pk):
     post = get_object_or_404(Post, pk=pk)
-    form = AnswerForm(request.POST)
+    if request.method == "POST":
+        form = AnswerForm(request.POST)
+        if form.is_valid():
+            answer = form.save(commit=False)
+            answer.post = post
+            answer.name = request.user
+            answer.save()
+            form = AnswerForm()
+    else:
+        form = AnswerForm()
     return render(request, 'blog/question_detail.html', {'post': post, "form":form})
 
 def question_new(request):
     if request.method == "POST":
         form = PostForm(request.POST)
+        label = LabelForm(request.POST)
+
         if form.is_valid():
             post = form.save(commit=False)
             post.author = request.user
@@ -30,12 +42,12 @@ def question_new(request):
             return redirect('question_detail', pk=post.pk)
     else:
         form = PostForm()
-    return render(request, 'blog/question_edit.html', {'form': form})
+        label = LabelForm()
+    return render(request, 'blog/question_edit.html', {'form': form, 'label': label})
 
 
 def question_edit(request, pk):
     post = get_object_or_404(Post, pk=pk)
-
     if request.method == "POST":
         form = PostForm(request.POST, instance=post)
         if form.is_valid():
@@ -85,3 +97,5 @@ def DislikeViewList(request):
     post.dislikes.add(request.user)
     post.likes.remove(request.user)
     return redirect('question')
+
+
