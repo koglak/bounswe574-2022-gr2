@@ -1,0 +1,53 @@
+{% extends 'blog/base.html' %}
+
+{% block title %}
+    Course Detail
+{% endblock %}
+
+{% block content %}
+
+
+<div class="container bootstrap snippets bootdey">
+    <div class="row">
+        <div class="post-list">
+            <div class="row">
+                <div class="col-sm-2">
+                    <div class="d-flex flex-start align-items-center">
+                        <img src="{{course.img.url}}" style="width: 120px; height: 120px; border-radius: 50%;">
+                    </div>
+                </div>
+                <div class="col-sm-8">
+                    <a href="{% url 'course_detail' title=course.title %}" class="post-title">{{ course.title }}</a>
+                    {% if user.is_authenticated and user == course.user %}
+                    <a class="btn btn-secondary btn-sm" href="{% url 'course_edit' title=course.title %}">
+                        Edit Course
+                    </a>
+                    {% endif %}
+                </div>
+                <!--Published Date-->
+                <div class="col-sm-2">
+                    <date> 
+                        {{course.published_date}}
+                    </date>
+                </div>
+            </div>
+
+            <div class="row">
+                <p class="post-text">{{course.description|linebreaksbr}}</p>   
+            </div>
+
+            <div class="row" style="padding: 4px; background: rgba(196, 196, 196, 0.22); margin-top:5px" >
+                Labels
+            </div>
+        </div>
+
+    </div>
+    
+</div>
+
+
+    <hr>
+
+   
+      
+{% endblock %}

@@ -9,6 +9,7 @@
 <div class="container bootstrap snippets bootdey">
     <div class="row">
         <div class="col-sm-9">
+            <h3>Courses</h3>
 
             {% for course in courses %}
 
@@ -21,7 +22,10 @@
                                 </div>
                             </div>
                             <div class="col-sm-8">
-                                <a href="#" class="post-title">{{course.title}}</a>
+                                <a href="{% url 'course_detail' title=course.title %}" class="post-title">{{ course.title }}</a>
+                                <a class="btn btn-secondary btn-sm" href="{% url 'course_edit' title=course.title %}">
+                                    Edit Course
+                                </a>
                             </div>
                             <!--Published Date-->
                             <div class="col-sm-2">
@@ -42,7 +46,7 @@
         </div>
         
         <div class="col-sm-3">
-            <div class="post-title" style="text-align: center; font-family:'Poppins">My Profile </div>
+            <div class="post-title" style="text-align: center; font-family:'Poppins'">My Profile </div>
             <div class="container d-flex justify-content-center align-items-center">
                 <div class="card">
                     <div> <img src="https://i.imgur.com/Qtrsrk5.jpg" class="img-fluid"> </div>
@@ -66,10 +70,13 @@
                     </div>
                 </div>
             </div>
+            <div style="padding-top: 20px;text-align:center">
+                <a class="btn btn-success" href="{% url 'course_new' %}" role="button">Create New Course!</a>
+            </div>
         </div>
     </div>
 
-
+    
 </div>
 
 {% endblock %}
