@@ -13,8 +13,9 @@ from django.urls import reverse,reverse_lazy
 
 # Create your views here.
 def question(request):
+    common_tags = Post.tags.most_common()[:4]
     posts=Post.objects.filter(published_date__lte=timezone.now()).order_by('published_date')
-    return render(request, 'blog/question_list.html', {'posts': posts})
+    return render(request, 'blog/question_list.html', {'posts': posts, 'common_tags': common_tags})
 
 def question_detail(request, pk):
     post = get_object_or_404(Post, pk=pk)
@@ -72,7 +73,8 @@ def question_tag_detail(response,tag):
 
 def home(response):
     courses = Course.objects.all()
-    return render(response, "blog/home.html", {'courses': courses})
+    common_tags = Course.tags.most_common()[:4]
+    return render(response, "blog/home.html", {'courses': courses, 'common_tags': common_tags})
 
 
 def LikeView(request, pk):

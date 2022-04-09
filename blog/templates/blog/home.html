@@ -6,6 +6,12 @@
 
 {% block content %}
 
+<div class="modal-footer"> 
+    <h4>Common Tags:</h4>
+    {% for tag in common_tags %}
+        <a href="{% url 'course_tag_detail' tag=tag %}" type="button" class="btn btn-outline-dark btn-sm" style="margin-left:10px"> #{{tag}}</a>
+    {% endfor %}
+</div>
 <div class="card-deck">
 {% for course in courses %}
     <div class="card" style="width: 18rem; float:left; margin: 10px">
@@ -47,13 +53,14 @@
         <div class="card-body">
      
                 {% for tag in course.tags.all  %}
-                       
                         <a href="{% url 'question_tag_detail' tag=tag %}" type="button" class="btn btn-outline-dark btn-sm" style="margin-left:10px"> #{{tag}}</a>
                 {% endfor %}
 
         </div>
     </div>
 {% endfor %}
+
+
 </div>
 
 {% endblock%}
