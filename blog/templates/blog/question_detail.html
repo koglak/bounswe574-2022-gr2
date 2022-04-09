@@ -92,7 +92,8 @@
                     {% else %}
                         {% for answer in post.answers.all %}
                               
-                                <form method="POST" style="float: right;">
+                          <div style="border: 1px solid rgba(191, 191, 191, 0.379); margin: 5px; padding:3px">
+                                <form method="POST" style="float: right; opacity: 0.5;">
                                   <a class="btn btn-outline-danger btn-sm" href="#">Delete</a>
                                 </form>
                               <div class="d-flex flex-start align-items-center">
@@ -103,8 +104,13 @@
                                   
                                   <div>
                                     <div style="float:left; margin-right:10px">
-                                        <h6 class="fw-bold text-primary mb-1">{{answer.name}}</h6>
+                                        {% if user == answer.name %}
+                                        <a href="{% url 'user_profile' %}" class="post-author" style="font-family: 'Poppins';font-size:18px; font-weight: 600px; margin-right:5px">{{answer.name}}</a>
+                                        {% else %}
+                                        <a href="{% url 'other_user_profile' name=answer.name %}" class="post-author" style="font-family: 'Poppins';font-size:18px; font-weight: 600px; margin-right:5px">{{answer.name}}</a>
+                                        {% endif %}
                                     </div>
+
                                     <div style="float:clear">
                                         <a href="#" class="link-success" style="font-family: 'Poppins';font-style: normal;font-weight: 800;font-size: 16px;">Follow</a>
                                     </div>
@@ -115,12 +121,30 @@
                                    
                                   </div>
                                   
-                                </div>
-                               
+                              </div>
+                               <hr>
                               <p class="mt-3 mb-4 pb-2">
                                 {{answer.body}}
                               </p>
 
+                              <div class="row" style="padding: 4px; background: rgba(196, 196, 196, 0.22); margin-top:5px" >
+                                <!--Like Button-->
+                                <div class="col-sm-1 col-lg-1 col-xl-1">
+                                    <form action="{% url 'like_answer' pk=post.pk %}" method="POST">
+                                        {% csrf_token %}
+                                            <button type="submit", name="answer_id", value="{{answer.id}}", class="btn btn-outline-primary btn-sm" >Like</button>
+                                            <p style="display: inline; font-weight: bold;">{{answer.total_likes}}</p>
+                                    </form>
+                                </div>
+                                <!--Disike Button-->
+                                <div class="col-sm-1 col-lg-1 col-xl-1">
+                                    <form action="{% url 'dislike_answer' pk=post.pk %}" method="POST">
+                                        {% csrf_token %}
+                                            <button type="submit", name="answer_id", value="{{answer.id}}", class="btn btn-outline-warning btn-sm" >Dislike</button>
+                                            <p style="display: inline; font-weight: bold;">{{answer.total_dislikes}}</p>
+                                    </form>
+                                </div>
+                            </div>
                         {% endfor %}
                     {% endif %}
                   

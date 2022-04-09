@@ -14,6 +14,8 @@ urlpatterns = [
     path('label/<str:tag>', views.question_tag_detail, name='question_tag_detail'),
     path('<int:pk>/delete-question',views.delete_question,name='delete_question'),
     path('question/search_result',views.search_question,name='search_question'),
+    path('like-answer/<int:pk>', views.AnswerLikeView, name='like_answer'),
+    path('dislike-answer/<int:pk>', views.AnswerDislikeView, name='dislike_answer'),
 
 
 

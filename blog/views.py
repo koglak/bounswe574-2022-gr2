@@ -104,6 +104,18 @@ def delete_question(request, pk):
     post.delete()
     return redirect('/question')
 
+def AnswerLikeView(request, pk):
+    answer = get_object_or_404(Answer, id=request.POST.get('answer_id'))
+    answer.likes.add(request.user)
+    answer.dislikes.remove(request.user)
+    return redirect('question_detail', pk=pk)
+
+def AnswerDislikeView(request,pk ):
+    answer = get_object_or_404(Answer, id=request.POST.get('answer_id'))
+    answer.dislikes.add(request.user)
+    answer.likes.remove(request.user)
+    return redirect('question_detail', pk=pk)
+
 def search_question(request):
     if request.method == "POST":
         searched = request.POST["searched"]

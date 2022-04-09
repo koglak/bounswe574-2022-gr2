@@ -33,9 +33,9 @@
             </div>
         </ul>
         <img src="{{course.img.url}}" class="card-img-top" >
-        <div class="card-body">
-        <a href="{% url 'course_detail' title=course.title %}" class="post-title">{{ course.title }}</a>
-        <p class="card-text">{{course.description}}</p>
+        <div class="card-body ">
+            <a href="{% url 'course_detail' title=course.title %}" class="post-title">{{ course.title }}</a>
+            <p class="card-text">{{course.description}}</p>
         </div>
         <ul class="list-group list-group-flush">
         <li class="list-group-item">Lecture Quiz Quantity</li>
