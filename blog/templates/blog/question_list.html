@@ -11,8 +11,9 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col-sm-4">
-                <form class="form-inline my-2 my-lg-0" style="margin:15px;padding-top: 20px;">
-                    <input class="form-control mr-sm-2" style="width:250px; float:left; margin-right:10px" type="search" placeholder="Search" aria-label="Search">
+                <form class="form-inline my-2 my-lg-0" method=POST action="{% url 'search_question' %}" style="margin:15px;padding-top: 20px;">
+                    {% csrf_token %}
+                    <input class="form-control mr-sm-2" style="width:250px; float:left; margin-right:10px" type="search"  placeholder="Search" aria-label="Search" name="searched"> 
                     <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
                 </form>
             </div>

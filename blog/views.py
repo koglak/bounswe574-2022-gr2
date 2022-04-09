@@ -102,3 +102,11 @@ def delete_question(request, pk):
     post.delete()
     return redirect('/question')
 
+def search_question(request):
+    if request.method == "POST":
+        searched = request.POST["searched"]
+        results = Post.objects.filter(title__contains=searched)
+
+        return render(request, "blog/search_question.html", {'searched': searched, 'results': results}) 
+    else:
+        return render(request, "blog/search_question.html", {}) 
