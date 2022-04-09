@@ -21,6 +21,5 @@ class CourseForm(forms.ModelForm):
                 }),
             'tags': TagWidget(),
             'img': forms.FileInput(),
-            'collaborative_members': forms.Select(),
                 }
            

@@ -22,9 +22,15 @@
                             </div>
                             <div class="col-sm-8">
                                 <a href="{% url 'course_detail' title=course.title %}" class="post-title">{{ course.title }}</a>
+                                {% if user in course.collaborative_members.all %}
                                 <a class="btn btn-secondary btn-sm" href="{% url 'course_edit' title=course.title %}">
                                     Edit Course
                                 </a>
+                                {% elif user == course.user %}
+                                <a class="btn btn-secondary btn-sm" href="{% url 'course_edit' title=course.title %}">
+                                    Edit Course
+                                </a>
+                                {% endif %}
                             </div>
                             <!--Published Date-->
                             <div class="col-sm-2">
