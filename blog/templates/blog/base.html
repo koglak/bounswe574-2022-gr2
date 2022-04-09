@@ -39,11 +39,16 @@
                 </button>
                 <div class="collapse navbar-collapse" id="navbarCollapse">
                     <div class="navbar-nav">
+                        {% if user.is_authenticated %}
                         <a href="/myspace/profile" class="nav-item nav-link active">MYSPACE</a>
+                        {% endif %}
                         <a href="/question" class="nav-item nav-link">QUESTIONS</a>
+                        {% if user.is_authenticated %}
                         <a href="/learn" class="nav-item nav-link">LEARN</a>
                         <a href="/rooms" class="nav-item nav-link">ROOMS</a>
                         <a href="/activity" class="nav-item nav-link">ACTIVITY</a>
+                        {% endif %}
+
                         
                     </div>
                     <div class="navbar-nav ms-auto">

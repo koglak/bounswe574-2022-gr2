@@ -17,9 +17,13 @@
                     <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
                 </form>
             </div>
+            {% if user.is_authenticated %}
+
             <div class="col-sm-3" style="padding-top: 20px;">
                 <a class="btn btn-success" href="{% url 'question_new' %}" role="button">Ask A Question!</a>
             </div>
+
+            {% endif %}
         </div>
     </div>
  
@@ -40,11 +44,13 @@
                         <!--Author name & Follow Link-->
                         <div class="col-sm-9">
                             {% if user == post.author %}
-                            <a href="{% url 'user_profile' %}" class="post-author" style="font-family: 'Poppins';font-size:18px; font-weight: 600px; margin-right:5px">{{post.author}}</a>
+                                <a href="{% url 'user_profile' %}" class="post-author" style="font-family: 'Poppins';font-size:18px; font-weight: 600px; margin-right:5px">{{post.author}}</a>
                             {% else %}
-                            <a href="{% url 'other_user_profile' name=post.author %}" class="post-author" style="font-family: 'Poppins';font-size:18px; font-weight: 600px; margin-right:5px">{{post.author}}</a>
+                                <a href="{% url 'other_user_profile' name=post.author %}" class="post-author" style="font-family: 'Poppins';font-size:18px; font-weight: 600px; margin-right:5px">{{post.author}}</a>
                             {% endif %}
-                            <a href="#" class="link-success" style="font-family: 'Poppins';font-style: normal;font-weight: 800;font-size: 16px;">Follow</a>
+                            {% if user.is_authenticated %}
+                                <a href="#" class="link-success" style="font-family: 'Poppins';font-style: normal;font-weight: 800;font-size: 16px;">Follow</a>
+                            {% endif %}
                         </div>
                         <!--Published Date-->
                         <div class="col-sm-2">
@@ -64,7 +70,11 @@
                         <div class="col-sm-1 col-lg-1 col-xl-1">
                             <form action="{% url 'like_post_list' %}" method="POST">
                                 {% csrf_token %}
+                                    {% if user.is_authenticated %}
                                     <button type="submit", name="post_id", value="{{post.id}}", class="btn btn-outline-primary btn-sm" >Like</button>
+                                    {% else %}
+                                    <strong>Like: </strong>
+                                    {% endif %}
                                     <p style="display: inline; font-weight: bold;">{{post.total_likes}}</p>
                             </form>
                         </div>
@@ -72,13 +82,22 @@
                         <div class="col-sm-1 col-lg-1 col-xl-1">
                             <form action="{% url 'dislike_post_list' %}" method="POST">
                                 {% csrf_token %}
+                                    {% if user.is_authenticated %}
                                     <button type="submit", name="post_id", value="{{post.id}}", class="btn btn-outline-warning btn-sm" >Dislike</button>
+                                    {% else %}
+                                    <strong>Dislike: </strong>
+                                    {% endif %}
+                                    
                                     <p style="display: inline; font-weight: bold;">{{post.total_dislikes}}</p>
                             </form>
                         </div>
                         <!--Comment Button-->
                         <div class="col-sm-2 col-lg-2 col-xl-2">
+                            {% if user.is_authenticated %}
                             <a class="btn btn-outline-secondary btn-sm"  href="{% url 'question_detail' pk=post.pk %}" role="button">Comment</a>
+                            {% else %}
+                            <strong>Comment:</strong>
+                            {% endif %}
                             <p style="display: inline; font-weight: bold;">{{post.answers.count}}</p>
                         </div>
                         <div class="col-sm-8 col-lg-8 col-xl-8" style="display: flex; justify-content: flex-end">

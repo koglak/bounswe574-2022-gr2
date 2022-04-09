@@ -26,7 +26,9 @@
                     {% else %}
                     <a href="{% url 'other_user_profile' name=course.user %}" class="post-author" style="font-family: 'Poppins';font-size:18px; font-weight: 600px; margin-right:5px">{{course.user}}</a>
                     {% endif %}
+                    {% if user.is_authenticated %}
                     <a href="#" class="link-success" style="font-family: 'Poppins';font-style: normal;font-weight: 800;font-size: 16px;">Follow</a>
+                    {% endif %}
                 </div>
                 <!--Published Date-->
                 

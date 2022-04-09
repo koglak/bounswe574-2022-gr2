@@ -24,8 +24,10 @@
                   {% else %}
                     <a href="{% url 'other_user_profile' name=post.author %}" class="post-author" style="font-family: 'Poppins';font-size:18px; font-weight: 600px; margin-right:5px">{{post.author}}</a>
                   {% endif %}
+                  {% if user.is_authenticated %}
                   <a href="#" class="link-success" style="font-family: 'Poppins';font-style: normal;font-weight: 800;font-size: 16px;">Follow</a>
-            </div>
+                  {% endif %}
+              </div>
             <div class="col-sm-2">
                 {% if post.published_date %}
                   <date class="date">
@@ -111,10 +113,12 @@
                                         {% endif %}
                                     </div>
 
-                                    <div style="float:clear">
-                                        <a href="#" class="link-success" style="font-family: 'Poppins';font-style: normal;font-weight: 800;font-size: 16px;">Follow</a>
-                                    </div>
-                                   
+
+                                      <div style="float:clear">
+
+                                          <a href="#" class="link-success" style="font-family: 'Poppins';font-style: normal;font-weight: 800;font-size: 16px;">Follow</a>
+                                        </div>
+
                                     <p class="text-muted small mb-0">
                                       {{answer.date_added}}
                                     </p>
@@ -131,16 +135,24 @@
                                 <!--Like Button-->
                                 <div class="col-sm-1 col-lg-1 col-xl-1">
                                     <form action="{% url 'like_answer' pk=post.pk %}" method="POST">
-                                        {% csrf_token %}
+                                            {% csrf_token %}
+                                            {% if user.is_authenticated %}
                                             <button type="submit", name="answer_id", value="{{answer.id}}", class="btn btn-outline-primary btn-sm" >Like</button>
+                                            {% else %}
+                                            <strong>Like:</strong>
+                                            {% endif %}
                                             <p style="display: inline; font-weight: bold;">{{answer.total_likes}}</p>
                                     </form>
                                 </div>
                                 <!--Disike Button-->
                                 <div class="col-sm-1 col-lg-1 col-xl-1">
                                     <form action="{% url 'dislike_answer' pk=post.pk %}" method="POST">
-                                        {% csrf_token %}
+                                            {% csrf_token %}
+                                            {% if user.is_authenticated %}
                                             <button type="submit", name="answer_id", value="{{answer.id}}", class="btn btn-outline-warning btn-sm" >Dislike</button>
+                                            {% else %}
+                                            <strong>Dislike:</strong>
+                                            {% endif %}
                                             <p style="display: inline; font-weight: bold;">{{answer.total_dislikes}}</p>
                                     </form>
                                 </div>
@@ -150,6 +162,8 @@
                   
                   
                 </div>
+                {% if user.is_authenticated %}
+
                 <div class="card-footer py-3 border-0" style="background-color: #f8f9fa;">
                   <div class="d-flex flex-start w-100">
                     <img class="rounded-circle shadow-1-strong me-3"
@@ -166,6 +180,8 @@
                   </div>
                   
                 </div>
+                {% endif %}
+
               </div>
             </div>
           </div>
