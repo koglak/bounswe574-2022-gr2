@@ -51,6 +51,9 @@ def course_new(request):
     return render(request, 'userprofile/course_edit.html', {'form': form})
 
 
+def course_tag_detail(response,tag):
+    courses = Course.objects.filter(tags__name__in=[tag])
+    return render(response, "userprofile/course_tag_details.html", {'courses': courses, 'tag': tag})
 
 
 

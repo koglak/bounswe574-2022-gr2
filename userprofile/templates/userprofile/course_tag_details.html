@@ -1,0 +1,17 @@
+{% extends 'blog/base.html' %}
+
+{% block title %}
+    Helloworld - Course Tags
+{% endblock %}
+
+{% block content %}
+
+    <h2>#{{tag}}</h2>
+    <hr>
+    <ul class="list-group"></ul>
+    {% for course in courses %}    
+        <li class="list-group-item"><a href="{% url 'course_detail' title=course %}" class="post-title">{{course.title}}</a></li>      
+    {% endfor %}
+</ul>
+
+{% endblock %}

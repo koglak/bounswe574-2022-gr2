@@ -39,7 +39,7 @@
                         </div>
                         <div class="col-sm-12 col-lg-12 col-xl-12" style="display: flex; justify-content: flex-end; background: rgba(196, 196, 196, 0.22); padding:5px ">
                             {% for tag in course.tags.all %}                     
-                              <a href="#" type="button" class="btn btn-outline-dark btn-sm" style="margin-left:10px"> #{{tag}}</a>
+                              <a href="{% url 'course_tag_detail' tag=tag %}" type="button" class="btn btn-outline-dark btn-sm" style="margin-left:10px"> #{{tag}}</a>
                             {% endfor %}
                           </div>
                     </div>  
