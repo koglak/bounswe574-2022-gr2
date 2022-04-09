@@ -2,6 +2,7 @@ import re
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from .models import Answer, Post
+from userprofile.models import Course
 from django.utils import timezone
 from django.shortcuts import render, get_object_or_404
 from .forms import PostForm, AnswerForm
@@ -70,7 +71,8 @@ def question_tag_detail(response,tag):
 
 
 def home(response):
-    return render(response, "blog/home.html", {})
+    courses = Course.objects.all()
+    return render(response, "blog/home.html", {'courses': courses})
 
 
 def LikeView(request, pk):
