@@ -10,45 +10,48 @@
     <div class="row">
         <div class="col-sm-9">
             <h3>Courses</h3>
+            {% if not post.answers.all %}
+            
+                {% for course in courses %}
 
-            {% for course in courses %}
-
-                    <div class="container-fluid post-list"   >
-                        <div class="row">
-                            <div class="col-sm-2">
-                                <div class="d-flex flex-start align-items-center">
-                                    <img src="{{course.img.url}}" style="width: 120px; height: 120px; border-radius: 50%;">
+                        <div class="container-fluid post-list"   >
+                            <div class="row">
+                                <div class="col-sm-2">
+                                    <div class="d-flex flex-start align-items-center">
+                                        
+                                        <img src="{{course.img.url}}" style="width: 120px; height: 120px; border-radius: 50%;">
+                                    </div>
+                                </div>
+                                <div class="col-sm-8">
+                                    <a href="{% url 'course_detail' title=course.title %}" class="post-title">{{ course.title }}</a>
+                                    {% if user in course.collaborative_members.all %}
+                                    <a class="btn btn-secondary btn-sm" href="{% url 'course_edit' title=course.title %}">
+                                        Edit Course
+                                    </a>
+                                    {% elif user == course.user %}
+                                    <a class="btn btn-secondary btn-sm" href="{% url 'course_edit' title=course.title %}">
+                                        Edit Course
+                                    </a>
+                                    {% endif %}
+                                </div>
+                                <!--Published Date-->
+                                <div class="col-sm-2">
+                                    <date> 
+                                        {{course.published_date}}
+                                    </date>
                                 </div>
                             </div>
-                            <div class="col-sm-8">
-                                <a href="{% url 'course_detail' title=course.title %}" class="post-title">{{ course.title }}</a>
-                                {% if user in course.collaborative_members.all %}
-                                <a class="btn btn-secondary btn-sm" href="{% url 'course_edit' title=course.title %}">
-                                    Edit Course
-                                </a>
-                                {% elif user == course.user %}
-                                <a class="btn btn-secondary btn-sm" href="{% url 'course_edit' title=course.title %}">
-                                    Edit Course
-                                </a>
-                                {% endif %}
+                            <div class="row">
+                                <p class="post-text">{{course.description|linebreaksbr}}</p>   
                             </div>
-                            <!--Published Date-->
-                            <div class="col-sm-2">
-                                <date> 
-                                    {{course.published_date}}
-                                </date>
+                            <div class="col-sm-12 col-lg-12 col-xl-12" style="display: flex; justify-content: flex-end; background: rgba(196, 196, 196, 0.22); padding:5px ">
+                                {% for tag in course.tags.all %}                     
+                                <a href="{% url 'course_tag_detail' tag=tag %}" type="button" class="btn btn-outline-dark btn-sm" style="margin-left:10px"> #{{tag}}</a>
+                                {% endfor %}
                             </div>
-                        </div>
-                        <div class="row">
-                            <p class="post-text">{{course.description|linebreaksbr}}</p>   
-                        </div>
-                        <div class="col-sm-12 col-lg-12 col-xl-12" style="display: flex; justify-content: flex-end; background: rgba(196, 196, 196, 0.22); padding:5px ">
-                            {% for tag in course.tags.all %}                     
-                              <a href="{% url 'course_tag_detail' tag=tag %}" type="button" class="btn btn-outline-dark btn-sm" style="margin-left:10px"> #{{tag}}</a>
-                            {% endfor %}
-                          </div>
-                    </div>  
-            {% endfor %}
+                        </div>  
+                {% endfor %}
+            {% endif %}
         </div>
         
         <div class="col-sm-3">
@@ -57,7 +60,13 @@
                 <div class="card">
                     <div> <img src="https://i.imgur.com/Qtrsrk5.jpg" class="img-fluid"> </div>
                     <div class="user text-center">
-                        <div class="profile"> <img src="{{user_profile.img.url}}" width="120"> </div>
+                        
+                        <div class="profile"> 
+                        {% if not user_profile.img%}
+                            <img src="http://cdn.onlinewebfonts.com/svg/img_24787.png" width="120"> </div>
+                        {% else %}
+                            <img src="{{user_profile.img.url}}" width="120"> </div>
+                        {% endif %}
                     </div>
                     <div class="mt-5 text-center">
                         <h4 class="mb-0">{{user_profile.user}}</h4> 
