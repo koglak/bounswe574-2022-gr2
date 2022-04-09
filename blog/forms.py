@@ -1,6 +1,6 @@
 from django import forms
 
-from .models import Post, Answer, Label
+from .models import Post, Answer
 from django.forms import  TextInput
 
 from taggit.forms import TagWidget
@@ -32,8 +32,3 @@ class AnswerForm(forms.ModelForm):
         'body': (''),
          }
 
-class LabelForm(forms.ModelForm):
-
-    class Meta:
-        model = Label
-        fields =('name',)       

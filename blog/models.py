@@ -69,9 +69,3 @@ class Answer(models.Model):
         return '%s - %s' % (self.post.title, self.name)
 
 
-class Label(models.Model):
-    post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name="labels")
-    name = models.CharField(max_length=255)
-
-    def __str__(self):
-        return self.name

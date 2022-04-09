@@ -1,10 +1,10 @@
 import re
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
-from .models import Answer, Post, Label
+from .models import Answer, Post
 from django.utils import timezone
 from django.shortcuts import render, get_object_or_404
-from .forms import PostForm, AnswerForm, LabelForm
+from .forms import PostForm, AnswerForm
 from django.shortcuts import redirect
 from django.urls import reverse,reverse_lazy
 
@@ -101,3 +101,4 @@ def delete_question(request, pk):
     post = Post.objects.get(pk=pk)
     post.delete()
     return redirect('/question')
+
