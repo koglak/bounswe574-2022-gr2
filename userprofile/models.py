@@ -9,9 +9,9 @@ from taggit.managers import TaggableManager
 
 class Profile(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    bio = models.TextField()
-    img = models.ImageField(upload_to='images')
-    followers = models.ManyToManyField(User, related_name='followers')
+    bio = models.TextField(default="This is my bio!")
+    img = models.ImageField(upload_to='images',default='../templates/userprofile/icons/1200px-Circle-icons-profile.svg.png')
+    followers = models.ManyToManyField(User, related_name='followers', blank=True)
 
     def __str__(self):
         return self.bio

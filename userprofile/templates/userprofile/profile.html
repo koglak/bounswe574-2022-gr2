@@ -13,7 +13,6 @@
 
             {% for course in courses %}
 
-                {% if user == course.user %}
                     <div class="container-fluid post-list"   >
                         <div class="row">
                             <div class="col-sm-2">
@@ -43,7 +42,6 @@
                             {% endfor %}
                           </div>
                     </div>  
-                {% endif %}
             {% endfor %}
         </div>
         
@@ -72,9 +70,13 @@
                     </div>
                 </div>
             </div>
-            <div style="padding-top: 20px;text-align:center">
-                <a class="btn btn-success" href="{% url 'course_new' %}" role="button">Create New Course!</a>
-            </div>
+            {% if user == user_profile.user %}
+
+                <div style="padding-top: 20px;text-align:center">
+                    <a class="btn btn-success" href="{% url 'course_new' %}" role="button">Create New Course!</a>
+                </div>
+
+            {% endif %}
         </div>
     </div>
 

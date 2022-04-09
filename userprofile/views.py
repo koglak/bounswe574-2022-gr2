@@ -11,8 +11,9 @@ from django.template.defaultfilters import slugify
 # Create your views here.
 
 def user_profile(response):
-    courses=Course.objects.filter(published_date__lte=timezone.now()).order_by('published_date')
+    courses=Course.objects.filter(user = response.user).order_by('published_date')
     user_profile=Profile.objects.get(user=response.user)
+
     return render(response, "userprofile/profile.html", {'courses':courses, 'user_profile':user_profile})
 
 def course_detail(request, title):
@@ -63,3 +64,8 @@ def delete_course(request, title):
     return redirect('/myspace/profile')
 
 
+def other_user_profile(response, name):
+    courses=Course.objects.filter(user__username=name).order_by('published_date')
+    user_profile=Profile.objects.filter(user__username=name)
+
+    return render(response, "userprofile/profile.html", {'courses': courses, 'user_profile': user_profile})
