@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'blog',
     'register.apps.RegisterConfig',
     'userprofile',
+    'taggit',
 ]
 
 MIDDLEWARE = [

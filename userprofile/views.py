@@ -3,9 +3,10 @@
 from django.utils import timezone
 from django.shortcuts import render
 from .models import Course, Profile
-from .forms import CourseForm, LabelForm
+from .forms import CourseForm
 from django.shortcuts import redirect, get_object_or_404
-
+from taggit.models import Tag
+from django.template.defaultfilters import slugify
 
 # Create your views here.
 
@@ -20,6 +21,7 @@ def course_detail(request, title):
 
 def course_edit(request, title):
     course = get_object_or_404(Course, title=title)
+     
     if request.method == "POST":
         form = CourseForm(request.POST or None, request.FILES or None, instance=course)
         if form.is_valid():
@@ -27,11 +29,11 @@ def course_edit(request, title):
             course.user = request.user
             course.published_date = timezone.now()
             course.save()
+            form.save_m2m()
             return redirect('course_detail', title=course.title)
     else:
         form = CourseForm(instance=course)
     return render(request, 'userprofile/course_edit.html', {'form': form})
-
 
 def course_new(request):
     if request.method == "POST":
@@ -41,8 +43,15 @@ def course_new(request):
             course.user = request.user
             course.published_date = timezone.now()
             course.save()
+            form.save_m2m()
+
             return redirect('course_detail', title=course.title)
     else:
         form = CourseForm()
     return render(request, 'userprofile/course_edit.html', {'form': form})
+
+
+
+
+
 

@@ -37,9 +37,11 @@
                         <div class="row">
                             <p class="post-text">{{course.description|linebreaksbr}}</p>   
                         </div>
-                        <div class="row" style="padding: 4px; background: rgba(196, 196, 196, 0.22); margin-top:5px" >
-                            Labels
-                        </div>
+                        <div class="col-sm-12 col-lg-12 col-xl-12" style="display: flex; justify-content: flex-end; background: rgba(196, 196, 196, 0.22); padding:5px ">
+                            {% for tag in course.tags.all %}                     
+                              <a href="#" type="button" class="btn btn-outline-dark btn-sm" style="margin-left:10px"> #{{tag}}</a>
+                            {% endfor %}
+                          </div>
                     </div>  
                 {% endif %}
             {% endfor %}

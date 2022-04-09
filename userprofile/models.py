@@ -5,7 +5,7 @@ from django.conf import settings
 from django.db import models
 from django.utils import timezone
 from django.contrib.auth.models import User
-
+from taggit.managers import TaggableManager
 
 class Profile(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
@@ -22,15 +22,9 @@ class Course(models.Model):
     description=models.TextField()
     img = models.ImageField(upload_to='images')
     published_date=models.DateTimeField(blank=True, null=True)
-
+    collaborative_members = models.ManyToManyField(User, blank=True, related_name='collaborative_members')
+    tags = TaggableManager()
 
     def __str__(self):
         return self.title
 
-
-class Label(models.Model):
-    course = models.ForeignKey(Course, on_delete=models.CASCADE, related_name="course_labels")
-    name = models.CharField(max_length=255)
-
-    def __str__(self):
-        return self.name
