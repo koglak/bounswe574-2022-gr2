@@ -6,11 +6,11 @@
 
 {% block content %}
 
-    <h2>{{name}}</h2>
+    <h2>#{{tag}}</h2>
     <ul class="list-group"></ul>
-    {% for item in label %}
+    {% for course in courses %}
     
-        <li class="list-group-item"><a href="{% url 'question_detail' pk=item.post.pk %}" class="post-title">{{item.post}}</a></li>
+        <li class="list-group-item"><a href="{% url 'question_detail' pk=course.pk %}" class="post-title">{{course}}</a></li>
    
         
     {% endfor %}

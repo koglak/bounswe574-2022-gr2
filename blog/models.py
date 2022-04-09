@@ -5,6 +5,8 @@ from django.db import models
 from django.conf import settings
 from django.utils import timezone
 from django.contrib.auth.models import User
+from taggit.managers import TaggableManager
+
 
 
 # Class is special keyword to define object
@@ -26,6 +28,8 @@ class Post(models.Model):
     published_date=models.DateTimeField(blank=True, null=True)
     likes = models.ManyToManyField(User, related_name='blog_post')
     dislikes = models.ManyToManyField(User, related_name='blog_post_dislike')
+    tags = TaggableManager()
+
 
     def total_likes(self):
         return self.likes.count()

@@ -32,18 +32,18 @@ def question_detail(request, pk):
 def question_new(request):
     if request.method == "POST":
         form = PostForm(request.POST)
-        label = LabelForm(request.POST)
 
         if form.is_valid():
             post = form.save(commit=False)
             post.author = request.user
             post.published_date = timezone.now()
             post.save()
+            form.save_m2m()
+
             return redirect('question_detail', pk=post.pk)
     else:
         form = PostForm()
-        label = LabelForm()
-    return render(request, 'blog/question_edit.html', {'form': form, 'label': label})
+    return render(request, 'blog/question_edit.html', {'form': form})
 
 
 def question_edit(request, pk):
@@ -55,6 +55,8 @@ def question_edit(request, pk):
             post.author = request.user
             post.published_date = timezone.now()
             post.save()
+            form.save_m2m()
+
             return redirect('question_detail', pk=post.pk)
     else:
         form = PostForm(instance=post)
@@ -62,9 +64,9 @@ def question_edit(request, pk):
 
 
 
-def label_detail(response,name):
-    label=Label.objects.filter(name=name)
-    return render(response, "blog/label_details.html", {'label': label, 'name': name})
+def question_tag_detail(response,tag):
+    courses = Post.objects.filter(tags__name__in=[tag])
+    return render(response, "blog/question_tag_details.html", {'courses': courses, 'tag': tag})
 
 
 

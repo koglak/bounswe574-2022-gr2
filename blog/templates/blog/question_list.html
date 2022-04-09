@@ -81,9 +81,9 @@
                             <p style="display: inline; font-weight: bold;">{{post.answers.count}}</p>
                         </div>
                         <div class="col-sm-8 col-lg-8 col-xl-8" style="display: flex; justify-content: flex-end">
-                            {% for label in post.labels.all %}
+                            {% for tag in post.tags.all  %}
                                    
-                                    <a href="{% url 'label_detail' name=label.name %}" type="button" class="btn btn-outline-dark btn-sm" style="margin-left:10px"> {{label}}</a>
+                                    <a href="{% url 'question_tag_detail' tag=tag %}" type="button" class="btn btn-outline-dark btn-sm" style="margin-left:10px"> #{{tag}}</a>
                             {% endfor %}
                         </div>
                     </div>                        
