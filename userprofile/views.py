@@ -33,7 +33,7 @@ def course_edit(request, title):
             return redirect('course_detail', title=course.title)
     else:
         form = CourseForm(instance=course)
-    return render(request, 'userprofile/course_edit.html', {'form': form})
+    return render(request, 'userprofile/course_edit.html', {'form': form, 'title': title})
 
 def course_new(request):
     if request.method == "POST":
@@ -48,7 +48,8 @@ def course_new(request):
             return redirect('course_detail', title=course.title)
     else:
         form = CourseForm()
-    return render(request, 'userprofile/course_edit.html', {'form': form})
+        title ="none"
+    return render(request, 'userprofile/course_edit.html', {'form': form, 'title':title})
 
 
 def course_tag_detail(response,tag):
@@ -56,5 +57,9 @@ def course_tag_detail(response,tag):
     return render(response, "userprofile/course_tag_details.html", {'courses': courses, 'tag': tag})
 
 
+def delete_course(request, title):
+    course = Course.objects.get(title=title)
+    course.delete()
+    return redirect('/myspace/profile')
 
 
