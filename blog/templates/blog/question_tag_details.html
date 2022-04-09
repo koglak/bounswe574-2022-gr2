@@ -8,9 +8,9 @@
 
     <h2>#{{tag}}</h2>
     <ul class="list-group"></ul>
-    {% for course in courses %}
+    {% for post in posts %}
     
-        <li class="list-group-item"><a href="{% url 'question_detail' pk=course.pk %}" class="post-title">{{course}}</a></li>
+        <li class="list-group-item"><a href="{% url 'question_detail' pk=post.pk %}" class="post-title">{{post}}</a></li>
    
         
     {% endfor %}

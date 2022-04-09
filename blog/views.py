@@ -43,7 +43,8 @@ def question_new(request):
             return redirect('question_detail', pk=post.pk)
     else:
         form = PostForm()
-    return render(request, 'blog/question_edit.html', {'form': form})
+        pk ="none"
+    return render(request, 'blog/question_edit.html', {'form': form,'pk': pk})
 
 
 def question_edit(request, pk):
@@ -60,20 +61,16 @@ def question_edit(request, pk):
             return redirect('question_detail', pk=post.pk)
     else:
         form = PostForm(instance=post)
-    return render(request, 'blog/question_edit.html', {'form': form})
-
+    return render(request, 'blog/question_edit.html', {'form': form, 'pk': pk})
 
 
 def question_tag_detail(response,tag):
-    courses = Post.objects.filter(tags__name__in=[tag])
-    return render(response, "blog/question_tag_details.html", {'courses': courses, 'tag': tag})
-
-
+    posts = Post.objects.filter(tags__name__in=[tag])
+    return render(response, "blog/question_tag_details.html", {'posts': posts, 'tag': tag})
 
 
 def home(response):
     return render(response, "blog/home.html", {})
-
 
 
 def LikeView(request, pk):
@@ -100,4 +97,7 @@ def DislikeViewList(request):
     post.likes.remove(request.user)
     return redirect('question')
 
-
+def delete_question(request, pk):
+    post = Post.objects.get(pk=pk)
+    post.delete()
+    return redirect('/question')
