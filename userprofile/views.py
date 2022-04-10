@@ -2,7 +2,7 @@
 # Create your views here.
 from django.utils import timezone
 from django.shortcuts import render
-from .models import Course, Profile, Rating
+from .models import Course, Profile, Rating, Lecture
 from .forms import CourseForm
 from django.shortcuts import redirect, get_object_or_404
 from taggit.models import Tag
@@ -88,3 +88,8 @@ def other_user_profile(response, name):
     user_profile=Profile.objects.filter(user__username=name)
 
     return render(response, "userprofile/profile.html", {'courses': courses, 'user_profile': user_profile})
+
+def lecture_detail(response, pk):
+    lecture = get_object_or_404(Lecture, pk=pk)
+
+    return redirect('course_detail', title=lecture.course.title)

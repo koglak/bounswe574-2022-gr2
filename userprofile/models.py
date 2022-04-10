@@ -47,3 +47,15 @@ class Rating(models.Model):
     def __str__(self):
         return self.course.title
 
+class Lecture(models.Model):
+    course=models.ForeignKey(Course,default=None, on_delete=models.PROTECT, related_name="lecture")
+    user=models.ForeignKey(User,default=None, on_delete=models.PROTECT)
+
+    title = models.CharField(max_length=255)
+    content=models.TextField()
+    published_date=models.DateTimeField(blank=True, null=True)
+
+    def __str__(self):
+        return self.course.title
+
+

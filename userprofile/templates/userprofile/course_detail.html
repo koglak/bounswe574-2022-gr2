@@ -20,7 +20,12 @@
                     <div class="container">    
                         <div class="row">
                             <div class="col-sm-6">
-                                <a href="{% url 'course_detail' title=course.title %}" class="post-title">{{ course.title }}</a>
+                                <a href="{% url 'course_detail' title=course.title %}" class="post-title">{{ course.title }}</a> | 
+                                {% if user == course.user %}
+                                <a href="{% url 'user_profile' %}" class="post-author" style="font-family: 'Poppins';font-size:18px; font-weight: 600px; margin-right:5px">{{course.user}}</a>
+                                {% else %}
+                                <a href="{% url 'other_user_profile' name=course.author %}" class="post-author" style="font-family: 'Poppins';font-size:18px; font-weight: 600px; margin-right:5px">{{course.user}}</a>
+                                {% endif %}
                             </div>
                             <div class="col-sm-6">
                                 {% if user in course.collaborative_members.all %}
@@ -36,8 +41,10 @@
                             </div>
                         </div>
                         <div class="row">
-
-                            <form class="form-inline my-2 my-lg-0" method='POST' action="{% url 'course_rate' title=course.title %}" style="margin:15px;padding-top: 20px;">
+                            <span style="font-family:'Poppins'; opacity: 0.8;">Lecture: {{course.lecture.count}} | Quiz: None | Case-Study: None </span>
+                        </div>
+                        <div class="row">
+                            <form class="form-inline my-2 my-lg-0" method='POST' action="{% url 'course_rate' title=course.title %}" style="padding-top: 20px;">
                                 {% csrf_token %}
                                 {% if user.is_authenticated %}
                                     <span class="star-rating">
@@ -49,7 +56,7 @@
                                     </span>
                                     <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Rate</button>
                                   {% endif %}
-                                  <span>{{course.averagereview }}/5</span>      
+                                  <span style="font-family:'Poppins'; opacity:0.8">{{course.averagereview }}/5</span>      
                             </form>
                             
                 
@@ -64,7 +71,7 @@
                 </div>
             </div>
           
-      
+            <hr>
            
             <div class="row">
                 <p class="post-text">{{course.description|linebreaksbr}}</p>   
@@ -86,6 +93,27 @@
 
     <hr>
 
-   
+   <div class="container">
+       <div class="row">
+           <div class="col-sm-3">
+
+
+           <ul class="list-group"></ul>
+                {% for lecture in course.lecture.all %}    
+                    <li class="list-group-item"><a href="{% url 'lecture_detail' pk=lecture.pk %}" class="lecture-title"> {{lecture.id}}. {{lecture.title}}</a></li>      
+                {% endfor %}
+            </ul>
+
+           </div>
+           <div class="col-sm-9">
+
+           </div>
+           <div class="col-sm-9">
+
+           </div>
+       </div>
+
+       
+   </div>
       
 {% endblock %}
