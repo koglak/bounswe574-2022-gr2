@@ -2,7 +2,7 @@
 # Create your views here.
 from django.utils import timezone
 from django.shortcuts import render
-from .models import Course, Profile
+from .models import Course, Profile, Rating
 from .forms import CourseForm
 from django.shortcuts import redirect, get_object_or_404
 from taggit.models import Tag
@@ -62,6 +62,25 @@ def delete_course(request, title):
     course = Course.objects.get(title=title)
     course.delete()
     return redirect('/myspace/profile')
+
+
+def course_rate(request, title):
+    course = get_object_or_404(Course, title=title)
+    rating=request.POST["rating"]
+    if course.rating_set.filter(user=request.user, rating=rating ):
+        print('already rated')
+    elif course.rating_set.filter(user=request.user):
+        obj= Rating.objects.get(user=request.user, course=course)
+        obj.rating = rating
+        obj.save()
+        course.averagereview()
+
+    else:
+        obj = Rating.objects.create(course=course, user=request.user, rating=rating)
+        obj.save()
+        course.averagereview()
+
+    return redirect('course_detail', title=course.title)
 
 
 def other_user_profile(response, name):

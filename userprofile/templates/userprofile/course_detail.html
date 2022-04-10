@@ -17,17 +17,44 @@
                     </div>
                 </div>
                 <div class="col-sm-8">
-                    <a href="{% url 'course_detail' title=course.title %}" class="post-title">{{ course.title }}</a>
-                    {% if user in course.collaborative_members.all %}
-                    <a class="btn btn-secondary btn-sm" href="{% url 'course_edit' title=course.title %}">
-                        Edit Course
-                    </a>
-                    {% elif user == course.user %}
+                    <div class="container">    
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <a href="{% url 'course_detail' title=course.title %}" class="post-title">{{ course.title }}</a>
+                            </div>
+                            <div class="col-sm-6">
+                                {% if user in course.collaborative_members.all %}
+                                <a class="btn btn-secondary btn-sm" href="{% url 'course_edit' title=course.title %}">
+                                    Edit Course
+                                </a>
+                                {% elif user == course.user %}
 
-                    <a class="btn btn-secondary btn-sm" href="{% url 'course_edit' title=course.title %}">
-                        Edit Course
-                    </a>
-                    {% endif %}
+                                <a class="btn btn-secondary btn-sm" href="{% url 'course_edit' title=course.title %}">
+                                    Edit Course
+                                </a>
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div class="row">
+
+                            <form class="form-inline my-2 my-lg-0" method='POST' action="{% url 'course_rate' title=course.title %}" style="margin:15px;padding-top: 20px;">
+                                {% csrf_token %}
+                                {% if user.is_authenticated %}
+                                    <span class="star-rating">
+                                        <input type="radio" name="rating" value="1"><i>1</i>
+                                        <input type="radio" name="rating" value="2"><i>2</i>
+                                        <input type="radio" name="rating" value="3"><i>3</i>
+                                        <input type="radio" name="rating" value="4"><i>4</i>
+                                        <input type="radio" name="rating" value="5"><i>5</i>
+                                    </span>
+                                    <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Rate</button>
+                                  {% endif %}
+                                  <span>{{course.averagereview }}/5</span>      
+                            </form>
+                            
+                
+                        </div>
+                    </div>
                 </div>
                 <!--Published Date-->
                 <div class="col-sm-2">
@@ -36,7 +63,9 @@
                     </date>
                 </div>
             </div>
-
+          
+      
+           
             <div class="row">
                 <p class="post-text">{{course.description|linebreaksbr}}</p>   
             </div>

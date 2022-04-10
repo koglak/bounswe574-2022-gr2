@@ -3,6 +3,12 @@ from django import forms
 from .models import Profile,Course
 from django.forms import ImageField, ModelForm, TextInput
 from taggit.forms import TagWidget
+from django.utils.safestring import mark_safe
+
+
+
+# RATING_CHOICES = [(i+1,i+1) for i in range(5)]
+
 
 class CourseForm(forms.ModelForm):
     class Meta:
@@ -22,4 +28,8 @@ class CourseForm(forms.ModelForm):
             'tags': TagWidget(),
             'img': forms.FileInput(),
                 }
-           
+
+
+                
+   
+                

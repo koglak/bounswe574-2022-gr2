@@ -120,3 +120,11 @@ date{
     float:left;
     margin-top: 10x;
 }
+
+
+.rating{
+    float: left;
+    width: auto;
+    margin-left: 3em;
+ }
+

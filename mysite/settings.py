@@ -139,6 +139,9 @@ STATICFILES_DORS = (
 
 CRISPY_TEMPLATE_PACK="bootstrap4"
 
+TEMPLATE_CONTEXT_PROCESSORS="django.core.context_processors.request"
+
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
