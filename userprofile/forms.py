@@ -1,6 +1,6 @@
 from django import forms
 
-from .models import Profile,Course
+from .models import Lecture, Profile,Course
 from django.forms import ImageField, ModelForm, TextInput
 from taggit.forms import TagWidget
 from django.utils.safestring import mark_safe

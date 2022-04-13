@@ -91,5 +91,6 @@ def other_user_profile(response, name):
 
 def lecture_detail(response, pk):
     lecture = get_object_or_404(Lecture, pk=pk)
+    course = Course.objects.filter(lecture__title=lecture.title)
 
-    return redirect('course_detail', title=lecture.course.title)
+    return render(response, "userprofile/lecture_detail.html",{'course': course, 'lecture':lecture})

@@ -12,6 +12,8 @@ urlpatterns = [
     path('profile/<str:name>', views.other_user_profile, name='other_user_profile'),
     path('<str:title>/rate',views.course_rate,name='course_rate'),
     path('lecture/<int:pk>',views.lecture_detail,name='lecture_detail'),
+    #path('<str:title>/<int:pk>', views.lecture_detail, name='lecture_detail'),
+
 
 ]
 
