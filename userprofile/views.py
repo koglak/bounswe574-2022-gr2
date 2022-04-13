@@ -3,7 +3,7 @@
 from django.utils import timezone
 from django.shortcuts import render
 from .models import Course, Profile, Rating, Lecture
-from .forms import CourseForm
+from .forms import CourseForm, ProfileForm
 from django.shortcuts import redirect, get_object_or_404
 from taggit.models import Tag
 from django.template.defaultfilters import slugify
@@ -94,3 +94,17 @@ def lecture_detail(response, pk):
     course = Course.objects.filter(lecture__title=lecture.title)
 
     return render(response, "userprofile/lecture_detail.html",{'course': course, 'lecture':lecture})
+
+def profile_edit(request,pk):
+    profile = get_object_or_404(Profile, pk=pk)
+
+    if request.method == "POST":
+        form = ProfileForm(request.POST or None, request.FILES or None, instance=profile)
+        if form.is_valid():
+            profile = form.save(commit=False)
+            profile.save()
+            form.save_m2m()
+            return redirect('user_profile')
+    else:
+        form = ProfileForm(instance=profile)
+    return render(request, 'userprofile/profile_edit.html', {'form': form})

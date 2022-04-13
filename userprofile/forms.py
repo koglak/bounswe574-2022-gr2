@@ -29,6 +29,10 @@ class CourseForm(forms.ModelForm):
             'img': forms.FileInput(),
                 }
 
+class ProfileForm(forms.ModelForm):
+    class Meta:
+        model = Profile
+        fields = ('bio', 'img')
 
                 
    
