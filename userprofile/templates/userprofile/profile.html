@@ -27,7 +27,13 @@
                     <a class="btn btn-success" href="{% url 'course_new' %}" role="button">Create New Course!</a>
                 </div>
 
+                <div style="display: flex; justify-content: center; margin-top: 10px;">
+                    <a class="btn btn-secondary" href="{% url 'profile_edit' pk=user_profile.pk %}">Edit Profile</a>
+                </div>
+
             {% endif %}
+
+
         </div>
     </div>
   

@@ -85,7 +85,8 @@ def course_rate(request, title):
 
 def other_user_profile(response, name):
     courses=Course.objects.filter(user__username=name).order_by('published_date')
-    user_profile=Profile.objects.filter(user__username=name)
+    user_profile=Profile.objects.get(user__username=name)
+    print(user_profile)
 
     return render(response, "userprofile/profile.html", {'courses': courses, 'user_profile': user_profile})
 

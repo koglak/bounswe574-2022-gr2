@@ -11,10 +11,8 @@
                 <img src="{{user_profile.img.url}}" width="120"> </div>
             {% endif %}
         </div>
-        <div style="display: flex; justify-content: center; margin-top: 15px;">
-            <a class="btn btn-secondary btn-sm" href="{% url 'profile_edit' pk=user_profile.pk %}">Edit Profile</a>
 
-        </div>
+          
 
         <div class="mt-5 text-center">
             <h4 class="mb-0">{{user_profile.user}}</h4> 

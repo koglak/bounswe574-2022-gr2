@@ -19,7 +19,7 @@
                     {% if user == course.user %}
                     <a href="{% url 'user_profile' %}" class="post-author" style="font-family: 'Poppins';font-size:18px; font-weight: 600px; margin-right:5px">{{course.user}}</a>
                     {% else %}
-                    <a href="{% url 'other_user_profile' name=course.author %}" class="post-author" style="font-family:'Poppins';font-size:18px; font-weight: 600px; margin-right:5px">{{course.user}}</a>
+                    <a href="{% url 'other_user_profile' name=course.user %}" class="post-author" style="font-family:'Poppins';font-size:18px; font-weight: 600px; margin-right:5px">{{course.user}}</a>
                     {% endif %}
                 </div>
                 <div class="col-sm-7">

@@ -40,16 +40,16 @@ class Course(models.Model):
 
 class Rating(models.Model):
 
-    course=models.ForeignKey(Course,default=None, on_delete=models.PROTECT)
-    user=models.ForeignKey(User,default=None, on_delete=models.PROTECT)
+    course=models.ForeignKey(Course,default=None, on_delete=models.CASCADE)
+    user=models.ForeignKey(User,default=None, on_delete=models.CASCADE)
     rating = models.IntegerField(null=True, blank=True, default=0)
 
     def __str__(self):
         return self.course.title
 
 class Lecture(models.Model):
-    course=models.ForeignKey(Course,default=None, on_delete=models.PROTECT, related_name="lecture")
-    user=models.ForeignKey(User,default=None, on_delete=models.PROTECT)
+    course=models.ForeignKey(Course,default=None, on_delete=models.CASCADE, related_name="lecture")
+    user=models.ForeignKey(User,default=None, on_delete=models.CASCADE)
 
     title = models.CharField(max_length=255)
     content=models.TextField()
