@@ -90,12 +90,6 @@ def other_user_profile(response, name):
 
     return render(response, "userprofile/profile.html", {'courses': courses, 'user_profile': user_profile})
 
-def lecture_detail(response, pk):
-    lecture = get_object_or_404(Lecture, pk=pk)
-    course = Course.objects.filter(lecture__title=lecture.title)
-
-    return render(response, "userprofile/lecture_detail.html",{'course': course, 'lecture':lecture})
-
 def profile_edit(request,pk):
     profile = get_object_or_404(Profile, pk=pk)
 
@@ -109,3 +103,9 @@ def profile_edit(request,pk):
     else:
         form = ProfileForm(instance=profile)
     return render(request, 'userprofile/profile_edit.html', {'form': form})
+
+def lecture_detail(response, pk):
+    lecture = get_object_or_404(Lecture, pk=pk)
+    course = Course.objects.filter(lecture__title=lecture.title)
+
+    return render(response, "userprofile/lecture_detail.html",{'course': course, 'lecture':lecture})

@@ -1,66 +1,22 @@
 {% extends 'blog/base.html' %}
 
+
 {% block title %}
     Helloworld - Home
 {% endblock %}
 
 {% block content %}
 
-<div class="modal-footer"> 
-    <h4>Common Tags:</h4>
-    {% for tag in common_tags %}
-        <a href="{% url 'course_tag_detail' tag=tag %}" type="button" class="btn btn-outline-dark btn-sm" style="margin-left:10px"> #{{tag}}</a>
-    {% endfor %}
-</div>
-<div class="card-deck">
-{% for course in courses %}
-    <div class="card" style="width: 18rem; float:left; margin: 10px">
-        <ul class="list-group list-group-flush">
-            <div class="row">
-                <!--Profile Picture-->
-                <div class="col-sm-3">
-                    <div class="d-flex flex-start align-items-center" style="margin:5px">
-                        <img class="rounded-circle shadow-1-strong me-3"
-                        src="https://i.pinimg.com/564x/a6/58/32/a65832155622ac173337874f02b218fb.jpg" alt="avatar" width="60"
-                        height="60" />
-                    </div>
-                </div>
-                <!--Author name & Follow Link-->
-                <div class="col-sm-9" style="display: flex;justify-content: center;align-items: center; ">
-                    {% if user == course.user %}
-                    <a href="{% url 'user_profile' %}" class="post-author" style="font-family: 'Poppins';font-size:18px; font-weight: 600px; margin-right:5px">{{course.user}}</a>
-                    {% else %}
-                    <a href="{% url 'other_user_profile' name=course.user %}" class="post-author" style="font-family: 'Poppins';font-size:18px; font-weight: 600px; margin-right:5px">{{course.user}}</a>
-                    {% endif %}
-                    {% if user.is_authenticated %}
-                    <a href="#" class="link-success" style="font-family: 'Poppins';font-style: normal;font-weight: 800;font-size: 16px;">Follow</a>
-                    {% endif %}
-                </div>
-                <!--Published Date-->
-                
-            </div>
-        </ul>
-        <img src="{{course.img.url}}" class="card-img-top" >
-        <div class="card-body ">
-            <a href="{% url 'course_detail' title=course.title %}" class="post-title">{{ course.title }}</a>
-            <p class="card-text">{{course.description}}</p>
-        </div>
-        <ul class="list-group list-group-flush">
-        <li class="list-group-item">Lecture: {{course.lecture.count}} | Quiz: None | Case-Study: None</li>
-        <li class="list-group-item">{{course.averagereview }}/5</li>
-        <li class="list-group-item">Attended people</li>
-        </ul>
-        <div class="card-body">
-     
-                {% for tag in course.tags.all  %}
-                        <a href="{% url 'question_tag_detail' tag=tag %}" type="button" class="btn btn-outline-dark btn-sm" style="margin-left:10px"> #{{tag}}</a>
-                {% endfor %}
-
-        </div>
+    <div class="modal-footer"> 
+        <h4>Common Tags:</h4>
+        {% for tag in common_tags %}
+            <a href="{% url 'course_tag_detail' tag=tag %}" type="button" class="btn btn-outline-dark btn-sm" style="margin-left:10px"> #{{tag}}</a>
+        {% endfor %}
     </div>
-{% endfor %}
-
-
-</div>
+    <div class="card-deck">
+        {% for course in courses %}
+            {% include 'includes/course2.html' with course=course select="home" %}
+        {% endfor %}
+    </div>
 
 {% endblock%}
