@@ -7,92 +7,9 @@
 {% block content %}
 
 
-<div class="container bootstrap snippets bootdey">
-    <div class="row">
-        <div class="post-list">
-            <div class="row">
-                <div class="col-sm-2">
-                    <div class="d-flex flex-start align-items-center">
-                        <img src="{{course.img.url}}" style="width: 120px; height: 120px; border-radius: 50%;">
-                    </div>
-                </div>
-                <div class="col-sm-8">
-                    <div class="container">    
-                        <div class="row">
-                            <div class="col-sm-6">
-                                <a href="{% url 'course_detail' title=course.title %}" class="post-title">{{ course.title }}</a> | 
-                                {% if user == course.user %}
-                                <a href="{% url 'user_profile' %}" class="post-author" style="font-family: 'Poppins';font-size:18px; font-weight: 600px; margin-right:5px">{{course.user}}</a>
-                                {% else %}
-                                <a href="{% url 'other_user_profile' name=course.author %}" class="post-author" style="font-family: 'Poppins';font-size:18px; font-weight: 600px; margin-right:5px">{{course.user}}</a>
-                                {% endif %}
-                            </div>
-                            <div class="col-sm-6">
-                                {% if user in course.collaborative_members.all %}
-                                <a class="btn btn-secondary btn-sm" href="{% url 'course_edit' title=course.title %}">
-                                    Edit Course
-                                </a>
-                                {% elif user == course.user %}
+{% include 'includes/course.html' with course=course %}
 
-                                <a class="btn btn-secondary btn-sm" href="{% url 'course_edit' title=course.title %}">
-                                    Edit Course
-                                </a>
-                                {% endif %}
-                            </div>
-                        </div>
-                       
-                        <div class="row">
-                            <span style="font-family:'Poppins'; opacity: 0.8;">Lecture: {{course.lecture.count}} | Quiz: None | Case-Study: None </span>
-                        </div>
-                        <div class="row">
-                            <form class="form-inline my-2 my-lg-0" method='POST' action="{% url 'course_rate' title=course.title %}" style="padding-top: 20px;">
-                                {% csrf_token %}
-                                {% if user.is_authenticated %}
-                                    <span class="star-rating">
-                                        <input type="radio" name="rating" value="1"><i>1</i>
-                                        <input type="radio" name="rating" value="2"><i>2</i>
-                                        <input type="radio" name="rating" value="3"><i>3</i>
-                                        <input type="radio" name="rating" value="4"><i>4</i>
-                                        <input type="radio" name="rating" value="5"><i>5</i>
-                                    </span>
-                                    <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Rate</button>
-                                  {% endif %}
-                                  <span style="font-family:'Poppins'; opacity:0.8">{{course.averagereview }}/5</span>      
-                            </form>
-                            
-                
-                        </div>
-                    </div>
-                </div>
-                <!--Published Date-->
-                <div class="col-sm-2">
-                    <date> 
-                        {{course.published_date}}
-                    </date>
-                </div>
-            </div>
-          
-            <hr>
-           
-            <div class="row">
-                <p class="post-text">{{course.description|linebreaksbr}}</p>   
-            </div>
-
-            <div class="row" style="padding: 4px; background: rgba(196, 196, 196, 0.22); margin-top:5px" >
-                <div class="col-sm-12 col-lg-12 col-xl-12" style="display: flex; justify-content: flex-end; background: rgba(196, 196, 196, 0.22); padding:5px ">
-                    {% for tag in course.tags.all %}                     
-                      <a href="{% url 'course_tag_detail' tag=tag %}" type="button" class="btn btn-outline-dark btn-sm" style="margin-left:10px"> #{{tag}}</a>
-                    {% endfor %}
-                  </div>
-            </div>
-        </div>
-
-    </div>
-    
-</div>
-
-
-    <hr>
+<hr>
 
    <div class="container">
        <div class="row">

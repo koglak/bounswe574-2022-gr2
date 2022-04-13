@@ -8,65 +8,12 @@
 
 <div class="container bootstrap snippets bootdey">
     <div class="row">
+        <!--List Courses-->
         <div class="col-sm-9">
             <h3>Courses</h3>
             {% if not post.answers.all %}
-            
                 {% for course in courses %}
-
-                        <div class="container-fluid post-list"   >
-                            <div class="row">
-                                <div class="col-sm-2">
-                                    <div class="d-flex flex-start align-items-center">
-                                        
-                                        <img src="{{course.img.url}}" style="width: 120px; height: 120px; border-radius: 50%;">
-                                    </div>
-                                </div>
-                                
-                                <div class="col-sm-8">
-                                    <div class="container">
-                                        <div class="row">
-                                            <div class="col-sm-10">
-                                                <a href="{% url 'course_detail' title=course.title %}" class="post-title">{{ course.title }}</a>
-                                                {% if user in course.collaborative_members.all %}
-                                                    <a class="btn btn-secondary btn-sm" href="{% url 'course_edit' title=course.title %}">
-                                                        Edit Course
-                                                    </a>
-                                                {% elif user == course.user %}
-                                                    <a class="btn btn-secondary btn-sm" href="{% url 'course_edit' title=course.title %}">
-                                                        Edit Course
-                                                    </a>
-                                                {% endif %} 
-                                            </div>
-                                            <!--Published Date-->
-                                            <div class="col-sm-2">
-                                                <date> 
-                                                    {{course.published_date|date:'y. m. d' }}
-                                                </date>
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <span style="font-family:'Poppins'; opacity:0.8">Rating: {{course.averagereview }}/5</span>      
-                                        </div>
-                                        <div class="row">
-                                            <span style="font-family:'Poppins'; opacity: 0.8;">Lecture: {{course.lecture.count}} | Quiz: None | Case-Study: None </span>
-                                        </div>
-                                        
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="row">
-                                <p class="post-text">{{course.description|linebreaksbr}}</p>   
-                            </div>
-                            <div class="col-sm-12 col-lg-12 col-xl-12" style="display: flex; justify-content: flex-end; background: rgba(196, 196, 196, 0.22); padding:5px ">
-                                {% for tag in course.tags.all %}                     
-                                <a href="{% url 'course_tag_detail' tag=tag %}" type="button" class="btn btn-outline-dark btn-sm" style="margin-left:10px"> #{{tag}}</a>
-                                {% endfor %}
-                            </div>
-
-                        
-                        </div>  
+                    {% include 'includes/course.html' with course=course %}
                 {% endfor %}
             {% endif %}
         </div>
