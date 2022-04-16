@@ -61,7 +61,7 @@
                         </span>
                         <button class="btn btn-outline-success my-2 my-sm-0 btn-sm" type="submit">Rate</button>
                       {% endif %}
-                      <span style="font-family:'Poppins'; opacity:0.8">{{course.averagereview}}/5</span>      
+                      <span style="font-family:'Poppins'; opacity:0.8">{{course.averagereview|floatformat:'2' }}/5</span>      
                 </form>
             </div>
 
