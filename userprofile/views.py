@@ -1,5 +1,6 @@
 
 # Create your views here.
+from django.http import HttpResponse
 from django.utils import timezone
 from django.shortcuts import render
 from .models import Course, Profile, Rating, Lecture
@@ -13,8 +14,9 @@ from django.template.defaultfilters import slugify
 def user_profile(response):
     courses=Course.objects.filter(user = response.user).order_by('published_date')
     user_profile=Profile.objects.get(user=response.user)
+    collaborative_member=Course.objects.filter(collaborative_members = response.user)
 
-    return render(response, "userprofile/profile.html", {'courses':courses, 'user_profile':user_profile})
+    return render(response, "userprofile/profile.html", {'courses':courses, 'user_profile':user_profile, 'collaborative_member': collaborative_member})
 
 def course_detail(request, title):
     course = get_object_or_404(Course, title=title)
@@ -85,9 +87,10 @@ def course_rate(request, title):
 def other_user_profile(response, name):
     courses=Course.objects.filter(user__username=name).order_by('published_date')
     user_profile=Profile.objects.get(user__username=name)
-    print(user_profile)
+    collaborative_member=Course.objects.filter(collaborative_members__username = name)
 
-    return render(response, "userprofile/profile.html", {'courses': courses, 'user_profile': user_profile})
+
+    return render(response, "userprofile/profile.html", {'courses': courses, 'user_profile': user_profile, 'collaborative_member': collaborative_member})
 
 def profile_edit(request,pk):
     profile = get_object_or_404(Profile, pk=pk)
@@ -119,4 +122,3 @@ def search_course(request):
     else:
         return render(request, "userprofile/search_course.html", {}) 
 
-   
