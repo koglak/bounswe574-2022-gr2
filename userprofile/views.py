@@ -110,5 +110,13 @@ def lecture_detail(response, pk):
     return render(response, "userprofile/lecture_detail.html",{'course': course, 'lecture':lecture})
 
 
+def search_course(request):
+    if request.method == "POST":
+        searched = request.POST["searched"]
+        results = Course.objects.filter(title__icontains=searched)
+
+        return render(request, "userprofile/search_course.html", {'searched': searched, 'results': results}) 
+    else:
+        return render(request, "userprofile/search_course.html", {}) 
 
    

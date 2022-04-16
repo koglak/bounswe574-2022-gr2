@@ -1,0 +1,28 @@
+{% extends 'blog/base.html' %}
+
+{% block title %}
+    Search Results - Course
+{% endblock %}
+
+{% block content %}
+
+    <h2>Search Results</h2>
+    <hr>
+    {% if searched %}
+        You searched for {{searched}}
+
+        <ul class="list-group">
+
+        {% for result in results %}
+         
+            <li class="list-group-item"><a href="{% url 'course_detail' title=result.title %}" class="post-title">{{result}}</a></li>
+
+        {% endfor %}
+
+        </ul>
+    {% else %}
+        Hey! You forgot to search!
+    {% endif %}
+ 
+    
+{% endblock %}
