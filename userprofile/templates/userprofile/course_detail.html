@@ -9,6 +9,7 @@
     <div class="container-fluid" style="margin-top: 10px;">
           <div class="row">
               <div class="col-sm-3">
+                    <h2>hhh</h2>
                     <div id="list-example" class="list-group">
                         {% for lecture in course.lecture.all %} 
                             <a href="{% url 'lecture_detail' pk=lecture.pk %}" class="list-group-item list-group-item-action"> {{lecture.id}}. {{lecture.title}}</a>  

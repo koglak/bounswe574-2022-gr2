@@ -34,6 +34,11 @@ class ProfileForm(forms.ModelForm):
         model = Profile
         fields = ('bio', 'img')
 
+class LectureForm(forms.ModelForm):
+    class Meta:
+        model = Lecture
+        fields = ('title', 'content')
+
                 
    
                 

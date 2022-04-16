@@ -3,7 +3,7 @@
 from django.utils import timezone
 from django.shortcuts import render
 from .models import Course, Profile, Rating, Lecture
-from .forms import CourseForm, ProfileForm
+from .forms import CourseForm, ProfileForm, LectureForm
 from django.shortcuts import redirect, get_object_or_404
 from taggit.models import Tag
 from django.template.defaultfilters import slugify
@@ -27,7 +27,6 @@ def course_edit(request, title):
         form = CourseForm(request.POST or None, request.FILES or None, instance=course)
         if form.is_valid():
             course = form.save(commit=False)
-            course.user = request.user
             course.published_date = timezone.now()
             course.save()
             form.save_m2m()
@@ -109,3 +108,7 @@ def lecture_detail(response, pk):
     course = Course.objects.filter(lecture__title=lecture.title)
 
     return render(response, "userprofile/lecture_detail.html",{'course': course, 'lecture':lecture})
+
+
+
+   
