@@ -3,6 +3,7 @@
 from django.http import HttpResponse
 from django.utils import timezone
 from django.shortcuts import render
+from blog.models import Post
 from .models import Course, Profile, Rating, Lecture
 from .forms import CourseForm, ProfileForm, LectureForm
 from django.shortcuts import redirect, get_object_or_404
@@ -15,9 +16,8 @@ def user_profile(response):
     courses=Course.objects.filter(user = response.user).order_by('published_date')
     user_profile=Profile.objects.get(user=response.user)
     collaborative_member=Course.objects.filter(collaborative_members = response.user)
-
-
-    return render(response, "userprofile/profile.html", {'courses':courses, 'user_profile':user_profile, 'collaborative_member': collaborative_member})
+    question=Post.objects.filter(author=response.user)
+    return render(response, "userprofile/profile.html", {'courses':courses, 'user_profile':user_profile, 'collaborative_member': collaborative_member, 'question':question})
 
 def course_detail(request, title):
     course = get_object_or_404(Course, title=title)
@@ -89,7 +89,9 @@ def other_user_profile(response, name):
     courses=Course.objects.filter(user__username=name).order_by('published_date')
     user_profile=Profile.objects.get(user__username=name)
     collaborative_member=Course.objects.filter(collaborative_members__username = name)
-    return render(response, "userprofile/profile.html", {'courses': courses, 'user_profile': user_profile, 'collaborative_member': collaborative_member})
+    question=Post.objects.filter(author=user_profile.user)
+
+    return render(response, "userprofile/profile.html", {'courses': courses, 'user_profile': user_profile, 'collaborative_member': collaborative_member, 'question': question})
 
 def profile_edit(request,pk):
     profile = get_object_or_404(Profile, pk=pk)
