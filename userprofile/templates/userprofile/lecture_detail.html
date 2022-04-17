@@ -10,7 +10,19 @@
     <div class="container-fluid" style="margin-top: 10px;">
         <div class="row">
             <div class="col-sm-3">
-        
+                {% for course in course %}
+                    {% if user in course.enrolled_users.all %}
+                        <div style="display: flex; justify-content: center; margin: 10px 0px; ">
+                            <a class="btn btn-secondary" href="{% url 'course_drop' pk=course.pk %}"> Drop Course</a>
+                        </div> 
+                    {% else %}
+                        <div style="display: flex; justify-content: center; margin: 10px 0px;">
+                            <a class="btn btn-success" href="{% url 'course_enroll' pk=course.pk %}"> Enroll Course</a>
+                        </div>
+                    {% endif %}
+
+                {% endfor %}
+
                 {% for course in course %}
                     <div id="list-example" class="list-group">
                         {% for lecture in course.lecture.all %} 
@@ -23,6 +35,7 @@
             {{lecture.content}}
             </div>
             <div class="col-sm-3">
+
                 {% for course in course %}
                     {% include 'includes/course2.html' with course=course select="course" %}
                 {% endfor %}

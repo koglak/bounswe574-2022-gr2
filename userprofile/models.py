@@ -26,6 +26,7 @@ class Course(models.Model):
     img = models.ImageField(upload_to='images')
     published_date=models.DateTimeField(blank=True, null=True)
     collaborative_members = models.ManyToManyField(User, blank=True, related_name='collaborative_members')
+    enrolled_users = models.ManyToManyField(User, blank=True, related_name='enrolled_users')
     tags = TaggableManager()
 
     def averagereview(self):
