@@ -9,6 +9,14 @@
 
 
     <h2>Create New Lecture</h2>
+    <form method="POST" class="question-form">
+        {% csrf_token %}
+        {{form.as_p}}
+        <button type="submit" class="save btn btn-success">Post</button>
+        {% if title != "none" %}
+        <a class="btn btn-outline-danger" href="{% url 'delete_lecture' title=title %}">Delete Lecture</a>
+        {% endif %}
+    </form>
   
   
    

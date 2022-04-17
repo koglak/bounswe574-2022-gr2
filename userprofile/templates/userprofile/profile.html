@@ -19,7 +19,7 @@
         
         <div class="col-sm-3">
            
-            {% include 'includes/profile.html' with user_profile=user_profile %}
+            {% include 'includes/profile.html' with user_profile=user_profile courses=courses %}
 
             {% if user == user_profile.user %}
 

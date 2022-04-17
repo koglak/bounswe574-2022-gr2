@@ -1,0 +1,14 @@
+{% load bootstrap_icons %}
+
+
+<div id="list-example" class="list-group">
+    {% for lecture in course.lecture.all %} 
+       <li class="list-group-item list-group-item-action">
+            {% if user in course.collaborative_members.all or user == course.user %}
+                <a href="{% url 'lecture_edit' pk=lecture.pk %}" class="post-text" style="text-decoration:none"> {% bs_icon 'pencil' size='1.5em' %}|</a>
+            {% endif %}
+           
+            <a href="{% url 'lecture_detail' pk=lecture.pk %}" class="post-text" style="text-decoration:none"> Lecture: {{lecture.title}}</a>
+        </li> 
+    {% endfor %}
+</div>

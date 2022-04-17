@@ -44,6 +44,8 @@ INSTALLED_APPS = [
     'register.apps.RegisterConfig',
     'userprofile',
     'taggit',
+    'django_bootstrap_icons',
+
 ]
 
 MIDDLEWARE = [

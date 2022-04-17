@@ -10,27 +10,37 @@
     <div class="container-fluid" style="margin-top: 10px;">
         <div class="row">
             <div class="col-sm-3">
-                {% for course in course %}
-                    {% include 'includes/enroll_drop.html' with course=course %}
-                {% endfor %}
+                <!--Enroll & Drop Button-->
+                {% if user.is_authenticated %}
+                    {% for course in course %}
+                        {% include 'includes/enroll_drop.html' with course=course %}
+                         <!-- Create New Lecture -->
+                        {% if user in course.collaborative_members.all or user == course.user %}
+                        <div style="display: flex; justify-content: center; margin: 10px 0px; ">
+                            <a href="{% url 'lecture_new' pk=course.pk %}" class="btn btn-outline-success">Create Lecture</a>                    
+                        </div> 
+                        {% endif %}
+                    {% endfor %}
+                {% endif %}
 
+               
+
+                <!-- Lecture List -->
                 {% for course in course %}
-                    <div id="list-example" class="list-group">
-                        {% for lecture in course.lecture.all %} 
-                            <a href="{% url 'lecture_detail' pk=lecture.pk %}" class="list-group-item list-group-item-action"> {{lecture.id}}. {{lecture.title}}</a>  
-                        {% endfor %}
-                    </div>
+                    {% include 'includes/lecture.html' with course=course %}
                 {% endfor %}
             </div>
+
+            <!--Lecture Content-->
             <div class="col-sm-6">
-            {{lecture.content}}
+                {{lecture.content}}
             </div>
-            <div class="col-sm-3">
 
+            <!--Course Block: Course2 Template-->
+            <div class="col-sm-3">
                 {% for course in course %}
                     {% include 'includes/course2.html' with course=course select="course" %}
                 {% endfor %}
-
             </div>
         </div> 
     </div>

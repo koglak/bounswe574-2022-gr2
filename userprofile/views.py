@@ -16,6 +16,7 @@ def user_profile(response):
     user_profile=Profile.objects.get(user=response.user)
     collaborative_member=Course.objects.filter(collaborative_members = response.user)
 
+
     return render(response, "userprofile/profile.html", {'courses':courses, 'user_profile':user_profile, 'collaborative_member': collaborative_member})
 
 def course_detail(request, title):
@@ -135,3 +136,45 @@ def course_drop(request,pk):
     title=course.title
     
     return redirect('course_detail', title=title)
+
+
+def lecture_new(request, pk):
+    if request.method == "POST":
+        course = Course.objects.get(pk=pk)
+        form = LectureForm(request.POST)
+        if form.is_valid():
+            lecture = form.save(commit=False)
+            lecture.user = request.user
+            lecture.published_date = timezone.now()
+            lecture.course = course
+            lecture.save()
+            return redirect('lecture_detail', pk=lecture.pk)
+    else:
+        form = LectureForm()
+        title ="none"
+    return render(request, 'userprofile/lecture_edit.html', {'form': form, 'title':title})
+
+def lecture_edit(request, pk):
+    lecture = get_object_or_404(Lecture, pk=pk)
+
+    if request.method == "POST":
+        course= Course.objects.get(lecture__pk=lecture.pk)
+
+        form = LectureForm(instance=lecture, data=request.POST)
+        if form.is_valid():
+            form.save()
+
+            return redirect('course_detail', title=course.title)
+    else:
+        form = LectureForm(instance=lecture)
+
+    return render(request, 'userprofile/lecture_edit.html', {'form': form, 'title': lecture.title})
+
+
+def delete_lecture(request, title):
+    lecture = Lecture.objects.get(title=title)
+    course= Course.objects.get(lecture__pk=lecture.pk)
+
+    lecture.delete()
+    return redirect('course_detail', title=course.title)
+

@@ -1,5 +1,6 @@
 {% extends 'blog/base.html' %}
 
+
 {% block title %}
     Course Detail
 {% endblock %}
@@ -9,12 +10,22 @@
     <div class="container-fluid" style="margin-top: 10px;">
           <div class="row">
               <div class="col-sm-3">
-                    {% include 'includes/enroll_drop.html' with course=course %}
-                    <div id="list-example" class="list-group">
-                        {% for lecture in course.lecture.all %} 
-                            <a href="{% url 'lecture_detail' pk=lecture.pk %}" class="list-group-item list-group-item-action"> {{lecture.id}}. {{lecture.title}}</a>  
-                        {% endfor %}
-                    </div>
+                    <!--Enroll & Drop Button -->
+                    {% if user.is_authenticated %}
+                        {% include 'includes/enroll_drop.html' with course=course %}
+                    {% endif %}
+
+                    <!-- Create Lecture Button-->
+                    {% if user in course.collaborative_members.all or user == course.user %}
+                        <div style="display: flex; justify-content: center; margin: 10px 0px; ">
+                            <a href="{% url 'lecture_new' pk=course.pk %}" class="btn btn-outline-success">Create Lecture</a>                    
+                        </div> 
+                    {% endif %}
+
+                    <!-- Lecture List-->
+                    {% include 'includes/lecture.html' with course=course %}
+
+                            
               </div>
               
               <div class="col-sm-6">
