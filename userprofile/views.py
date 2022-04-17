@@ -180,3 +180,8 @@ def delete_lecture(request, title):
     lecture.delete()
     return redirect('course_detail', title=course.title)
 
+
+def learn_page(response):
+    course = Course.objects.filter(enrolled_users=response.user)
+
+    return render(response, "userprofile/learn.html", {'course': course})

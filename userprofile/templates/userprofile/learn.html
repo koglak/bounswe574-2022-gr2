@@ -1,0 +1,15 @@
+{% extends 'blog/base.html' %}
+
+{% block title %}
+    Learn
+{% endblock %}
+
+{% block content %}
+
+   <h2>Enrolled Courses</h2>
+
+   {% for course in course %}
+    {% include 'includes/course.html' with course=course %}
+   {% endfor %}
+
+{% endblock %}
