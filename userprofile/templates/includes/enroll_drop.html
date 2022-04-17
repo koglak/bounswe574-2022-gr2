@@ -1,0 +1,9 @@
+{% if user in course.enrolled_users.all %}
+    <div style="display: flex; justify-content: center; margin: 10px 0px; ">
+        <a class="btn btn-secondary" href="{% url 'course_drop' pk=course.pk %}"> Drop Course</a>
+    </div> 
+{% else %}
+    <div style="display: flex; justify-content: center; margin: 10px 0px;">
+        <a class="btn btn-success" href="{% url 'course_enroll' pk=course.pk %}"> Enroll Course</a>
+    </div>
+{% endif %}
