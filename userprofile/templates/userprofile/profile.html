@@ -42,7 +42,7 @@
 
             <ul class="list-group">
                 {% for col in collaborative_member %}
-                    <li class="list-group-item"><a href="{% url 'course_detail' title=col.title %}" class="post-text">{{ col }}</a></li>
+                    <li class="list-group-item"><a href="{% url 'course_detail' title=col.title %}" class="post-text" style="text-decoration: none;">{{ col }}</a></li>
                 {% endfor %}
             </ul>
 

@@ -1,0 +1,25 @@
+{% extends 'blog/base.html' %}
+
+{% block title %}
+    Quiz
+{% endblock %}
+
+{% block content %}
+<div class="container ">
+        
+    <div class="card-columns" style="padding: 10px; margin: 20px;">
+        <div class="card" style="width: 32rem; border:1px black solid">
+            <div class="card-body">
+                <h5 class="card-title"> <strong> {{score}}</strong></h5>
+                <p class="card-text"><strong> Percentage:</strong> {{percent}}%</p>
+                <p class="card-text"><strong> Correct answers:</strong> {{correct}}</p>
+                <p class="card-text"><strong> Incorrect answers:</strong> {{wrong}}</p>
+                <p class="card-text"><strong> Total questions:</strong> {{total}}</p>
+                <h5>All the best for next quiz!</h5>
+            </div>
+        </div>
+    </div>
+ 
+</div>
+
+{% endblock %}

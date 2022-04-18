@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'userprofile',
     'taggit',
     'django_bootstrap_icons',
+    'quiz',
 
 ]
 

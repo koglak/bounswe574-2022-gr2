@@ -4,6 +4,7 @@ from django.http import HttpResponse
 from django.utils import timezone
 from django.shortcuts import render
 from blog.models import Post
+from quiz.models import Question, QuestionList
 from .models import Course, Profile, Rating, Lecture
 from .forms import CourseForm, ProfileForm, LectureForm
 from django.shortcuts import redirect, get_object_or_404
@@ -21,7 +22,8 @@ def user_profile(response):
 
 def course_detail(request, title):
     course = get_object_or_404(Course, title=title)
-    return render(request, 'userprofile/course_detail.html', {'course':course})
+    quiz_list = QuestionList.objects.filter(course=course)
+    return render(request, 'userprofile/course_detail.html', {'course':course, 'quiz_list':quiz_list})
 
 def course_edit(request, title):
     course = get_object_or_404(Course, title=title)
