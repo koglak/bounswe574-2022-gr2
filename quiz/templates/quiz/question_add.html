@@ -1,0 +1,24 @@
+{% extends 'blog/base.html' %}
+
+{% block title %}
+    Question Add
+{% endblock %}
+
+{% block content %}
+<div class="jumbotron container row">
+    <div class="col-md-6">
+        <p class="post-title">Add Questions for {{quiz.title}} | {{quiz.course.title}}</a>
+        <div class="card card-body">
+           <form action="" method="POST">
+              {% csrf_token %}
+                {{form.as_p}}
+                <br>
+                <button type="submit" class="save btn btn-success" name="Submit">Ask</button>
+            </form>
+            </div>
+        </div>
+    </div>
+ 
+</div>
+
+{% endblock %}

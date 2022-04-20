@@ -1,19 +1,19 @@
 {% extends 'blog/base.html' %}
 
 {% block title %}
-    Quiz
+    Create New Quiz
 {% endblock %}
 
 {% block content %}
 <div class="jumbotron container row">
     <div class="col-md-6">
-        <h1>Add Question</h1>
+        <h1>Create Quiz for {{title}} </h1>
         <div class="card card-body">
            <form action="" method="POST">
-              {% csrf_token %}
+                {% csrf_token %}
                 {{form.as_p}}
                 <br>
-                <button type="submit" class="save btn btn-success" name="Submit">Ask</button>
+                <button type="submit" class="save btn btn-success" name="Submit">Create</button>
             </form>
             </div>
         </div>

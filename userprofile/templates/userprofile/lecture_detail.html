@@ -15,10 +15,13 @@
                     {% for course in course %}
                         {% include 'includes/enroll_drop.html' with course=course %}
                          <!-- Create New Lecture -->
-                        {% if user in course.collaborative_members.all or user == course.user %}
-                        <div style="display: flex; justify-content: center; margin: 10px 0px; ">
-                            <a href="{% url 'lecture_new' pk=course.pk %}" class="btn btn-outline-success">Create Lecture</a>                    
-                        </div> 
+                         {% if user %}
+
+                            <div class="btn-group" role="group" aria-label="Basic example">
+                                <a href="{% url 'lecture_new' pk=course.pk %}" type="button" class="btn btn-primary">Create Lecture</a>
+                                <a href="{% url 'quiz_create' title=course.title %}" class="btn btn-primary">Create Quiz</a>
+                                <a href="#"  class="btn btn-primary">Create Case-Study</a>
+                            </div>
                         {% endif %}
                     {% endfor %}
                 {% endif %}
@@ -27,7 +30,7 @@
 
                 <!-- Lecture List -->
                 {% for course in course %}
-                    {% include 'includes/lecture.html' with course=course %}
+                    {% include 'includes/lecture.html' with course=course quiz_list=course.questionlist %}
                 {% endfor %}
             </div>
 
