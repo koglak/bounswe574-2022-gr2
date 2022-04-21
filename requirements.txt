@@ -1,1 +1,2 @@
 Django~=3.2.10
+fontawesomefree==6.1.1

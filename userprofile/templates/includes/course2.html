@@ -33,6 +33,12 @@
     <!--Course Explanation-->
     <div class="card-body ">
         <a href="{% url 'course_detail' title=course.title %}" class="post-title">{{ course.title }}</a>
+        {% if course.enrolled_users.count > 2 %}
+        <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAABmJLR0QA/wD/AP+gvaeTAAAA2klEQVRIie2UPQrCQBCFPyVo4Q3ERstcwcIjSU5grqPHMP41YuU9TKVBlthMID+TNUtSiOTBwPJm5r0ZBhZ6dIwjELk0eI4GEyB17GmMORADD3k74dvqntSkEgfs21f0IsAAG8BXGsKceBahUucLb4B9ObnLNd+l0AeWwFsxMMAKWABr2SrLbbW1AkUkBZIa3pYLMtFhzuCsuQKjGt6WO2nkGHhapm0aL9GqbJAAN8u0TXEVrYoBwKUDg4JG2aDuDi6wakxpf4NZB0P+EAYK1/a3LGiWj9zjD/EB2nZh39k6c8MAAAAASUVORK5CYII="/>
+        {% elif course.averagereview > 4 %}
+        <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAABmJLR0QA/wD/AP+gvaeTAAABM0lEQVRIieXTQStEURjG8Z/SUMaCfBMbpSxmo9jaWMhWStbYicVkqyx8EdmQDWUjK6WmpCgrTXaMsZhzM6Zz7twZlPLU0+2+3ft/n/ftHP67BjCNHRzjEc9Y+i54CGu4RTPip+/A53GXAGd+6Df1YRdw5qNe4RM4i4A2MILNjvp2L/BxXCeSlsM3ox31qaLwMi4S8GZIXsZWW+1G63QltYL3HGg3r+bBl9HI+Tm188w1lFLwBbx1SZfaeTNMPZuX/r7A+LGdZz7Ig8M+Xgs0iflEzmpi2vM5djf4ldZRLqxh1AO8In7BMp9jrBc4zIWfL8N7JWeScgzQrsFIbSY8S6HJpPTFeSmaul2nvqasoyo+QV+qhSZVrXUNh3onfLffBillR7iB9Z+G07onT1j8Dfjf1Qf3orrfQhu7EQAAAABJRU5ErkJggg=="/>
+        {% endif %}
+        
         {% if select == 'home' %}
             <p class="card-text">{{course.description|truncatechars:150}}</p>
         {% else %}

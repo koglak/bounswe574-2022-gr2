@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'taggit',
     'django_bootstrap_icons',
     'quiz',
+    'fontawesomefree',
 
 ]
 
