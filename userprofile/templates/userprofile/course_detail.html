@@ -15,8 +15,8 @@
                         {% include 'includes/enroll_drop.html' with course=course %}
                     {% endif %}
 
-                    <!-- Create Lecture Button-->
-                    {% if user %}
+                    <!-- Create Lecture & Quiz & Case Study Button-->
+                    {% if user in course.collaborative_members.all or user == course.user %}
 
                         <div class="btn-group" role="group" aria-label="Basic example">
                             <a href="{% url 'lecture_new' pk=course.pk %}" type="button" class="btn btn-primary">Create Lecture</a>
@@ -37,7 +37,7 @@
               </div>
 
               <div class="col-sm-3">
-                {% include 'includes/course2.html' with course=course select="course" %}
+                {% include 'includes/course2.html' with course=course count=quiz_list.count select="course" %}
               </div>
           </div> 
     </div>

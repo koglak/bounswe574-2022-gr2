@@ -21,7 +21,7 @@ def user_profile(response):
     return render(response, "userprofile/profile.html", {'courses':courses, 'user_profile':user_profile, 'collaborative_member': collaborative_member, 'question':question})
 
 def course_detail(request, title):
-    course = get_object_or_404(Course, title=title)
+    course =Course.objects.get(title=title)
     quiz_list = QuestionList.objects.filter(course=course)
     return render(request, 'userprofile/course_detail.html', {'course':course, 'quiz_list':quiz_list})
 

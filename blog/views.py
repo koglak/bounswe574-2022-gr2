@@ -1,6 +1,8 @@
 import re
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
+
+from quiz.models import QuestionList
 from .models import Answer, Post
 from userprofile.models import Course
 from django.utils import timezone

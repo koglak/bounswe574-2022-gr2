@@ -8,9 +8,17 @@
     <div class="container ">
         <h1>Welcome to Quiz Page</h1>
 
-        <a class="btn btn-outline-primary" href="{% url 'question_add' title=quiz.title %}">Add Question</a>
+        {% if user in course.collaborative_members.all or user == course.user %}
+            <!--Quiz Settings-->
+            <div class="btn-group" role="group" aria-label="Basic example">
+                <!--Delete Quiz-->
+                <a class="btn btn-outline-danger" href="{% url 'quiz_delete' title=quiz.title %}">Delete Quiz</a>
+                <!--Add Question-->
+                <a class="btn btn-outline-primary" href="{% url 'question_add' title=quiz.title %}">Add Question</a>
+            </div>
+        {% endif %}
 
-        
+        <!--Question Form-->
         <form method='post' action=''>
             {% csrf_token %}
             {% for q  in questions %}
@@ -56,6 +64,7 @@
             <br>
             <!--Submit Button-->
             <button type="submit" class="btn btn-primary">Submit</button>
+
         </form>
         
     </div>

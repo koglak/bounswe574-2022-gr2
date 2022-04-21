@@ -38,9 +38,11 @@ def quiz_detail(request,title):
     else:
         quiz = get_object_or_404(QuestionList, title=title)
         questions=quiz.question_list.all()
+        course= Course.objects.get(questionlist__pk=quiz.pk)
         context = {
             'quiz': quiz,
-            'questions':questions
+            'questions':questions,
+            'course':course
         }
         return render(request,'quiz/quiz_detail.html',context)
 
@@ -49,8 +51,7 @@ def quiz_detail(request,title):
   #  return render(response, "quiz/quiz_detail.html", {'quiz': quiz})
 
 def quiz_create(request, title):
-    course = get_object_or_404(Course, title=title)
-    
+    course=Course.objects.get(title=title)    
     if request.method == "POST":
         form = QuizForm(request.POST)
         if form.is_valid():
@@ -82,3 +83,10 @@ def question_add(request,title):
         return render(request,'quiz/question_add.html',context)
     else: 
         return redirect('quiz_detail', title=title) 
+
+def quiz_delete(request, title):
+    quiz = QuestionList.objects.get(title=title)
+    course= Course.objects.get(questionlist__pk=quiz.pk)
+
+    quiz.delete()
+    return redirect('course_detail', title=course.title)
