@@ -1,6 +1,6 @@
 from django.shortcuts import render
 
-from quiz.models import Question, QuestionList
+from quiz.models import Question, QuestionList, Score
 from userprofile.models import Course
 from .forms import QuestionForm, QuizForm
 from django.shortcuts import redirect, get_object_or_404
@@ -27,6 +27,7 @@ def quiz_detail(request,title):
             else:
                 wrong+=1
         percent = score/(total*10) *100
+        user_score=Score.objects.create(user=request.user, quiz=quiz, score=percent)
         context = {
             'score':score,
             'correct':correct,
@@ -36,9 +37,10 @@ def quiz_detail(request,title):
         }
         return render(request,'quiz/quiz_result.html',context)
     else:
-        quiz = get_object_or_404(QuestionList, title=title)
+        quiz = QuestionList.objects.get(title=title)
         questions=quiz.question_list.all()
         course= Course.objects.get(questionlist__pk=quiz.pk)
+        
         context = {
             'quiz': quiz,
             'questions':questions,
@@ -65,24 +67,22 @@ def quiz_create(request, title):
         return render(request, 'quiz/quiz_create.html', {'form': form, 'title': title})
 
 def question_add(request,title):    
-    if request.user.is_staff:
-        form=QuestionForm()
-        ###
-        quiz = QuestionList.objects.get(title=title)
+    form=QuestionForm()
+    quiz = QuestionList.objects.get(title=title)
         
-        if request.method=='POST':
-            form=QuestionForm(request.POST)
-            if form.is_valid():
-                question=form.save(commit=False)
-                question.save()
-                quiz.question_list.add(question.pk)
-                quiz.save()
+    if request.method=='POST':
+        form=QuestionForm(request.POST)
+        if form.is_valid():
+            question=form.save(commit=False)
+            question.save()
+            quiz.question_list.add(question.pk)
+            quiz.save()
 
-                return redirect('quiz_detail', title=title)
-        context={'form':form}
-        return render(request,'quiz/question_add.html',context)
-    else: 
-        return redirect('quiz_detail', title=title) 
+            return redirect('quiz_detail', title=title)
+
+    context={'form':form}
+    return render(request,'quiz/question_add.html',context)
+   
 
 def quiz_delete(request, title):
     quiz = QuestionList.objects.get(title=title)

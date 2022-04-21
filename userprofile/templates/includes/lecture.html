@@ -20,6 +20,7 @@
                 <a href="#" class="post-text" style="text-decoration:none"> {% bs_icon 'pencil' size='1.5em' %}|</a>
             {% endif %}
             <a href="{% url 'quiz_detail' title=quiz.title %}" class="post-text" style="text-decoration:none"> Quiz: {{quiz.title}}</a>
+            <span class="badge alert-success">Score: {{score_list | get_all_scores:quiz }} </span>
         </li> 
 
     {% endfor %}
