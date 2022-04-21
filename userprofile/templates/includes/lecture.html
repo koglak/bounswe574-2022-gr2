@@ -25,4 +25,16 @@
 
     {% endfor %}
 
+
+    {% for case in case_list %}
+        <li class="list-group-item list-group-item-action">
+            {% if user in course.collaborative_members.all or user == course.user %}
+                <a href="#" class="post-text" style="text-decoration:none"> {% bs_icon 'pencil' size='1.5em' %}|</a>
+            {% endif %}
+            <a href="{% url 'case_detail' title=case.title %}" class="post-text" style="text-decoration:none"> Case: {{case.title}}</a>
+        </li> 
+    {% endfor %}
+
+
+
 </div>

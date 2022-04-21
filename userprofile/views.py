@@ -4,7 +4,7 @@ from django.http import HttpResponse
 from django.utils import timezone
 from django.shortcuts import render
 from blog.models import Post
-from quiz.models import Question, QuestionList, Score
+from quiz.models import Case, Question, QuestionList, Score
 from .models import Course, Profile, Rating, Lecture
 from .forms import CourseForm, ProfileForm, LectureForm
 from django.shortcuts import redirect, get_object_or_404
@@ -23,13 +23,16 @@ def user_profile(response):
 def course_detail(request, title):
     course =Course.objects.get(title=title)
     quiz_list = QuestionList.objects.filter(course=course)
-
+    case_list = Case.objects.filter(course=course)
     score_list = Score.objects.filter(user=request.user)
+    context = {
+            'course': course,
+            'quiz_list':quiz_list,
+            'score_list':score_list,
+            'case_list':case_list
+        }
 
-    for quiz in quiz_list:
-        print(score_list.filter(quiz=quiz))
-
-    return render(request, 'userprofile/course_detail.html', {'course':course, 'quiz_list':quiz_list, 'score_list': score_list})
+    return render(request, 'userprofile/course_detail.html', context)
 
 
 
@@ -120,8 +123,16 @@ def profile_edit(request,pk):
 def lecture_detail(response, pk):
     lecture = get_object_or_404(Lecture, pk=pk)
     course = Course.objects.filter(lecture__title=lecture.title)
+    quiz_list = QuestionList.objects.filter(course=course)
+    score_list = Score.objects.filter(user=response.user)
+    context = {
+            'course': course,
+            'lecture': lecture,
+            'quiz_list':quiz_list,
+            'score_list':score_list,
+        }
 
-    return render(response, "userprofile/lecture_detail.html",{'course': course, 'lecture':lecture})
+    return render(response, "userprofile/lecture_detail.html",context)
 
 
 def search_course(request):

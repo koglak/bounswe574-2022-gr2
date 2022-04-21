@@ -26,9 +26,6 @@ class Question(models.Model):
         return self.question
 
 
-
-
-
 class QuestionList(models.Model):
     title=models.CharField(max_length=200,null=True)
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
@@ -51,3 +48,14 @@ class Score(models.Model):
 
     def __str__(self):
         return self.score
+
+class Case(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    course=models.ForeignKey(Course, default=None, on_delete=models.CASCADE)
+    title=models.CharField(max_length=200,null=True)
+    description=models.TextField()
+
+    def __str__(self):
+        return self.title
+
+

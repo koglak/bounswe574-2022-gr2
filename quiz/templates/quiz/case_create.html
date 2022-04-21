@@ -1,0 +1,24 @@
+{% extends 'blog/base.html' %}
+
+{% block title %}
+    Create New Case Study
+{% endblock %}
+
+{% block content %}
+<div class="jumbotron container row">
+    <div class="col-md-6">
+        <h1>Create Case Study for {{course.title}} </h1>
+        <div class="card card-body">
+           <form action="" method="POST">
+                {% csrf_token %}
+                {{form.as_p}}
+                <br>
+                <button type="submit" class="save btn btn-success" name="Submit">Create</button>
+            </form>
+            </div>
+        </div>
+    </div>
+ 
+</div>
+
+{% endblock %}

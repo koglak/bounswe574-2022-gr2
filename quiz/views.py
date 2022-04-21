@@ -1,8 +1,8 @@
 from django.shortcuts import render
 
-from quiz.models import Question, QuestionList, Score
+from quiz.models import Case, Question, QuestionList, Score
 from userprofile.models import Course
-from .forms import QuestionForm, QuizForm
+from .forms import CaseForm, QuestionForm, QuizForm
 from django.shortcuts import redirect, get_object_or_404
 
 
@@ -90,3 +90,20 @@ def quiz_delete(request, title):
 
     quiz.delete()
     return redirect('course_detail', title=course.title)
+
+def case_create(request,title):
+    course=Course.objects.get(title=title)
+    form = CaseForm()
+    if request.method == "POST":
+        form = CaseForm(request.POST)
+        if form.is_valid():
+            case = form.save(commit=False)
+            case.user = request.user
+            case.course = course
+            case.save()
+            return redirect('case_detail', title=case.title)
+    return render(request, 'quiz/case_create.html', {'course': course, 'form':form})
+
+def case_detail(response,title):
+    case=Case.objects.get(title=title)
+    return render(response, 'quiz/case_detail.html', {'case':case})

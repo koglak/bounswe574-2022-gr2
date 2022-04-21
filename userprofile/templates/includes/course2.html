@@ -41,13 +41,12 @@
     </div>
 
     <!--Course Detail-->
-    {% if select == 'home' %}
+
         <ul class="list-group list-group-flush">
             <li class="list-group-item">Lecture: {{course.lecture.count}} | Quiz: {{count }} | Case-Study: None</li>
-            <li class="list-group-item">{{course.averagereview }}/5</li>
+            <li class="list-group-item">Rating: {{course.averagereview }}/5</li>
             <li class="list-group-item">Enrolled Users: {{course.enrolled_users.count}}</li>
         </ul>
-    {% endif %}
 
 
     <!--Course Tag-->

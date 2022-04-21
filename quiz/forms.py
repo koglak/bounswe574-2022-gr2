@@ -16,3 +16,10 @@ class QuizForm(ModelForm):
     class Meta:
         model=QuestionList
         fields=('title', )
+
+
+class CaseForm(ModelForm):
+
+    class Meta:
+        model=Case
+        fields=('title','description')

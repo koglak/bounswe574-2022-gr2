@@ -1,0 +1,15 @@
+{% extends 'blog/base.html' %}
+
+{% block title %}
+    Create New Case Study
+{% endblock %}
+
+{% block content %}
+<div class="jumbotron container row">
+    <p class="post-title">{{case.title}}</p>
+    <br>
+    <hr>
+    <p class="post-author">{{case.description}}</p>
+</div>
+
+{% endblock %}
