@@ -23,3 +23,31 @@ class CaseForm(ModelForm):
     class Meta:
         model=Case
         fields=('title','description')
+
+class CaseResultForm(ModelForm):
+
+    class Meta:
+        model=CaseResult
+        fields=('upload',)
+
+    def clean_file(self):
+        file= self.cleaned_data['file']
+
+        try:
+            #validate content type
+            main, sub = file.content_type.split('/')
+            if not (main == 'image' and sub in ['jpeg', 'pjpeg', 'png']):
+                raise forms.ValidationError(u'Please use a JPEG or PNG image.')
+
+            #validate file size
+            if len(file) > (10000 * 1024):
+                raise forms.ValidationError(u'File size may not exceed 10M.')
+
+        except AttributeError:
+            """
+            Handles case when we are updating the user profile
+            and do not supply a new avatar
+            """
+            pass
+
+        return file

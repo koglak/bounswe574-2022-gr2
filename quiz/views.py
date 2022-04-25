@@ -2,8 +2,9 @@ from django.shortcuts import render
 
 from quiz.models import Case, Question, QuestionList, Score
 from userprofile.models import Course
-from .forms import CaseForm, QuestionForm, QuizForm
+from .forms import CaseForm, QuestionForm, QuizForm, CaseResultForm
 from django.shortcuts import redirect, get_object_or_404
+from django.utils import timezone
 
 
 # Create your views here.
@@ -104,6 +105,21 @@ def case_create(request,title):
             return redirect('case_detail', title=case.title)
     return render(request, 'quiz/case_create.html', {'course': course, 'form':form})
 
-def case_detail(response,title):
+def case_detail(request,title):
     case=Case.objects.get(title=title)
-    return render(response, 'quiz/case_detail.html', {'case':case})
+    course=Course.objects.get(case=case)
+
+    form= CaseResultForm()
+
+    if request.method == 'POST':  
+        form = CaseResultForm(request.POST, request.FILES)  
+        if form.is_valid():  
+            result = form.save(commit=False)
+            result.user=request.user
+            result.shared_date = timezone.now()
+            result.case=case
+            result.save()
+            return redirect('course_detail', title=course.title)  
+    else:  
+        form= CaseResultForm()
+        return render(request, 'quiz/case_detail.html', {'case':case, 'form': form, 'course': course})

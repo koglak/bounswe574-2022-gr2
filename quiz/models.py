@@ -58,4 +58,14 @@ class Case(models.Model):
     def __str__(self):
         return self.title
 
+class CaseResult(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    case=models.ForeignKey(Case, default=None, on_delete=models.CASCADE)
+    upload = models.FileField(upload_to='uploads/')
+    shared_date=models.DateTimeField(blank=True, null=True)
+    score=models.CharField(max_length=200,null=True, default='0')
+
+    def __str__(self):
+        return self.score
+
 
