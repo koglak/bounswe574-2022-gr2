@@ -16,7 +16,9 @@ db.sqlite3
 
 # media
 
+/media/
 /media/images/
+/media/uploads/
 
 # macOS
 ._*

@@ -26,7 +26,7 @@
         
         <div class="row card-deck">
             {% for course in courses %}
-                {% include 'includes/course2.html' with course=course count=course.questionlist.count select="home" %}
+                {% include 'includes/course2.html' with course=course count=course.questionlist.count  select="home" %}
             {% endfor %}
         </div>
     </div>

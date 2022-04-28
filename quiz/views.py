@@ -1,11 +1,11 @@
 from django.shortcuts import render
 
-from quiz.models import Case, Question, QuestionList, Score
+from quiz.models import Case, CaseResult, Question, QuestionList, Score
 from userprofile.models import Course
-from .forms import CaseForm, QuestionForm, QuizForm, CaseResultForm
+from .forms import CaseForm, QuestionForm, QuizForm, CaseResultForm, ScoreForm
 from django.shortcuts import redirect, get_object_or_404
 from django.utils import timezone
-
+from django.forms import modelformset_factory
 
 # Create your views here.
 def quiz_detail(request,title):
@@ -123,3 +123,17 @@ def case_detail(request,title):
     else:  
         form= CaseResultForm()
         return render(request, 'quiz/case_detail.html', {'case':case, 'form': form, 'course': course})
+
+def case_grade(request,title):
+    case=Case.objects.get(title=title)
+    submission_list = CaseResult.objects.filter(case=case).order_by('shared_date')
+    ListFormSet = modelformset_factory(CaseResult, fields=('score',), extra=0)
+    if request.method == 'POST':
+        list_formset = ListFormSet(request.POST)
+        if list_formset.is_valid():
+            list_formset.save()
+            return redirect('case_grade', title=case.title)  
+    else: 
+        list_formset = ListFormSet(queryset=CaseResult.objects.filter(case=case).order_by('shared_date'))
+
+        return render(request, 'quiz/case_grade.html', {'submission_list': submission_list, 'list_formset': list_formset} )

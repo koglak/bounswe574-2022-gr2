@@ -1,0 +1,41 @@
+{% extends 'blog/base.html' %}
+
+{% block title %}
+    Create New Case Study
+{% endblock %}
+
+{% block content %}
+
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">User Name</th>
+        <th scope="col">Submission Date</th>
+        <th scope="col">File</th>
+      </tr>
+    </thead>
+    <tbody>
+      <form enctype="multipart/form-data" method="POST">
+
+        {{ list_formset.management_form }}
+        {% csrf_token %}
+
+        {% for list_form in list_formset %}
+          <tr id="row_{{ list_form.instance.id }}">
+            <th scope="row">{{forloop.counter}}</th>
+            <td> <a href="{% url 'other_user_profile' name=list_form.instance.user.username %}" class="post-author" style="font-family:'Poppins';font-size:18px; font-weight: 600px; margin-right:5px">{{list_form.instance.user}}</a></td>
+            <td>{{ list_form.instance.shared_date }}</td>
+            <td><a href="{{ MEDIA_URL }}{{list_form.instance.upload.url}}">Download</a></td>
+            {{ list_form }} 
+          </tr>
+
+        {% endfor %}
+        <button type="submit" class="save btn btn-success">Save</button>
+      </form>
+
+    </tbody>
+  </table>
+{% endblock %}
+
+

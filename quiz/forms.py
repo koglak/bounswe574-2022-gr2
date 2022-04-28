@@ -51,3 +51,8 @@ class CaseResultForm(ModelForm):
             pass
 
         return file
+
+class ScoreForm(ModelForm):
+    class Meta:
+        model=CaseResult
+        fields=('score',)
