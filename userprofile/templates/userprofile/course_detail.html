@@ -8,8 +8,13 @@
 {% block content %}
 
     <div class="container-fluid" style="margin-top: 10px;">
-          <div class="row">
-              <div class="col-sm-3">
+
+        <div class="row">
+                {% include 'includes/course.html' with course=course count=quiz_list.count case_count=case_list.count select='home' %}
+   
+        </div>
+        <div class="row">
+              <div class="col-sm-4">
                     <!--Enroll & Drop Button -->
                     {% if user.is_authenticated %}
                         {% include 'includes/enroll_drop.html' with course=course %}
@@ -34,14 +39,11 @@
                             
               </div>
               
-              <div class="col-sm-6">
+              <div class="col-sm-8">
                 {{course.lecture.first.content}}
               </div>
 
-              <div class="col-sm-3">
-                {% include 'includes/course2.html' with course=course count=quiz_list.count case_count=case_list.count select="course" %}
-              </div>
-          </div> 
+        </div> 
     </div>
       
 {% endblock %}

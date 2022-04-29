@@ -100,7 +100,7 @@ def course_rate(request, title):
         obj.save()
         course.averagereview()
 
-    return redirect('/myspace/profile', title=course.title)
+    return redirect('course_detail', title=course.title)
 
 
 def other_user_profile(response, name):
