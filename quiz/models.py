@@ -3,6 +3,9 @@ from django.db import models
 from django.conf import settings
 from userprofile.models import Course
 from django.template.defaulttags import register
+from django.contrib.auth.models import User
+from django.db.models import Avg
+from django.core.validators import MaxValueValidator, MinValueValidator 
 
 
 OPTION_CHOICES = (
@@ -63,9 +66,25 @@ class CaseResult(models.Model):
     case=models.ForeignKey(Case, default=None, on_delete=models.CASCADE)
     upload = models.FileField(upload_to='uploads/')
     shared_date=models.DateTimeField(blank=True, null=True)
-    score=models.CharField(max_length=200,null=True, default='0')
+    
+    score=models.IntegerField(null=True, default='0', validators=[MinValueValidator(0), MaxValueValidator(100)])
+
+    def averagereview(self):
+        rating = CaseRating.objects.filter(case_result=self).aggregate(avarage=Avg('rating'))
+        avg=0
+        if rating["avarage"] is not None:
+            avg=float(rating["avarage"])
+        return avg
 
     def __str__(self):
-        return self.score
+        return str(self.score)
 
+class CaseRating(models.Model):
+
+    case_result=models.ForeignKey(CaseResult,default=None, on_delete=models.CASCADE)
+    user=models.ForeignKey(User,default=None, on_delete=models.CASCADE)
+    rating = models.IntegerField(null=True, blank=True, default=0)
+
+    def __str__(self):
+        return str(self.rating)
 

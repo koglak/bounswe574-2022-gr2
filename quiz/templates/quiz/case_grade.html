@@ -13,6 +13,9 @@
         <th scope="col">User Name</th>
         <th scope="col">Submission Date</th>
         <th scope="col">File</th>
+        <th scope="col">Rated By Owner</th>
+        <th scope="col">Rated By Users</th>
+
       </tr>
     </thead>
     <tbody>
@@ -24,16 +27,52 @@
         {% for list_form in list_formset %}
           <tr id="row_{{ list_form.instance.id }}">
             <th scope="row">{{forloop.counter}}</th>
-            <td> <a href="{% url 'other_user_profile' name=list_form.instance.user.username %}" class="post-author" style="font-family:'Poppins';font-size:18px; font-weight: 600px; margin-right:5px">{{list_form.instance.user}}</a></td>
+            
+            <td> 
+              <a href="{% url 'other_user_profile' name=list_form.instance.user.username %}" class="post-author" style="font-family:'Poppins';font-size:18px; font-weight: 600px; margin-right:5px">
+                {{list_form.instance.user}}
+              </a>
+            </td>
+            
             <td>{{ list_form.instance.shared_date }}</td>
+            
             <td><a href="{{ MEDIA_URL }}{{list_form.instance.upload.url}}">Download</a></td>
-            {{ list_form }} 
+            
+            <td>{{list_form.instance.score}}/100</td>
+
+            <td>
+              <!--All users can rate case studies-->
+              <form class="form-inline my-2 my-lg-0" action="{% url 'case_rate' pk=list_form.instance.pk %}" method="POST">
+                {% csrf_token %}
+                {% if user.is_authenticated %}
+                    <span class="star-rating">
+                        <input type="radio" name="rating" value="1"><i>1</i>
+                        <input type="radio" name="rating" value="2"><i>2</i>
+                        <input type="radio" name="rating" value="3"><i>3</i>
+                        <input type="radio" name="rating" value="4"><i>4</i>
+                        <input type="radio" name="rating" value="5"><i>5</i>
+                    </span>
+                    <button class="btn btn-outline-success my-2 my-sm-0 btn-sm" type="submit">Rate</button>
+                  {% endif %}
+                  <span style="font-family:'Poppins'; opacity:0.8">{{list_form.instance.averagereview|floatformat:'2' }}/5</span>      
+              </form>
+
+            </td>
+
+            <!--Only case owner can grade the case studies-->
+            {% if user == list_form.instance.case.user %}
+              {{ list_form }} 
+            {% endif %}
           </tr>
 
         {% endfor %}
-        <button type="submit" class="save btn btn-success">Save</button>
-      </form>
 
+        {% if user == list_form.instance.case.user %}
+          <button type="submit" class="save btn btn-success">Save</button>
+        {% endif %}
+
+
+      </form>
     </tbody>
   </table>
 {% endblock %}

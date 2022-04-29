@@ -10,6 +10,7 @@ urlpatterns = [
     path('<str:title>/case_create/', views.case_create,name='case_create'),
     path('<str:title>/case_detail/', views.case_detail,name='case_detail'),
     path('<str:title>/case_grade/', views.case_grade,name='case_grade'),
+    path('<int:pk>/case_rate',views.case_rate,name='case_rate'),
 
 
 

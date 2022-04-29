@@ -1,6 +1,6 @@
 from django.shortcuts import render
 
-from quiz.models import Case, CaseResult, Question, QuestionList, Score
+from quiz.models import Case, CaseResult, Question, QuestionList, Score, CaseRating
 from userprofile.models import Course
 from .forms import CaseForm, QuestionForm, QuizForm, CaseResultForm, ScoreForm
 from django.shortcuts import redirect, get_object_or_404
@@ -126,7 +126,6 @@ def case_detail(request,title):
 
 def case_grade(request,title):
     case=Case.objects.get(title=title)
-    submission_list = CaseResult.objects.filter(case=case).order_by('shared_date')
     ListFormSet = modelformset_factory(CaseResult, fields=('score',), extra=0)
     if request.method == 'POST':
         list_formset = ListFormSet(request.POST)
@@ -136,4 +135,25 @@ def case_grade(request,title):
     else: 
         list_formset = ListFormSet(queryset=CaseResult.objects.filter(case=case).order_by('shared_date'))
 
-        return render(request, 'quiz/case_grade.html', {'submission_list': submission_list, 'list_formset': list_formset} )
+        return render(request, 'quiz/case_grade.html', {'list_formset': list_formset} )
+
+
+def case_rate(request, pk):
+    case_result = get_object_or_404(CaseResult, pk=pk)
+    case=case_result.case
+    if request.method == 'POST':
+        rating=request.POST["rating"]
+        print(rating)
+        if case_result.caserating_set.filter(user=request.user, rating=rating ):
+            print('already rated')
+        elif case_result.caserating_set.filter(user=request.user):
+            obj= CaseRating.objects.get(user=request.user, case_result=case_result)
+            obj.rating = rating
+            obj.save()
+            case_result.averagereview()
+        else:
+            obj = CaseRating.objects.create(case_result=case_result, user=request.user, rating=rating)
+            obj.save()
+            case_result.averagereview()
+
+    return redirect('case_grade', title=case.title)
