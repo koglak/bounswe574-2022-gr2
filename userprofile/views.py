@@ -77,13 +77,13 @@ def course_tag_detail(response,tag):
     courses = Course.objects.filter(tags__name__in=[tag])
     return render(response, "userprofile/course_tag_details.html", {'courses': courses, 'tag': tag})
 
-
+@login_required(login_url="/login")
 def delete_course(request, title):
     course = Course.objects.get(title=title)
     course.delete()
     return redirect('/myspace/profile')
 
-
+@login_required(login_url="/login")
 def course_rate(request, title):
     course = get_object_or_404(Course, title=title)
     rating=request.POST["rating"]
@@ -102,7 +102,7 @@ def course_rate(request, title):
 
     return redirect('course_detail', title=course.title)
 
-
+@login_required(login_url="/login")
 def other_user_profile(response, name):
     courses=Course.objects.filter(user__username=name).order_by('published_date')
     user_profile=Profile.objects.get(user__username=name)
@@ -111,6 +111,7 @@ def other_user_profile(response, name):
 
     return render(response, "userprofile/profile.html", {'courses': courses, 'user_profile': user_profile, 'collaborative_member': collaborative_member, 'question': question})
 
+@login_required(login_url="/login")
 def profile_edit(request,pk):
     profile = get_object_or_404(Profile, pk=pk)
 
@@ -125,6 +126,7 @@ def profile_edit(request,pk):
         form = ProfileForm(instance=profile)
     return render(request, 'userprofile/profile_edit.html', {'form': form})
 
+@login_required(login_url="/login")
 def lecture_detail(response, pk):
     lecture = get_object_or_404(Lecture, pk=pk)
     course = Course.objects.filter(lecture__title=lecture.title)
@@ -139,7 +141,7 @@ def lecture_detail(response, pk):
 
     return render(response, "userprofile/lecture_detail.html",context)
 
-
+@login_required(login_url="/login")
 def search_course(request):
     if request.method == "POST":
         searched = request.POST["searched"]
@@ -149,6 +151,7 @@ def search_course(request):
     else:
         return render(request, "userprofile/search_course.html", {}) 
 
+@login_required(login_url="/login")
 def course_enroll(request,pk):
     course = get_object_or_404(Course, pk=pk)
 
@@ -157,6 +160,7 @@ def course_enroll(request,pk):
     
     return redirect('course_detail', title=title)
 
+@login_required(login_url="/login")
 def course_drop(request,pk):
     course = get_object_or_404(Course, pk=pk)
 
@@ -166,6 +170,7 @@ def course_drop(request,pk):
     return redirect('course_detail', title=title)
 
 
+@login_required(login_url="/login")
 def lecture_new(request, pk):
     if request.method == "POST":
         course = Course.objects.get(pk=pk)
@@ -182,6 +187,7 @@ def lecture_new(request, pk):
         title ="none"
     return render(request, 'userprofile/lecture_edit.html', {'form': form, 'title':title})
 
+@login_required(login_url="/login")
 def lecture_edit(request, pk):
     lecture = get_object_or_404(Lecture, pk=pk)
 
@@ -199,6 +205,7 @@ def lecture_edit(request, pk):
     return render(request, 'userprofile/lecture_edit.html', {'form': form, 'title': lecture.title})
 
 
+@login_required(login_url="/login")
 def delete_lecture(request, title):
     lecture = Lecture.objects.get(title=title)
     course= Course.objects.get(lecture__pk=lecture.pk)

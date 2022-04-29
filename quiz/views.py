@@ -6,8 +6,11 @@ from .forms import CaseForm, QuestionForm, QuizForm, CaseResultForm, ScoreForm
 from django.shortcuts import redirect, get_object_or_404
 from django.utils import timezone
 from django.forms import modelformset_factory
+from django.contrib.auth.decorators import login_required
+
 
 # Create your views here.
+@login_required(login_url="/login")
 def quiz_detail(request,title):
     if request.method == 'POST':
         print(request.POST)
@@ -53,6 +56,8 @@ def quiz_detail(request,title):
  #   quiz = get_object_or_404(QuestionList, title=title)
   #  return render(response, "quiz/quiz_detail.html", {'quiz': quiz})
 
+
+@login_required(login_url="/login")
 def quiz_create(request, title):
     course=Course.objects.get(title=title)    
     if request.method == "POST":
@@ -67,6 +72,8 @@ def quiz_create(request, title):
         form = QuizForm()
         return render(request, 'quiz/quiz_create.html', {'form': form, 'title': title})
 
+
+@login_required(login_url="/login")
 def question_add(request,title):    
     form=QuestionForm()
     quiz = QuestionList.objects.get(title=title)
@@ -85,6 +92,7 @@ def question_add(request,title):
     return render(request,'quiz/question_add.html',context)
    
 
+@login_required(login_url="/login")
 def quiz_delete(request, title):
     quiz = QuestionList.objects.get(title=title)
     course= Course.objects.get(questionlist__pk=quiz.pk)
@@ -92,6 +100,8 @@ def quiz_delete(request, title):
     quiz.delete()
     return redirect('course_detail', title=course.title)
 
+
+@login_required(login_url="/login")
 def case_create(request,title):
     course=Course.objects.get(title=title)
     form = CaseForm()
@@ -105,6 +115,8 @@ def case_create(request,title):
             return redirect('case_detail', title=case.title)
     return render(request, 'quiz/case_create.html', {'course': course, 'form':form})
 
+
+@login_required(login_url="/login")
 def case_detail(request,title):
     case=Case.objects.get(title=title)
     course=Course.objects.get(case=case)
@@ -124,6 +136,8 @@ def case_detail(request,title):
         form= CaseResultForm()
         return render(request, 'quiz/case_detail.html', {'case':case, 'form': form, 'course': course})
 
+
+@login_required(login_url="/login")
 def case_grade(request,title):
     case=Case.objects.get(title=title)
     ListFormSet = modelformset_factory(CaseResult, fields=('score',), extra=0)
@@ -137,7 +151,7 @@ def case_grade(request,title):
 
         return render(request, 'quiz/case_grade.html', {'list_formset': list_formset} )
 
-
+@login_required(login_url="/login")
 def case_rate(request, pk):
     case_result = get_object_or_404(CaseResult, pk=pk)
     case=case_result.case
