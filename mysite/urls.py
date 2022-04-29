@@ -29,6 +29,7 @@ urlpatterns = [
     path('', include("django.contrib.auth.urls")),
     path('myspace/', include("userprofile.urls")),
     path('learning/', include("quiz.urls")),
+    path('activity/', include("activity.urls")),
 
 
 
