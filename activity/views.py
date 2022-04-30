@@ -35,3 +35,28 @@ def activity_new(request):
         form = ActivityForm()
         title ="none"
     return render(request, 'activity/activity_edit.html', {'form': form, 'title':title})
+
+
+@login_required(login_url="/login")
+def activity_edit(request, pk):
+    activity = get_object_or_404(Activity, pk=pk)
+    if request.method == "POST":
+        form = ActivityForm(request.POST, instance=activity)
+        if form.is_valid():
+            instance=form.save(commit=False)
+            instance.user=request.user
+            instance.save()
+            return redirect('activity')
+    else:
+        form = ActivityForm(instance=activity)
+        title ="none"
+
+    return render(request, 'activity/activity_edit.html', {'form': form, 'title':title})
+
+@login_required(login_url="/login")
+def activity_enroll(request,pk):
+    activity = get_object_or_404(Activity, pk=pk)
+
+    activity.enrolled_users.add(request.user)
+    
+    return redirect('activity')
