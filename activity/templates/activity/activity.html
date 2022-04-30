@@ -1,4 +1,5 @@
 {% extends 'blog/base.html' %}
+{% load bootstrap_icons %}
 
 
 {% block title %}
@@ -7,5 +8,29 @@
 
 {% block content %}
 <h2>Activity</h2>
+
+<div class="container">
+    <div class="row">
+      <a class="btn btn-success" href="{% url 'activity_new' %}">Create New Activity</a>
+      {% for a in activity %}
+        <div class="card" style="width: 18rem; float:left; margin:10px">
+          <div class="card-body"> 
+            <h5 class="card-title">{% bs_icon 'calendar' size='1.5em' %}{{a.title}}</h5>
+            <h6 class="card-subtitle mb-2 text-muted">{{a.start_time}}</h6>
+            <p class="card-text">{{a.description}}</p>
+            <a href="#" class="card-link">Enroll</a>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+</div>
+
+
+
+{% endblock %}
+
+
+{% block script %}
+
 
 {% endblock %}
