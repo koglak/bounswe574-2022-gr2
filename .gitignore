@@ -36,3 +36,10 @@ $RECYCLE.BIN/
 .vscode/
 .history/
 *.code-workspace
+
+
+# Ignore docker data/db
+/data/db
+
+#ignore commands.txt
+commands.txt

@@ -18,7 +18,7 @@
               <a href="{% url 'activity_edit' pk=a.pk %}" style="text-decoration:none; ">Edit</a>
             {% endif %}
             <h5 class="card-title">{% bs_icon 'calendar' size='1.5em' %} {{a.title}}</h5>
-            <h6 class="card-subtitle mb-2 text-muted">{{a.start_time}}</h6>
+            <h6 class="card-subtitle mb-2 text-muted">{{a.start_time|date:"M d, Y" }}</h6>
             <p class="card-text">{{a.description}}</p>
             <a href="{% url 'activity_enroll' pk=a.pk %}" class="card-link">Join</a> | <strong>People:</strong>{{a.enrolled_users.count}}
           </div>
