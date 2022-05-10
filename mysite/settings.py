@@ -152,3 +152,6 @@ TEMPLATE_CONTEXT_PROCESSORS="django.core.context_processors.request"
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+LOGIN_REDIRECT_URL= "/"
+LOGOUT_REDIRECT_URL= "/" 
+
