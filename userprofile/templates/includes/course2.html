@@ -30,6 +30,9 @@
     <!--Course Image-->
     <img src="{{course.img.url}}" class="card-img-top" >
 
+
+   
+
     <!--Course Explanation-->
     <div class="card-body ">
         <a href="{% url 'course_detail' title=course.title %}" class="post-title">{{ course.title }}</a>
@@ -44,6 +47,7 @@
         {% else %}
             <p class="card-text">{{course.description}}</p>
         {% endif %}
+
     </div>
 
     <!--Course Detail-->
@@ -52,6 +56,22 @@
             <li class="list-group-item">Content: {{course.lecture.count}} | Quiz: {{count }} | Case-Study: {{case_count}}</li>
             <li class="list-group-item">Rating: {{course.averagereview |floatformat:'2' }}/5</li>
             <li class="list-group-item">Enrolled Users: {{course.enrolled_users.count}}</li>
+            {% if select == 'course' %}
+            <li class="list-group-item">
+                <form class="form-inline" method='POST' action="{% url 'course_rate' title=course.title %}">
+                    {% csrf_token %}
+                        <span class="star-rating">
+                            <input type="radio" name="rating" value="1"><i>1</i>
+                            <input type="radio" name="rating" value="2"><i>2</i>
+                            <input type="radio" name="rating" value="3"><i>3</i>
+                            <input type="radio" name="rating" value="4"><i>4</i>
+                            <input type="radio" name="rating" value="5"><i>5</i>
+                        </span>
+                        <button class="btn btn-outline-success my-2 my-sm-0 btn-sm" type="submit">Rate</button>
+                        <span style="font-family:'Poppins'; opacity:0.8">{{course.averagereview|floatformat:'2' }}/5</span>        
+                </form>
+            </li>
+            {% endif %}
         </ul>
 
 
