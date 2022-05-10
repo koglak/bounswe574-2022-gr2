@@ -129,14 +129,17 @@ def profile_edit(request,pk):
 @login_required(login_url="/login")
 def lecture_detail(response, pk):
     lecture = get_object_or_404(Lecture, pk=pk)
-    course = Course.objects.filter(lecture__title=lecture.title)
+    course = Course.objects.get(lecture__title=lecture.title)
     quiz_list = QuestionList.objects.filter(course=course)
     score_list = Score.objects.filter(user=response.user)
+    case_list = Case.objects.filter(course=course)
+
     context = {
             'course': course,
             'lecture': lecture,
             'quiz_list':quiz_list,
             'score_list':score_list,
+            'case_list':case_list,
         }
 
     return render(response, "userprofile/lecture_detail.html",context)
