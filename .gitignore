@@ -46,4 +46,5 @@ commands.txt
 
 db.json
 datadump.json
-.covarage
+.coverage
+/images/
