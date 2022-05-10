@@ -43,3 +43,7 @@ $RECYCLE.BIN/
 
 #ignore commands.txt
 commands.txt
+
+db.json
+datadump.json
+.covarage
