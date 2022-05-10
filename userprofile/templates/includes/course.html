@@ -24,15 +24,15 @@
                 </div>
                 <div class="col-sm-7">
                     {% if user in course.collaborative_members.all %}
-                        <a class="btn btn-secondary btn-sm" href="{% url 'course_edit' title=course.title %}" style="float:right">Edit Course</a>
+                        <a class="btn btn-secondary btn-sm" href="{% url 'course_edit' title=course.title %}" style="float:right">Edit Space</a>
                     {% elif user == course.user %}
-                        <a class="btn btn-secondary btn-sm" href="{% url 'course_edit' title=course.title %}" style="float:right">Edit Course</a>
+                        <a class="btn btn-secondary btn-sm" href="{% url 'course_edit' title=course.title %}" style="float:right">Edit Space</a>
                     {% endif %}
                 </div>
             </div>
             <!-- Lecture, Quiz, Case Study Count -->
             <div class="row" style="margin-bottom: 5px">
-                <span style="font-family:'Poppins'; opacity: 0.8;">Lecture: {{course.lecture.count}} | Quiz: None | Case-Study: None </span>
+                <span style="font-family:'Poppins'; opacity: 0.8;">Content: {{course.lecture.count}} | Quiz: None | Case-Study: None </span>
             </div>
 
             <!--Collaborative Members-->

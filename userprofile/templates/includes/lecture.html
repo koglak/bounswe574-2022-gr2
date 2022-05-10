@@ -8,7 +8,7 @@
                 <a href="{% url 'lecture_edit' pk=lecture.pk %}" class="post-text" style="text-decoration:none"> {% bs_icon 'pencil' size='1.5em' %}|</a>
             {% endif %}
            
-            <a href="{% url 'lecture_detail' pk=lecture.pk %}" class="post-text" style="text-decoration:none"> Lecture: {{lecture.title}}</a>
+            <a href="{% url 'lecture_detail' pk=lecture.pk %}" class="post-text" style="text-decoration:none"> Content: {{lecture.title}}</a>
         </li> 
 
     {% endfor %}

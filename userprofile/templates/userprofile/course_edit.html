@@ -2,7 +2,7 @@
 
 
 {% block title %}
-    Edit Course
+    Edit Space
 {% endblock %}
 
 {% block content %}
@@ -15,7 +15,7 @@
         {{form.as_p}}
         <button type="submit" class="save btn btn-success">Post</button>
         {% if title != "none" %}
-        <a class="btn btn-outline-danger" href="{% url 'delete_course' title=title %}">Delete Course</a>
+        <a class="btn btn-outline-danger" href="{% url 'delete_course' title=title %}">Delete Space</a>
         {% endif %}
     </form>
   
