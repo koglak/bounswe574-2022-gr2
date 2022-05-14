@@ -32,8 +32,8 @@ class Question(models.Model):
 class QuestionList(models.Model):
     title=models.CharField(max_length=200,null=True)
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    course=models.ForeignKey(Course, default=None, on_delete=models.CASCADE)
-    question_list = models.ManyToManyField(Question, blank=True, related_name='question_list')
+    course=models.ForeignKey(Course, default=None, on_delete=models.CASCADE, related_name='question_list')
+    question_list = models.ManyToManyField(Question, blank=True)
 
 
     def __str__(self):
@@ -54,7 +54,7 @@ class Score(models.Model):
 
 class Case(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    course=models.ForeignKey(Course, default=None, on_delete=models.CASCADE)
+    course=models.ForeignKey(Course, default=None, on_delete=models.CASCADE, related_name='case_list')
     title=models.CharField(max_length=200,null=True)
     description=models.TextField()
 

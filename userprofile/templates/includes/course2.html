@@ -53,7 +53,7 @@
     <!--Course Detail-->
 
         <ul class="list-group list-group-flush">
-            <li class="list-group-item">Content: {{course.lecture.count}} | Quiz: {{count }} | Case-Study: {{case_count}}</li>
+            <li class="list-group-item">Content: {{course.lecture.count}} | Quiz: {{course.question_list.count}} | Case-Study: {{course.case_list.count}}</li>
             <li class="list-group-item">Rating: {{course.averagereview |floatformat:'2' }}/5</li>
             <li class="list-group-item">Enrolled Users: {{course.enrolled_users.count}}</li>
             {% if select == 'course' %}

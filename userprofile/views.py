@@ -26,14 +26,10 @@ def user_profile(response):
 @login_required(login_url="/login")
 def course_detail(request, title):
     course =Course.objects.get(title=title)
-    quiz_list = QuestionList.objects.filter(course=course)
-    case_list = Case.objects.filter(course=course)
     score_list = Score.objects.filter(user=request.user)
     context = {
             'course': course,
-            'quiz_list':quiz_list,
             'score_list':score_list,
-            'case_list':case_list
         }
 
     return render(request, 'userprofile/course_detail.html', context)
@@ -130,16 +126,12 @@ def profile_edit(request,pk):
 def lecture_detail(response, pk):
     lecture = get_object_or_404(Lecture, pk=pk)
     course = Course.objects.get(lecture__title=lecture.title)
-    quiz_list = QuestionList.objects.filter(course=course)
     score_list = Score.objects.filter(user=response.user)
-    case_list = Case.objects.filter(course=course)
 
     context = {
             'course': course,
             'lecture': lecture,
-            'quiz_list':quiz_list,
             'score_list':score_list,
-            'case_list':case_list,
         }
 
     return render(response, "userprofile/lecture_detail.html",context)
