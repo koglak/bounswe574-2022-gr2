@@ -23,7 +23,7 @@
             <div class="row">
                 <a class="btn btn-success" href="{% url 'event_new' title=course.title %}">Create New Activity</a>
             </div>
-                {% for event in course.event_list.all %}
+                {% for event in event_list %}
                     {% include 'includes/event.html' with event=event course=course %}
                 {% endfor %}
         </div>
