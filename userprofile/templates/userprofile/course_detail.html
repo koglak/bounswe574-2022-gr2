@@ -16,15 +16,7 @@
                         {% include 'includes/enroll_drop.html' with course=course %}
                     {% endif %}
 
-                    <!-- Create Lecture & Quiz & Case Study Button-->
-                    {% if user in course.collaborative_members.all or user == course.user %}
-                        <div class="btn-group" role="group" aria-label="Basic example">
-                            <a href="{% url 'lecture_new' pk=course.pk %}" type="button" class="btn btn-primary">Create Content</a>
-                            <a href="{% url 'quiz_create' title=course.title %}" class="btn btn-primary">Create Quiz</a>
-                            <a href="{% url 'case_create' title=course.title %}"  class="btn btn-primary">Create Case-Study</a>
-                        </div>
-                    {% endif %}
-                    <br>
+                   
 
                     <!-- Lecture List-->
                     {% include 'includes/lecture.html' with course=course %}                 
