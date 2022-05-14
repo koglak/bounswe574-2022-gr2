@@ -5,7 +5,7 @@ from django.utils import timezone
 from django.shortcuts import render
 from blog.models import Post
 from quiz.models import Case, Question, QuestionList, Score
-from .models import Course, Profile, Rating, Lecture
+from .models import Course, Profile, Rating, Lecture, Event
 from .forms import CourseForm, ProfileForm, LectureForm, EventForm
 from django.shortcuts import redirect, get_object_or_404
 from taggit.models import Tag
@@ -235,4 +235,21 @@ def event_new(request, title):
     else:
         form = EventForm()
         title ="none"
+    return render(request, 'userprofile/event_edit.html', {'form': form, 'title':title})
+
+
+@login_required(login_url="/login")
+def event_edit(request, pk):
+    event = get_object_or_404(Event, pk=pk)
+    if request.method == "POST":
+        form = EventForm(request.POST, instance=event)
+        if form.is_valid():
+            instance=form.save(commit=False)
+            instance.user=request.user
+            instance.save()
+            return redirect('event_list', title=event.course.title)
+    else:
+        form = EventForm(instance=event)
+        title ="none"
+
     return render(request, 'userprofile/event_edit.html', {'form': form, 'title':title})

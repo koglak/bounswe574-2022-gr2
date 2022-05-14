@@ -6,7 +6,7 @@
             <div class="card" style="width: 18rem; float:left; margin:10px">
             <div class="card-body"> 
                 {% if user == event.user %}
-                <a href="#" style="text-decoration:none; ">Edit</a>
+                <a href="{% url 'event_edit' pk=event.pk %}" style="text-decoration:none; ">Edit</a>
                 {% endif %}
                 <h5 class="card-title">{% bs_icon 'calendar' size='1.5em' %} {{event.title}}</h5>
                 <h6 class="card-subtitle mb-2 text-muted">{{event.start_time|date:"M d, Y" }}</h6>
