@@ -10,7 +10,7 @@
                 <h5 class="card-title">{% bs_icon 'calendar' size='1.5em' %} {{event.title}}</h5>
                 <h6 class="card-subtitle mb-2 text-muted">{{event.start_time|date:"M d, Y" }}</h6>
                 <p class="card-text">{{event.description}}</p>
-                <a href="#" class="card-link">Join</a> | <strong>People:</strong>{{event.enrolled_users.count}}
+                <a href="{% url 'event_enroll' pk=event.pk %}" class="card-link">Join</a> | <strong>People:</strong>{{event.enrolled_users.count}}
             </div>
             </div>
         </div>

@@ -253,3 +253,9 @@ def event_edit(request, pk):
         title ="none"
 
     return render(request, 'userprofile/event_edit.html', {'form': form, 'title':title})
+
+@login_required(login_url="/login")
+def event_enroll(request,pk):
+    event = get_object_or_404(Event, pk=pk)
+    event.enrolled_users.add(request.user)
+    return redirect('event_list', title=event.course.title)
