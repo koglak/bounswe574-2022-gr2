@@ -6,7 +6,7 @@ from django.shortcuts import render
 from blog.models import Post
 from quiz.models import Case, Question, QuestionList, Score
 from .models import Course, Profile, Rating, Lecture
-from .forms import CourseForm, ProfileForm, LectureForm
+from .forms import CourseForm, ProfileForm, LectureForm, EventForm
 from django.shortcuts import redirect, get_object_or_404
 from taggit.models import Tag
 from django.template.defaultfilters import slugify
@@ -212,3 +212,25 @@ def delete_lecture(request, title):
 def learn_page(response):
     course = Course.objects.filter(enrolled_users=response.user)
     return render(response, "userprofile/learn.html", {'course': course})
+
+@login_required(login_url="/login")
+def event_list(response, title):
+    course=get_object_or_404(Course, title=title)
+    return render(response, "userprofile/event_list.html", {'course': course})
+
+
+@login_required(login_url="/login")
+def event_new(request, title):
+    course=get_object_or_404(Course, title=title)
+    if request.method == "POST":
+        form = EventForm(request.POST)
+        if form.is_valid():
+            event = form.save(commit=False)
+            event.user = request.user
+            event.course=course
+            event.save()
+            return redirect('event_list', title=title)
+    else:
+        form = EventForm()
+        title ="none"
+    return render(request, 'userprofile/event_edit.html', {'form': form, 'title':title})

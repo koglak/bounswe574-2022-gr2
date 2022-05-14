@@ -1,9 +1,10 @@
 from django import forms
 
-from .models import Lecture, Profile,Course
+from .models import Lecture, Profile,Course, Event
 from django.forms import ImageField, ModelForm, TextInput
 from taggit.forms import TagWidget
 from django.utils.safestring import mark_safe
+from django.forms.widgets import NumberInput
 
 
 
@@ -39,6 +40,16 @@ class LectureForm(forms.ModelForm):
         model = Lecture
         fields = ('title', 'content')
 
-                
+
+class EventForm(forms.ModelForm):
+
+    class Meta:
+        model = Event
+        fields = ('title', 'description', 'start_time')
+
+        widgets = {
+            'start_time': NumberInput(attrs={'type':'date'}),
+        }
+
    
                 

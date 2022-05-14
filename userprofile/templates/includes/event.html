@@ -1,0 +1,21 @@
+{% load bootstrap_icons %}
+
+{% block content %}
+    <div class="container">
+        <div class="row">
+            <div class="card" style="width: 18rem; float:left; margin:10px">
+            <div class="card-body"> 
+                {% if user == event.user %}
+                <a href="#" style="text-decoration:none; ">Edit</a>
+                {% endif %}
+                <h5 class="card-title">{% bs_icon 'calendar' size='1.5em' %} {{event.title}}</h5>
+                <h6 class="card-subtitle mb-2 text-muted">{{event.start_time|date:"M d, Y" }}</h6>
+                <p class="card-text">{{event.description}}</p>
+                <a href="#" class="card-link">Join</a> | <strong>People:</strong>{{event.enrolled_users.count}}
+            </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+

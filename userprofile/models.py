@@ -59,4 +59,15 @@ class Lecture(models.Model):
     def __str__(self):
         return self.course.title
 
+class Event(models.Model):
+    title = models.CharField(max_length=200)
+    description = models.TextField()
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    start_time = models.DateTimeField()
+    enrolled_users = models.ManyToManyField(User, blank=True, related_name='event_enrolled_users')
+    course=models.ForeignKey(Course, default=None, on_delete=models.CASCADE, related_name='event_list')
+
+    
+    def __str__(self):
+        return self.title
 
