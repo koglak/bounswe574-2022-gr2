@@ -13,7 +13,7 @@
 
     {% endfor %}
 
-    {% for quiz in quiz_list %} 
+    {% for quiz in course.question_list.all %} 
 
         <li class="list-group-item list-group-item-action">
             {% if user in course.collaborative_members.all or user == course.user %}
@@ -26,7 +26,7 @@
     {% endfor %}
 
 
-    {% for case in case_list %}
+    {% for case in course.case_list.all %}
         <li class="list-group-item list-group-item-action">
             <a href="{% url 'case_grade' title=case.title %}" class="post-text" style="text-decoration:none"> {% bs_icon 'eye' size='1.5em' %}|</a>
             <a href="{% url 'case_detail' title=case.title %}" class="post-text" style="text-decoration:none"> Case: {{case.title}}</a>
