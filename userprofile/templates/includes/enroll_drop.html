@@ -7,3 +7,8 @@
         <a class="btn btn-success" href="{% url 'course_enroll' pk=course.pk %}"> Follow Space</a>
     </div>
 {% endif %}
+
+<!--Event List Button -->
+<div style="display: flex; justify-content: center; margin: 10px 0px; ">
+    <a href="{% url 'event_list' title=course.title %}" type="button" class="btn btn-outline-warning" >Event List</a>
+</div>
