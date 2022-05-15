@@ -20,6 +20,9 @@ services:
       - POSTGRES_NAME=postgres
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
+    restart: always
+    links:
+      - db:db
     depends_on:
       - db
   migration:
@@ -27,5 +30,7 @@ services:
     command: python manage.py migrate --noinput
     volumes:
       - .:/code
+    links:
+      - db:db
     depends_on:
       - db
