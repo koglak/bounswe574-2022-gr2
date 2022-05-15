@@ -78,7 +78,7 @@
     <!--Course Tag-->
     <div class="card-body">
         {% for tag in course.tags.all  %}
-            <a href="{% url 'question_tag_detail' tag=tag %}" type="button" class="btn btn-outline-dark btn-sm" style="margin-left:10px"> #{{tag}}</a>
+            <a href="{% url 'course_tag_detail' tag=tag %}" type="button" class="btn btn-outline-dark btn-sm" style="margin-left:10px"> #{{tag}}</a>
         {% endfor %}
     </div>
 </div>

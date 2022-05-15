@@ -43,7 +43,7 @@ def quiz_detail(request,title):
     else:
         quiz = QuestionList.objects.get(title=title)
         questions=quiz.question_list.all()
-        course= Course.objects.get(questionlist__pk=quiz.pk)
+        course= Course.objects.get(question_list__pk=quiz.pk)
         
         context = {
             'quiz': quiz,
@@ -95,7 +95,7 @@ def question_add(request,title):
 @login_required(login_url="/login")
 def quiz_delete(request, title):
     quiz = QuestionList.objects.get(title=title)
-    course= Course.objects.get(questionlist__pk=quiz.pk)
+    course= Course.objects.get(question_list__pk=quiz.pk)
 
     quiz.delete()
     return redirect('course_detail', title=course.title)
@@ -119,7 +119,7 @@ def case_create(request,title):
 @login_required(login_url="/login")
 def case_detail(request,title):
     case=Case.objects.get(title=title)
-    course=Course.objects.get(case=case)
+    course=Course.objects.get(case_list=case)
 
     form= CaseResultForm()
 
