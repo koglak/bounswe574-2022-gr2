@@ -6,7 +6,11 @@
 
 {% block content %}
 <div class="container ">
-        
+    
+    <!--Page Navigation-->
+    <h5> <a href="{% url 'course_detail' title=course.title %}"> Space: {{course.title}} </a> > Quiz Page </h5>
+    <br>
+    
     <div class="card-columns" style="padding: 10px; margin: 20px;">
         <div class="card" style="width: 32rem; border:1px black solid">
             <div class="card-body">

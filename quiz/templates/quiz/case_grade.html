@@ -6,6 +6,10 @@
 
 {% block content %}
 
+  <!--Page Navigation-->
+  <h5> <a href="{% url 'course_detail' title=course.title %}"> Space: {{course.title}} </a> > Case Page </h5>
+  <br>
+
   <table class="table table-striped">
     <thead>
       <tr>

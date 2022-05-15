@@ -32,12 +32,15 @@ def quiz_detail(request,title):
                 wrong+=1
         percent = score/(total*10) *100
         user_score=Score.objects.create(user=request.user, quiz=quiz, score=percent)
+        course= Course.objects.get(question_list__pk=quiz.pk)
+
         context = {
             'score':score,
             'correct':correct,
             'wrong':wrong,
             'percent':percent,
-            'total':total
+            'total':total,
+            'course':course
         }
         return render(request,'quiz/quiz_result.html',context)
     else:
@@ -148,8 +151,8 @@ def case_grade(request,title):
             return redirect('case_grade', title=case.title)  
     else: 
         list_formset = ListFormSet(queryset=CaseResult.objects.filter(case=case).order_by('shared_date'))
-
-        return render(request, 'quiz/case_grade.html', {'list_formset': list_formset} )
+        course=Course.objects.get(case_list=case)
+        return render(request, 'quiz/case_grade.html', {'list_formset': list_formset, 'course':course} )
 
 @login_required(login_url="/login")
 def case_rate(request, pk):
