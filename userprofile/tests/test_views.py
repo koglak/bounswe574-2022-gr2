@@ -48,6 +48,7 @@ class TestViews(TestCase):
 
     # testing delete_course view
     def test_delete_course_GET(self):
+        self.client.login(username='testuser', password='123456')
         response=self.client.get(self.delete_course)
         self.assertRedirects(response, '/myspace/profile', target_status_code=301)
 
