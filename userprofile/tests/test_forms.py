@@ -8,7 +8,7 @@ class TestForms(SimpleTestCase):
 
         form = ProfileForm(data={
             'bio': 'Hello',
-            'img':SimpleUploadedFile(name='test_image.jpg', content=open('images\cb9558a2594f7e65a9266ae1e7248420.jpg', 'rb').read(), content_type='image/jpeg'),
+            'img': SimpleUploadedFile(name='test_image.jpg', content=b'', content_type='image/jpeg'),
         })
 
         self.assertTrue(form.is_valid())

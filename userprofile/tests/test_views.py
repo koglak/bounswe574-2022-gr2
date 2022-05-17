@@ -31,7 +31,7 @@ class TestViews(TestCase):
             title='Course Title',
             description='Course Description',
             published_date= timezone.now(),
-            img = SimpleUploadedFile(name='test_image.jpg', content=open('images\cb9558a2594f7e65a9266ae1e7248420.jpg', 'rb').read(), content_type='image/jpeg'),
+            img = SimpleUploadedFile(name='test_image.jpg', content=b'', content_type='image/jpeg'),
         )
         course.enrolled_users.add(self.user2)
         course.save()
@@ -58,7 +58,7 @@ class TestViews(TestCase):
             'title' : 'Course Test',
             'description' : 'Test Description',
             'published_date': timezone.now(),
-            'img': SimpleUploadedFile(name='test_image.jpg', content=open('images\cb9558a2594f7e65a9266ae1e7248420.jpg', 'rb').read(), content_type='image/jpeg'),
+            'img': SimpleUploadedFile(name='test_image.jpg', content=b'', content_type='image/jpeg'),
         })
 
         self.assertEquals(response.status_code, 302)
