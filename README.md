@@ -3,7 +3,7 @@ SWE573 SOFTWARE DEVELOPMENT PRACTICE BOUN 2022 SPRING
 
 This file has been created as guide for the project.
 
-Overview
+Project Overview
 -----
 
 **Welcome to my repository!**  🥳
@@ -30,4 +30,35 @@ Topics
 <strong> Week8: </strong> Virtualization and Deployment
 
 
-![Image](https://www.channelfutures.com/files/2020/12/Welcome-stick-figures-1-877x432.jpg)
+Instructions to install app
+-----
+
+## Prerequisites
+
+*  Python: [Download Python](https://www.python.org/downloads/)
+*  Django: `python -m pip install Django`
+*  Virtual Environment: `python -m venv myvenv`    
+*  PostgreSQL: [Download PostgreSQL](https://www.postgresql.org/download/)
+
+
+1. Clone repository:
+
+        git clone https://github.com/koglak/SWE573.git
+        
+2. Activate virtual environment:
+      
+        python3 -m venv myvenv
+        
+3. Run requirments:
+
+        pip install -r requirements.txt
+        
+4. Create docker images:
+
+        docker build . -t <container_name>
+        
+5. Run docker container:
+
+        docker-compose up
+
+6. Go to your local host: [http://localhost](http://127.0.0.1:8000/)
