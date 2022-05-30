@@ -33,6 +33,8 @@ Topics
 Instructions to install app
 -----
 
+**Check deployed app: http://ec2-44-202-83-160.compute-1.amazonaws.com/**
+
 ## Prerequisites
 
 *  Python: [Download Python](https://www.python.org/downloads/)
