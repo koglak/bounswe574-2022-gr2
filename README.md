@@ -10,7 +10,7 @@ Project Overview
 
 This is a guidance that I will complete whole instructions of the lecture throughout the semester. Throughout the semester, I developed a collaborative learning environment where people can easily interact and improve themselves. My project name is "Helloworld"! 
 
-**Check [Project Deliverables Table](https://github.com/koglak/SWE573/wiki/Final-Deliverables-Table)!**
+**Check [Deliverables Table](https://github.com/koglak/SWE573/wiki/Deliverables-Table)!**
 
 Topics
 -----
