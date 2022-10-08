@@ -1,35 +1,21 @@
-SWE573 SOFTWARE DEVELOPMENT PRACTICE BOUN 2022 SPRING
+SWE574 SOFTWARE DEVELOPMENT AS A TEAM FALL 2022
 =====
-
-This file has been created as guide for the project.
 
 Project Overview
 -----
 
-**Welcome to my repository!**  🥳
+**Helloworld** is an online platform where users can create new spaces to learn, discuss and develop each other. Within those spaces, users can create textual content to share their knowledge, quiz to test each other and competition by case-study feature to provide interactive environment. When user submitted a file to created case-study, other users can download the file to rate and grade the study. It allows to emerge collaborative environment where people can interact each other and criticize their studies. Space owner can add collaborative members to space who can modify space content as space owner can do. Other users can see all spaces, search them by either a keyword or tags. Moreover, if user enrols to a space, the space is listed learn page of the user. Beside all these features, Helloworld platform presents Question & Answer application in it where users can freely ask questions and take advantages of knowledge of the other members. Helloworld website is creative, interactive, and collaborative learning environment for all users.
 
-This is a guidance that I will complete whole instructions of the lecture throughout the semester. Throughout the semester, I developed a collaborative learning environment where people can easily interact and improve themselves. My project name is "Helloworld"! 
-
-**Check [Deliverables Table](https://github.com/koglak/SWE573/wiki/Deliverables-Table)!**
-
-Topics
+Project Team
 -----
 
-<strong> Week1: </strong> Introduction, Logistics, Overview
-
-<strong> Week2: </strong> Effective use of Software Development Tools
-
-<strong> Week3: </strong> Requirements Specificaiton - Elicitation and SRS preperation
-
-<strong> Week4: </strong> Plan - Work, Milestones, Deliverables
-
-<strong> Week5: </strong> Design: Use case, Class and Sequence diagrams
-
-<strong> Week6: </strong> Implementation: Continuous implementation with proper practices
-
-<strong> Week7: </strong> Testing: User Testing
-
-<strong> Week8: </strong> Virtualization and Deployment
+| **No** | **Team Member** |
+| --- | --- |
+| 1 | [Kardelen Oğlakcıoğlu](https://github.com/koglak/)|
+| 2 | [Mert Can Geyik](https://github.com/bharaddur)|
+| 3 | [Sabahattin Erdem Turanlıoğlu](https://github.com/turanlioglu)|
+| 4 | [Murat Mert Şentürk](https://github.com/musentur)|
+| 5 | [Ömer Bahar]()|
 
 
 Instructions to install app
