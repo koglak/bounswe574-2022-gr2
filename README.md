@@ -15,7 +15,7 @@ Project Team
 | 2 | [Mert Can Geyik](https://github.com/bharaddur)|
 | 3 | [Sabahattin Erdem Turanlıoğlu](https://github.com/turanlioglu)|
 | 4 | [Murat Mert Şentürk](https://github.com/musentur)|
-| 5 | [Ömer Bahar]()|
+| 5 | [Ömer Bahar](https://github.com/omerbahaar)|
 
 
 Instructions to install app
