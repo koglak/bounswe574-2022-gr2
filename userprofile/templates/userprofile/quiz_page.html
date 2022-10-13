@@ -15,7 +15,7 @@
             {% endif %}
 
             <!-- Lecture List -->
-            {% include 'includes/lecture.html' with course=course %}
+            {% include 'includes/sidebar.html' with course=course page="quiz" %}
 
             <div class="text-end mt-3">
                 {% if user in course.collaborative_members.all or user == course.user %}
@@ -27,6 +27,10 @@
         </div>
 
         <!--Quiz Content-->
+        <div class="col-sm-6">
+            Quizzes score etc. will be displayed here!!
+        </div>
+
         
         <!--Course Block: Course2 Template-->
         <div class="col-sm-3">

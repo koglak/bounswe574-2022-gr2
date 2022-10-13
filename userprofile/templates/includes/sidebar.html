@@ -18,29 +18,30 @@
 <br>
 
 <div id="list-example" class="list-group">
-    {% for lecture in course.lecture.all %} 
-       <li class="list-group-item list-group-item-action">
-            {% if user in course.collaborative_members.all or user == course.user %}
-                <a href="{% url 'lecture_edit' pk=lecture.pk %}" class="post-text" style="text-decoration:none"> {% bs_icon 'pencil' size='1.5em' %}|</a>
-            {% endif %}
-           
-            <a href="{% url 'lecture_detail' pk=lecture.pk %}" class="post-text" style="text-decoration:none"> Content: {{lecture.title}}</a>
-        </li> 
 
-    {% endfor %}
-
-    <!-- {% for quiz in course.question_list.all %} 
-
+    {% if page == 'lecture' %}
+        {% for lecture in course.lecture.all %} 
         <li class="list-group-item list-group-item-action">
-            {% if user in course.collaborative_members.all or user == course.user %}
-                <a href="#" class="post-text" style="text-decoration:none"> {% bs_icon 'pencil' size='1.5em' %}|</a>
-            {% endif %}
-            <a href="{% url 'quiz_detail' title=quiz.title %}" class="post-text" style="text-decoration:none"> Quiz: {{quiz.title}}</a>
-            <span class="badge alert-success">Score: {{score_list | get_all_scores:quiz }} </span>
-        </li> 
+                {% if user in course.collaborative_members.all or user == course.user %}
+                    <a href="{% url 'lecture_edit' pk=lecture.pk %}" class="post-text" style="text-decoration:none"> {% bs_icon 'pencil' size='1.5em' %}|</a>
+                {% endif %}
+            
+                <a href="{% url 'lecture_detail' pk=lecture.pk %}" class="post-text" style="text-decoration:none"> Content: {{lecture.title}}</a>
+            </li> 
+        {% endfor %}
+    
+    {% elif page == 'quiz' %}
+        {% for quiz in course.question_list.all %} 
 
-    {% endfor %} -->
-
+            <li class="list-group-item list-group-item-action">
+                {% if user in course.collaborative_members.all or user == course.user %}
+                    <a href="#" class="post-text" style="text-decoration:none"> {% bs_icon 'pencil' size='1.5em' %}|</a>
+                {% endif %}
+                <a href="{% url 'quiz_detail' title=quiz.title %}" class="post-text" style="text-decoration:none"> Quiz: {{quiz.title}}</a>
+                <span class="badge alert-success">Score: {{score_list | get_all_scores:quiz }} </span>
+            </li> 
+        {% endfor %}
+    {% endif %}
 
     <!-- {% for case in course.case_list.all %}
         <li class="list-group-item list-group-item-action">

@@ -17,7 +17,7 @@
                     {% endif %}
 
                     <!-- Side List-->
-                    {% include 'includes/lecture.html' with course=course %}                 
+                    {% include 'includes/sidebar.html' with course=course page="lecture" %}                 
               
                     <div class="text-end mt-3">
                       {% if user in course.collaborative_members.all or user == course.user %}
