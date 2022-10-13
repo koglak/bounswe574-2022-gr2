@@ -18,6 +18,12 @@
 
                 <!-- Lecture List -->
                 {% include 'includes/lecture.html' with course=course %}
+            
+                <div class="text-end mt-3">
+                    {% if user in course.collaborative_members.all or user == course.user %}
+                            <a href="{% url 'lecture_new' pk=course.pk %}" type="button" class="btn btn-primary">Create Content</a>
+                    {% endif %}
+                </div>
             </div>
 
             <!--Lecture Content-->

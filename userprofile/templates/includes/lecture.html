@@ -1,14 +1,20 @@
 {% load bootstrap_icons %}
 
+<div class="btn-group" role="group" >
+    <a href="{% url 'course_detail' title=course.title %}" class="btn btn-dark">Space Contents</a>
+    <a href="{% url 'quiz_page' title=course.title %}" type="button" class="btn btn-dark" >Space Quizzes</a>
+    <a href="{% url 'event_list' title=course.title %}" type="button" class="btn btn-dark" >Event List</a>
+    <button type="button" class="btn btn-dark">Space Events</button>
+</div>
 
  <!-- Create Lecture & Quiz & Case Study Button-->
- {% if user in course.collaborative_members.all or user == course.user %}
+ <!-- {% if user in course.collaborative_members.all or user == course.user %}
  <div class="btn-group" role="group" aria-label="Basic example">
      <a href="{% url 'lecture_new' pk=course.pk %}" type="button" class="btn btn-primary">Create Content</a>
      <a href="{% url 'quiz_create' title=course.title %}" class="btn btn-primary">Create Quiz</a>
      <a href="{% url 'case_create' title=course.title %}"  class="btn btn-primary">Create Case-Study</a>
  </div>
-{% endif %}
+{% endif %} -->
 <br>
 
 <div id="list-example" class="list-group">
@@ -23,7 +29,7 @@
 
     {% endfor %}
 
-    {% for quiz in course.question_list.all %} 
+    <!-- {% for quiz in course.question_list.all %} 
 
         <li class="list-group-item list-group-item-action">
             {% if user in course.collaborative_members.all or user == course.user %}
@@ -33,16 +39,16 @@
             <span class="badge alert-success">Score: {{score_list | get_all_scores:quiz }} </span>
         </li> 
 
-    {% endfor %}
+    {% endfor %} -->
 
 
-    {% for case in course.case_list.all %}
+    <!-- {% for case in course.case_list.all %}
         <li class="list-group-item list-group-item-action">
             <a href="{% url 'case_grade' title=case.title %}" class="post-text" style="text-decoration:none"> {% bs_icon 'eye' size='1.5em' %}|</a>
             <a href="{% url 'case_detail' title=case.title %}" class="post-text" style="text-decoration:none"> Case: {{case.title}}</a>
         </li> 
-    {% endfor %}
+    {% endfor %} -->
 
-
+   
 
 </div>

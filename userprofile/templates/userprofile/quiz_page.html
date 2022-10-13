@@ -1,0 +1,38 @@
+{% extends 'blog/base.html' %}
+
+{% block title %}
+    Event Detail
+{% endblock %}
+
+{% block content %}
+
+<div class="container-fluid" style="margin-top: 10px;">
+    <div class="row">
+        <div class="col-sm-3">
+            <!--Enroll & Drop Button-->
+            {% if user.is_authenticated %}
+                    {% include 'includes/enroll_drop.html' with course=course %}
+            {% endif %}
+
+            <!-- Lecture List -->
+            {% include 'includes/lecture.html' with course=course %}
+
+            <div class="text-end mt-3">
+                {% if user in course.collaborative_members.all or user == course.user %}
+                    <a href="{% url 'quiz_create' title=course.title %}" class="btn btn-primary">Create Quiz</a>
+                {% endif %}
+              </div>
+
+
+        </div>
+
+        <!--Quiz Content-->
+        
+        <!--Course Block: Course2 Template-->
+        <div class="col-sm-3">
+            {% include 'includes/course2.html' with course=course select="course" %}
+        </div>
+    </div> 
+</div>
+
+{% endblock %}
