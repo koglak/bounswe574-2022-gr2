@@ -3,8 +3,8 @@
 <div class="btn-group" role="group" >
     <a href="{% url 'course_detail' title=course.title %}" class="btn btn-dark">Space Contents</a>
     <a href="{% url 'quiz_page' title=course.title %}" type="button" class="btn btn-dark" >Space Quizzes</a>
-    <a href="{% url 'event_list' title=course.title %}" type="button" class="btn btn-dark" >Event List</a>
-    <button type="button" class="btn btn-dark">Space Events</button>
+    <a href="{% url 'case_page' title=course.title %}" type="button" class="btn btn-dark" >Case Studies</a>
+    <a href="{% url 'event_list' title=course.title %}" type="button" class="btn btn-dark" >Space Events</a>
 </div>
 
  <!-- Create Lecture & Quiz & Case Study Button-->
@@ -41,15 +41,14 @@
                 <span class="badge alert-success">Score: {{score_list | get_all_scores:quiz }} </span>
             </li> 
         {% endfor %}
+
+    {% elif page == 'case' %}
+        {% for case in course.case_list.all %}
+            <li class="list-group-item list-group-item-action">
+                <a href="{% url 'case_grade' title=case.title %}" class="post-text" style="text-decoration:none"> {% bs_icon 'eye' size='1.5em' %}|</a>
+                <a href="{% url 'case_detail' title=case.title %}" class="post-text" style="text-decoration:none"> Case: {{case.title}}</a>
+            </li> 
+        {% endfor %}
     {% endif %}
-
-    <!-- {% for case in course.case_list.all %}
-        <li class="list-group-item list-group-item-action">
-            <a href="{% url 'case_grade' title=case.title %}" class="post-text" style="text-decoration:none"> {% bs_icon 'eye' size='1.5em' %}|</a>
-            <a href="{% url 'case_detail' title=case.title %}" class="post-text" style="text-decoration:none"> Case: {{case.title}}</a>
-        </li> 
-    {% endfor %} -->
-
-   
 
 </div>
