@@ -220,6 +220,18 @@ def event_list(response, title):
     event_list= Event.objects.filter(course=course).order_by('-start_time')
     return render(response, "userprofile/event_list.html", {'course': course, 'score_list': score_list, 'event_list':event_list})
 
+@login_required(login_url="/login")
+def quiz_page(response, title):
+    course=get_object_or_404(Course, title=title)
+    score_list = Score.objects.filter(user=response.user)
+    return render(response, "userprofile/quiz_page.html", {'course': course, 'score_list': score_list})
+
+@login_required(login_url="/login")
+def case_page(response, title):
+    course=get_object_or_404(Course, title=title)
+    score_list = Score.objects.filter(user=response.user)
+    return render(response, "userprofile/case_page.html", {'course': course, 'score_list': score_list})
+
 
 @login_required(login_url="/login")
 def event_new(request, title):

@@ -8,12 +8,15 @@
     <div class="container ">
 
         <!--Page Navigation-->
-        <h5> <a href="{% url 'course_detail' title=course.title %}"> Space: {{course.title}} </a> > Quiz Page </h5>
-        <br>
+        <h5> <a href="{% url 'course_detail' title=course.title %}"> Space: {{course.title}} </a> 
+            > 
+            <a href="{% url 'quiz_page' title=course.title %}" > Quiz Page</a> 
+        </h5>
+
 
         {% if user in course.collaborative_members.all or user == course.user %}
             <!--Quiz Settings-->
-            <div class="btn-group" role="group" aria-label="Basic example">
+            <div class="btn-group mt-3" role="group" aria-label="Basic example">
                 <!--Delete Quiz-->
                 <a class="btn btn-outline-danger" href="{% url 'quiz_delete' title=quiz.title %}">Delete Quiz</a>
                 <!--Add Question-->

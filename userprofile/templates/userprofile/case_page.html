@@ -15,19 +15,22 @@
             {% endif %}
 
             <!-- Lecture List -->
-            {% include 'includes/sidebar.html' with course=course page="event" %}
-        </div>
+            {% include 'includes/sidebar.html' with course=course page="case" %}
 
-        <!--Event Content-->
-        <div class="col-sm-6">
-            <div class="row">
-                <a class="btn btn-success" href="{% url 'event_new' title=course.title %}">Create New Activity</a>
+            <div class="text-end mt-3">
+                {% if user in course.collaborative_members.all or user == course.user %}
+                    <a href="{% url 'case_create' title=course.title %}"  class="btn btn-primary">Create Case-Study</a>
+                {% endif %}
             </div>
-                {% for event in event_list %}
-                    {% include 'includes/event.html' with event=event course=course %}
-                {% endfor %}
+
         </div>
 
+        <!--Quiz Content-->
+        <div class="col-sm-6">
+            Case content will be displayed here.!!!
+        </div>
+
+        
         <!--Course Block: Course2 Template-->
         <div class="col-sm-3">
             {% include 'includes/course2.html' with course=course select="course" %}
