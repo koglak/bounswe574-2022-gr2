@@ -49,6 +49,15 @@
                 <a href="{% url 'case_detail' title=case.title %}" class="post-text" style="text-decoration:none"> Case: {{case.title}}</a>
             </li> 
         {% endfor %}
+    
+    {% elif page == 'event' %}
+        <li class="list-group-item list-group-item-action">
+            <a href="" class="post-text" style="text-decoration:none"> Up Coming Events</a> 
+        </li> 
+        <li class="list-group-item list-group-item-action">
+            <a href="" class="post-text" style="text-decoration:none"> Past Events</a>
+        </li>
+    
     {% endif %}
 
 </div>
