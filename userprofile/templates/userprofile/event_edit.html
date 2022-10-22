@@ -1,4 +1,5 @@
 {% extends 'blog/base.html' %}
+{% load crispy_forms_tags %}
 
 
 {% block title %}
@@ -6,14 +7,14 @@
 {% endblock %}
 
 {% block content %}
-
-<form method="POST" class="question-form">
-    {% csrf_token %}
-    {{form.as_p}}
-    <button type="submit" class="save btn btn-success">Post</button>
-    {% if title != "none" %}
-    <a class="btn btn-outline-danger" href="#">Delete Activity</a>
-    {% endif %}
-</form>
-
+<div class="w-50 mt-2">
+    <form method="POST" class="question-form">
+        {% csrf_token %}
+        {{form|crispy}}
+        <button type="submit" class="save btn btn-success mt-4">Post</button>
+        {% if title != "none" %}
+        <a class="btn btn-outline-danger mt-4" href="#">Delete Activity</a>
+        {% endif %}
+    </form>
+</div>
 {% endblock %}
