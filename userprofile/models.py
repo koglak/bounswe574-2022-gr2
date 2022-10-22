@@ -6,6 +6,7 @@ from django.db import models
 from django.utils import timezone
 from django.contrib.auth.models import User
 from taggit.managers import TaggableManager
+from django.db.models import Avg
 
 
 
@@ -81,6 +82,7 @@ class Event(models.Model):
                   choices=CATEGORY_CHOICES,
                   default="Workshop")
     link= models.URLField(default='http://www.helloworld.com')
+
 
     
     def __str__(self):
