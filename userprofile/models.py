@@ -79,6 +79,8 @@ class Event(models.Model):
     category = models.CharField(max_length=12,
                   choices=CATEGORY_CHOICES,
                   default="Workshop")
+    link= models.URLField(default='http://www.helloworld.com')
+
 
     
     def __str__(self):
