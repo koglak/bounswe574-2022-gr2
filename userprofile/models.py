@@ -6,7 +6,7 @@ from django.db import models
 from django.utils import timezone
 from django.contrib.auth.models import User
 from taggit.managers import TaggableManager
-from django.db.models import Avg
+
 
 
 class Profile(models.Model):
@@ -73,7 +73,8 @@ class Event(models.Model):
     title = models.CharField(max_length=200)
     description = models.TextField()
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    start_time = models.DateTimeField()
+    event_date = models.DateTimeField()
+    event_time = models.TimeField()
     enrolled_users = models.ManyToManyField(User, blank=True, related_name='event_enrolled_users')
     course=models.ForeignKey(Course, default=None, on_delete=models.CASCADE, related_name='event_list')
     category = models.CharField(max_length=12,
