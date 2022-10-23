@@ -44,3 +44,11 @@ Project Team
         docker-compose up
 
 6. Go to your local host: [http://localhost:8000/](http://127.0.0.1:8000/)
+
+7. Get your container id
+
+        docker container ls
+        
+8. Create superuser for django admin
+
+        docker exec -it container_id python manage.py createsuperuser
