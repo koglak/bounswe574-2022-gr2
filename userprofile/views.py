@@ -217,7 +217,7 @@ def learn_page(response):
 def event_list(response, title):
     course=get_object_or_404(Course, title=title)
     score_list = Score.objects.filter(user=response.user)
-    event_list= Event.objects.filter(course=course).order_by('-start_time')
+    event_list= Event.objects.filter(course=course).order_by('-event_date')
     return render(response, "userprofile/event_list.html", {'course': course, 'score_list': score_list, 'event_list':event_list})
 
 @login_required(login_url="/login")
