@@ -59,7 +59,6 @@ class Lecture(models.Model):
 
     def __str__(self):
         return self.course.title
-
 class Event(models.Model):
     CATEGORY_CHOICES = (
     ("Outside", "Outside"),
@@ -68,14 +67,13 @@ class Event(models.Model):
     ("Presentation", "Presentation"),
     ("Introductory", "Introductory"),
     ("Training", "Training"),
-)
-
+    )
 
     title = models.CharField(max_length=200)
     description = models.TextField()
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    event_date = models.DateTimeField()
-    event_time = models.TimeField()
+    event_date = models.DateTimeField(default=timezone.now)  
+    event_time = models.TimeField(default='20:00')
     enrolled_users = models.ManyToManyField(User, blank=True, related_name='event_enrolled_users')
     course=models.ForeignKey(Course, default=None, on_delete=models.CASCADE, related_name='event_list')
     category = models.CharField(max_length=12,
@@ -83,8 +81,6 @@ class Event(models.Model):
                   default="Workshop")
     link= models.URLField(default='http://www.helloworld.com')
 
-
     
     def __str__(self):
         return self.title
-
