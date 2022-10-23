@@ -83,6 +83,7 @@ class Event(models.Model):
                   default="Workshop")
     link= models.URLField(default='http://www.helloworld.com')
 
+
     
     def __str__(self):
         return self.title
