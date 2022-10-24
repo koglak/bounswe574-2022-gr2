@@ -8,8 +8,6 @@ from django.contrib.auth.models import User
 from taggit.managers import TaggableManager
 from django.db.models import Avg
 
-
-
 class Profile(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     bio = models.TextField(default="This is my bio!")

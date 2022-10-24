@@ -237,7 +237,7 @@ def case_page(response, title):
 def event_new(request, title):
     course=get_object_or_404(Course, title=title)
     if request.method == "POST":
-        form = EventForm(request.POST)
+        form = EventForm(request.POST, request.FILES)
         if form.is_valid():
             event = form.save(commit=False)
             event.user = request.user

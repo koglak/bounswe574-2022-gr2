@@ -49,9 +49,8 @@ class EventForm(forms.ModelForm):
 
         widgets = {
             'event_date': NumberInput(attrs={'type':'date'}),
-            'event_time': forms.TimeInput(attrs={'type': 'time'})
-
-
+            'event_time': forms.TimeInput(attrs={'type': 'time'}),
+            'img': forms.FileInput(),
         }
 
    
