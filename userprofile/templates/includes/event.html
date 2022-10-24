@@ -2,18 +2,25 @@
 
 {% block content %}
         <div style="float:left">
-            <div class="card" style="width: 18rem; float:left; margin:10px">
-            <div class="card-body"> 
+            <div class="card" style="width: 18rem;">
                 {% if user == event.user %}
-                <a href="{% url 'event_edit' pk=event.pk %}" style="text-decoration:none; ">Edit</a>
+                    <div class="text-end m-1">
+                        <a href="{% url 'event_edit' pk=event.pk %}" style="text-decoration:none; ">Edit</a>
+                    </div>
                 {% endif %}
-                <h5 class="card-title">{% bs_icon 'calendar' size='1.5em' %} {{event.title}}</h5>
-                <h6 class="card-subtitle mb-2 text-muted">{{event.start_time|date:"M d, Y" }}</h6>
-                <p class="card-text">{{event.description}}</p>
-                <a href="{% url 'event_enroll' pk=event.pk %}" class="card-link">Join</a> | <strong>People:</strong>{{event.enrolled_users.count}}
-            </div>
+                <img class="card-img-top" src="{{event.img.url}}" alt="Card image cap">
+                <div class="card-body">
+                <h5 class="card-title">{{ event.title }}</h5>
+                <p class="card-text">{{ event.description }}</p>
+                </div>
+                <ul class="list-group list-group-flush">
+                <li class="list-group-item"> {% bs_icon 'alarm' size='1em' %} {{ event.event_date |date }} | {{ event.event_time }} </li>
+                <li class="list-group-item"> {% bs_icon 'link' size='1em' %} <a href="{{ event.link }}">{{ event.link }}</a></li>
+                <li class="list-group-item"> {% bs_icon 'bookmarks' size='1em' %} {{ event.category}}</li>
+                </ul>
+                <div class="card-body">
+                    <a href="{% url 'event_enroll' pk=event.pk %}" class="card-link">Join</a> | <strong>People:</strong>{{event.enrolled_users.count}}
+                </div>
             </div>
         </div>
 {% endblock %}
-
-
