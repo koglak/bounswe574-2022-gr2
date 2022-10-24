@@ -19,12 +19,16 @@
                 <li class="list-group-item"> {% bs_icon 'bookmarks' size='1em' %} {{ event.category}}</li>
                 </ul>
                 <div class="card-body">
-                    <a href="{% url 'event_enroll' pk=event.pk %}" class="card-link">Join</a> | 
-                    <strong>Joined Users:</strong>{{event.enrolled_users.count}} / 
-                    {% if event.quota == 0 %}
-                        No quota!
+                    {% if event.enrolled_users.count == event.quota and event.quota != 0 %}
+                        <p class="text-danger">Quota is filled! <strong> {{event.enrolled_users.count}} / {{ event.quota }} </strong> </p>
                     {% else %}
-                        {{ event.quota }}
+                        <a href="{% url 'event_enroll' pk=event.pk %}" class="card-link">Join</a> | 
+                        <strong>Joined Users: </strong>{{event.enrolled_users.count}} / 
+                        {% if event.quota == 0 %}
+                            No quota!
+                        {% else %}
+                            {{ event.quota }}
+                        {% endif %}
                     {% endif %}
                 </div>
             </div>
