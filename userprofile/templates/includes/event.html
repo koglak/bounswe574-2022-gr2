@@ -19,7 +19,13 @@
                 <li class="list-group-item"> {% bs_icon 'bookmarks' size='1em' %} {{ event.category}}</li>
                 </ul>
                 <div class="card-body">
-                    <a href="{% url 'event_enroll' pk=event.pk %}" class="card-link">Join</a> | <strong>People:</strong>{{event.enrolled_users.count}}
+                    <a href="{% url 'event_enroll' pk=event.pk %}" class="card-link">Join</a> | 
+                    <strong>Joined Users:</strong>{{event.enrolled_users.count}} / 
+                    {% if event.quota == 0 %}
+                        No quota!
+                    {% else %}
+                        {{ event.quota }}
+                    {% endif %}
                 </div>
             </div>
         </div>
