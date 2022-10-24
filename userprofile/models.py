@@ -80,7 +80,7 @@ class Event(models.Model):
                   choices=CATEGORY_CHOICES,
                   default="Workshop")
     link= models.URLField(default='http://www.helloworld.com')
-
+    img = models.ImageField(upload_to='images', help_text="event_image", null=True)
     
     def __str__(self):
         return self.title

@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     'quiz',
     'fontawesomefree',
     'activity',
+    'googlemaps',
 ]
 
 MIDDLEWARE = [
@@ -152,7 +153,7 @@ TEMPLATE_CONTEXT_PROCESSORS="django.core.context_processors.request"
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-# GOOGLE_MAPS_API_KEY="AIzaSyBjKDvjDz2oDH6WJ_QCm1YaR3_v7oaQj4Q"
+GOOGLE_MAPS_API_KEY="AIzaSyBjKDvjDz2oDH6WJ_QCm1YaR3_v7oaQj4Q"
 
 LOGIN_REDIRECT_URL= "/"
 LOGOUT_REDIRECT_URL= "/" 
