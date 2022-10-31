@@ -1,4 +1,6 @@
+
 {% extends 'blog/base.html' %}
+{% load bootstrap_icons %}
 
 {% block title %}
     Event Detail
@@ -12,22 +14,48 @@
             <!--Enroll & Drop Button-->
             {% if user.is_authenticated %}
                     {% include 'includes/enroll_drop.html' with course=course %}
+                  
             {% endif %}
 
             <!-- Lecture List -->
             {% include 'includes/sidebar.html' with course=course page="case" %}
-
-            <div class="text-end mt-3">
-                {% if user in course.collaborative_members.all or user == course.user %}
-                    <a href="{% url 'case_create' title=course.title %}"  class="btn btn-primary">Create Case-Study</a>
-                {% endif %}
-            </div>
-
         </div>
 
         <!--Quiz Content-->
         <div class="col-sm-6">
-            Case content will be displayed here.!!!
+            <div class="col-sm">
+                {% if user in course.collaborative_members.all or user == course.user %}
+                    <a href="{% url 'case_create' title=course.title %}"  class="btn btn-primary">Create Case-Study</a>
+                {% endif %}
+            </div>
+            Tarih bilgisi tutulmalı ***
+            <br><br>
+            {% bs_icon 'envelope-open' size='1em' %} <a>Newly Opened Cases</a>
+                {% for case in course.case_list.all %}
+                <li class="list-group-item list-group-item-action">
+                    <a href="{% url 'case_grade' title=case.title %}" class="post-text" style="text-decoration:none"> {% bs_icon 'eye' size='1.5em' %}|</a>
+                    <a href="{% url 'case_detail' title=case.title %}" class="post-text" style="text-decoration:none"> Case: {{case.title}}</a>
+                    case.published_date
+                </li> 
+                {% endfor %}
+            <br><br>
+            {% bs_icon 'folder2-open' size='1em' %}<a>Cases In-progess</a> 
+                {% for case in course.case_list.all %}
+                <li class="list-group-item list-group-item-action">
+                    <a href="{% url 'case_grade' title=case.title %}" class="post-text" style="text-decoration:none"> {% bs_icon 'eye' size='1.5em' %}|</a>
+                    <a href="{% url 'case_detail' title=case.title %}" class="post-text" style="text-decoration:none"> Case: {{case.title}}</a>
+                    case.published_date
+                </li> 
+                {% endfor %}    
+            <br><br>
+            {% bs_icon 'archive' size='1em' %} <a>Cases Closed</a> 
+                {% for case in course.case_list.all %}
+                <li class="list-group-item list-group-item-action">
+                    <a href="{% url 'case_grade' title=case.title %}" class="post-text" style="text-decoration:none"> {% bs_icon 'eye' size='1.5em' %}|</a>
+                    <a href="{% url 'case_detail' title=case.title %}" class="post-text" style="text-decoration:none"> Case: {{case.title}}</a>
+                    case.published_date
+                </li> 
+                {% endfor %}
         </div>
 
         
