@@ -271,3 +271,13 @@ def event_enroll(request,pk):
     event = get_object_or_404(Event, pk=pk)
     event.enrolled_users.add(request.user)
     return redirect('event_list', title=event.course.title)
+
+@login_required(login_url="/login")
+def search_event(request,title):
+    if request.method == "POST":
+        searched = request.POST["searched"]
+        results = Event.objects.filter(title__icontains=searched)
+
+        return render(request, "userprofile/search_event.html", {'searched': searched, 'results': results}) 
+    else:
+        return render(request, "userprofile/search_event.html", {}) 
