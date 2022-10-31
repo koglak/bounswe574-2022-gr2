@@ -22,16 +22,12 @@
         </div>
 
         <!--Event Content-->
-        <div class="col-sm-6">
-                {% for event in event_list %}
-                    {% include 'includes/event.html' with event=event course=course %}
-                {% endfor %}
+        <div class="col-sm-9">
+            {% for event in event_list %}
+                {% include 'includes/event.html' with event=event course=course %}
+            {% endfor %}
         </div>
 
-        <!--Course Block: Course2 Template-->
-        <div class="col-sm-3">
-            {% include 'includes/course2.html' with course=course select="course" %}
-        </div>
     </div> 
 </div>
 
