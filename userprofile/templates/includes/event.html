@@ -1,16 +1,15 @@
 {% load bootstrap_icons %}
 
 {% block content %}
-        <div style="float:left">
-            <div class="card" style="width: 18rem;">
-                {% if user == event.user %}
-                    <div class="text-end m-1">
-                        <a href="{% url 'event_edit' pk=event.pk %}" style="text-decoration:none; ">Edit</a>
-                    </div>
-                {% endif %}
-                <img class="card-img-top" src="{{event.img.url}}" alt="Card image cap">
+        <div style="margin:5px;" class="d-flex flex-row">
+            <div class="card" style="width: 15rem;">
+                <img class="card-img-top" src="{{event.img.url}}" alt="Card image cap" >
                 <div class="card-body">
-                <h5 class="card-title">{{ event.title }}</h5>
+                <h5 class="card-title">{{ event.title }}
+                    {% if user == event.user %}
+                      • <a href="{% url 'event_edit' pk=event.pk %}" style="text-decoration:none; font-size: 0.75em">Edit</a>
+                    {% endif %}
+                </h5>
                 <p class="card-text">{{ event.description }}</p>
                 </div>
                 <ul class="list-group list-group-flush">
@@ -20,7 +19,7 @@
                 </ul>
                 <div class="card-body">
                     {% if event.enrolled_users.count == event.quota and event.quota != 0 %}
-                        <p class="text-danger">Quota is filled! <strong> {{event.enrolled_users.count}} / {{ event.quota }} </strong> </p>
+                        <span class="text-danger">Quota is filled! | <strong> {{event.enrolled_users.count}} / {{ event.quota }} </strong> </span>
                     {% else %}
                         <a href="{% url 'event_enroll' pk=event.pk %}" class="card-link">Join</a> | 
                         <strong>Joined Users: </strong>{{event.enrolled_users.count}} / 
@@ -33,4 +32,44 @@
                 </div>
             </div>
         </div>
+
+
+        <!-- <div class="card mb-3" >
+            <div class="row g-0 border-bottom ">
+              <div class="col-md-4 text-center justify-content-center">
+                <img class="card-img-top" src="{{event.img.url}}" alt="Card image cap" style="width: 150px; height: 150px; border-radius: 50%;">
+              </div>
+              <div class="col-md-8">
+                <div class="card-body">
+                    <h5 class="card-title">{{ event.title }}
+                        {% if user == event.user %}
+                        • <a href="{% url 'event_edit' pk=event.pk %}" style="text-decoration:none; font-size: 0.75em">Edit</a>
+                        {% endif %}
+                    </h5>       
+                </div>
+                <div class="p-3">
+                    <p>{% bs_icon 'alarm' size='1em' %} {{ event.event_date |date }} | {{ event.event_time }}</p>
+                    <p> {% bs_icon 'link' size='1em' %} <a href="{{ event.link }}">{{ event.link }}</a> </p>
+                    <p>{% bs_icon 'bookmarks' size='1em' %} {{ event.category}}</p>    
+                </div>
+              </div>
+            </div>
+
+            <div class="row g-0">
+                <p class="card-text">{{ event.description }}</p>
+                <div class="text-end" style="background: rgba(196, 196, 196, 0.22);padding: 5px">
+                    {% if event.enrolled_users.count == event.quota and event.quota != 0 %}
+                        <span class="text-danger">Quota is filled! | <strong> {{event.enrolled_users.count}} / {{ event.quota }} </strong> </span>
+                    {% else %}
+                        <a href="{% url 'event_enroll' pk=event.pk %}" class="card-link">Join</a> | 
+                        <strong>Joined Users: </strong>{{event.enrolled_users.count}} / 
+                        {% if event.quota == 0 %}
+                            No quota!
+                        {% else %}
+                            {{ event.quota }}
+                        {% endif %}
+                    {% endif %} 
+                </div>
+            </div>
+          </div> -->
 {% endblock %}
