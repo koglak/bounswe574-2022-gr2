@@ -28,16 +28,16 @@
 
             <div class="row d-flex align-items-center">
 
-                <div class="col-sm-5">
+                <div class="col-sm-7">
 
                 </div>
 
                 <!-- search by keyword -->
-                <div class="col-sm-5">
-                    <form class="form-inline my-2 my-lg-0" method="POST" action="{% url 'search_event' title=course.title %}" style="margin:15px;padding-top: 20px;">
+                <div class="col-sm-3">
+                    <form class="form-inline my-2 my-lg-0" method="POST" action="{% url 'event_list' title=course.title %}" >
                         {% csrf_token %}
-                        <input class="form-control mr-sm-2" style="width:250px; float:left; margin-right:10px" type="search"  placeholder="Search" aria-label="Search" name="searched"> 
-                        <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+                        {{ form_input.as_p}}
+                        <input class="form-control mr-sm-2" type="search"  placeholder="Search" aria-label="Search" name="searched"> 
                     </form>        
                 </div>
 
