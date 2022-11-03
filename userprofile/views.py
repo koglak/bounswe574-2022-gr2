@@ -6,7 +6,7 @@ from django.shortcuts import render
 from blog.models import Post
 from quiz.models import Case, Question, QuestionList, Score
 from .models import Course, Profile, Rating, Lecture, Event
-from .forms import CourseForm, ProfileForm, LectureForm, EventForm
+from .forms import CourseForm, ProfileForm, LectureForm, EventForm, CategorySortingForm
 from django.shortcuts import redirect, get_object_or_404
 from taggit.models import Tag
 from django.template.defaultfilters import slugify
@@ -216,9 +216,16 @@ def learn_page(response):
 @login_required(login_url="/login")
 def event_list(response, title):
     course=get_object_or_404(Course, title=title)
-    score_list = Score.objects.filter(user=response.user)
     event_list= Event.objects.filter(course=course).order_by('-event_date')
-    return render(response, "userprofile/event_list.html", {'course': course, 'score_list': score_list, 'event_list':event_list})
+    form = CategorySortingForm(response.POST)
+    if response.method == "POST":
+        if form.is_valid():
+            filtered_category = response.POST['category'] 
+            event_list = Event.objects.filter(category=filtered_category)
+            print(event_list)
+    else:
+        form = CategorySortingForm()
+    return render(response, "userprofile/event_list.html", {'course': course, 'event_list':event_list, "form": form})
 
 @login_required(login_url="/login")
 def quiz_page(response, title):
@@ -280,4 +287,6 @@ def search_event(request,title):
 
         return render(request, "userprofile/search_event.html", {'searched': searched, 'results': results}) 
     else:
-        return render(request, "userprofile/search_event.html", {}) 
+        return render(request, "userprofile/search_event.html", {})
+
+

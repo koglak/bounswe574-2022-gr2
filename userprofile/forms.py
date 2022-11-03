@@ -1,16 +1,23 @@
 from django import forms
 
 from .models import Lecture, Profile,Course, Event
-from django.forms import ImageField, ModelForm, TextInput
+from django.forms import ImageField, ModelForm, Select, TextInput
 from taggit.forms import TagWidget
 from django.utils.safestring import mark_safe
 from django.forms.widgets import NumberInput
 
 
 
-# RATING_CHOICES = [(i+1,i+1) for i in range(5)]
-
-
+CATEGORY_CHOICES =(
+    ("All", "All"),
+    ("Outside", "Outside"),
+    ("Workshop", "Workshop"),
+    ("Social", "Social"),
+    ("Presentation", "Presentation"),
+    ("Introductory", "Introductory"),
+    ("Training", "Training"),
+    )
+  
 class CourseForm(forms.ModelForm):
     class Meta:
        model = Course
@@ -53,5 +60,16 @@ class EventForm(forms.ModelForm):
             'img': forms.FileInput(),
         }
 
-   
-                
+class CategorySortingForm(ModelForm):
+    class Meta:
+        model = Event
+        fields = ['category']
+
+        widgets = {
+           # Here you define what input type should the field have
+           'category': Select(attrs = { 
+               'class': 'form-control',
+               'onchange': 'this.form.submit();',
+               "name":"category"
+           })
+        }
