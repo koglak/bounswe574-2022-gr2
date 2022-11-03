@@ -7,16 +7,6 @@ from django.utils.safestring import mark_safe
 from django.forms.widgets import NumberInput
 
 
-
-CATEGORY_CHOICES =(
-    ("All", "All"),
-    ("Outside", "Outside"),
-    ("Workshop", "Workshop"),
-    ("Social", "Social"),
-    ("Presentation", "Presentation"),
-    ("Introductory", "Introductory"),
-    ("Training", "Training"),
-    )
   
 class CourseForm(forms.ModelForm):
     class Meta:
@@ -73,3 +63,19 @@ class CategorySortingForm(ModelForm):
                "name":"category"
            })
         }
+
+class DateFilterForm(ModelForm):
+    class Meta:
+        model = Event
+        fields = ['event_date']
+        DATE_CHOICES =(
+                ("Ascending", "Ascending"),
+                ("Descending", "Descending"),
+                )
+        widgets = {
+                'event_date': forms.Select(choices=DATE_CHOICES,attrs={'class': 'dropdown'}),
+                'onchange': 'this.form.submit();',
+                "name":"event_date"
+            }
+
+    

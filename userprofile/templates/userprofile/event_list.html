@@ -28,7 +28,7 @@
 
             <div class="row d-flex align-items-center">
 
-                <div class="col-sm-7">
+                <div class="col-sm-5">
 
                 </div>
 
@@ -39,6 +39,14 @@
                         {{ form_input.as_p}}
                         <input class="form-control mr-sm-2" type="search"  placeholder="Search" aria-label="Search" name="searched"> 
                     </form>        
+                </div>
+
+                <div class="col-sm-2">
+                    <form action="{% url 'event_list' title=course.title %}" method="POST">
+                        {% csrf_token %}
+                        {{ form_date.as_p }}
+                    </form>   
+
                 </div>
 
                 <!-- filtering by category -->

@@ -6,7 +6,7 @@ from django.shortcuts import render
 from blog.models import Post
 from quiz.models import Case, Question, QuestionList, Score
 from .models import Course, Profile, Rating, Lecture, Event
-from .forms import CourseForm, ProfileForm, LectureForm, EventForm, CategorySortingForm
+from .forms import CourseForm, ProfileForm, LectureForm, EventForm, CategorySortingForm, DateFilterForm
 from django.shortcuts import redirect, get_object_or_404
 from taggit.models import Tag
 from django.template.defaultfilters import slugify
@@ -218,20 +218,32 @@ def event_list(response, title):
     startdate = datetime.today()
     enddate = startdate + timedelta(days=365)
     course=get_object_or_404(Course, title=title)
-    event_list= Event.objects.filter(course=course, event_date__range=[startdate, enddate]).order_by('-event_date')
-    form = CategorySortingForm(response.POST)
+    event_list= Event.objects.filter(course=course, event_date__range=[startdate, enddate])
+    
     if response.method == "POST":
+        form = CategorySortingForm(response.POST, use_required_attribute=False)
+        form_date=DateFilterForm(response.POST, use_required_attribute=False)
+        
         if form.is_valid():
             filtered_category = response.POST['category']                
             if filtered_category!="All" :
                 event_list = Event.objects.filter(course=course,category=filtered_category, event_date__range=[startdate, enddate])
+        elif form_date.is_valid():
+                date_filter= response.POST['event_date']
+                if date_filter =="Ascending":
+                    event_list= Event.objects.filter(course=course, event_date__range=[startdate, enddate]).order_by('event_date')
+                else:
+                    event_list= Event.objects.filter(course=course, event_date__range=[startdate, enddate]).order_by('-event_date')
         else:
             searched = response.POST["searched"]
-            event_list=Event.objects.filter(title__icontains=searched)
-            form = CategorySortingForm(course=course, use_required_attribute=False, event_date__range=[startdate, enddate])
+            event_list=Event.objects.filter(course=course, title__icontains=searched, event_date__range=[startdate, enddate])
+            form = CategorySortingForm(use_required_attribute=False)
+            form_date=DateFilterForm(use_required_attribute=False)
     else:
         form = CategorySortingForm(initial={'category': "All"})
-    return render(response, "userprofile/event_list.html", {'course': course, 'event_list':event_list, "form": form})
+        form_date=DateFilterForm(use_required_attribute=False)
+
+    return render(response, "userprofile/event_list.html", {'course': course, 'event_list':event_list, "form": form, "form_date": form_date})
 
 @login_required(login_url="/login")
 def past_event(response, title):
