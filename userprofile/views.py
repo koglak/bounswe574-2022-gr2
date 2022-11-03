@@ -224,7 +224,7 @@ def event_list(response, title):
             if filtered_category!="All" :
                 event_list = Event.objects.filter(category=filtered_category)
     else:
-        form = CategorySortingForm()
+        form = CategorySortingForm(initial={'category': "All"})
     return render(response, "userprofile/event_list.html", {'course': course, 'event_list':event_list, "form": form})
 
 @login_required(login_url="/login")
