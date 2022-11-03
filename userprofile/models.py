@@ -59,12 +59,13 @@ class Lecture(models.Model):
         return self.course.title
 class Event(models.Model):
     CATEGORY_CHOICES = (
+    ("All", "All"),
     ("Outside", "Outside"),
     ("Workshop", "Workshop"),
     ("Social", "Social"),
     ("Presentation", "Presentation"),
     ("Introductory", "Introductory"),
-    ("Training", "Training"),
+    ("Training", "Training")
     )
 
     title = models.CharField(max_length=200)

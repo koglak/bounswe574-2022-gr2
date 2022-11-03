@@ -220,9 +220,9 @@ def event_list(response, title):
     form = CategorySortingForm(response.POST)
     if response.method == "POST":
         if form.is_valid():
-            filtered_category = response.POST['category'] 
-            event_list = Event.objects.filter(category=filtered_category)
-            print(event_list)
+            filtered_category = response.POST['category']
+            if filtered_category!="All" :
+                event_list = Event.objects.filter(category=filtered_category)
     else:
         form = CategorySortingForm()
     return render(response, "userprofile/event_list.html", {'course': course, 'event_list':event_list, "form": form})
