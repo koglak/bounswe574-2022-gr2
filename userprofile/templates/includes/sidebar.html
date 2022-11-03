@@ -52,10 +52,10 @@
     
     {% elif page == 'event' %}
         <li class="list-group-item list-group-item-action">
-            <a href="" class="post-text" style="text-decoration:none"> Up Coming Events</a> 
+            <a href="{% url 'event_list' title=course.title %}" class="post-text" style="text-decoration:none"> Up Coming Events</a> 
         </li> 
         <li class="list-group-item list-group-item-action">
-            <a href="" class="post-text" style="text-decoration:none"> Past Events</a>
+            <a href="{% url 'past_event' title=course.title %}" class="post-text" style="text-decoration:none"> Past Events</a>
         </li>
     
     {% endif %}

@@ -1,0 +1,59 @@
+{% extends 'blog/base.html' %}
+
+{% block title %}
+    Event Detail
+{% endblock %}
+
+{% block content %}
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-sm-3">
+            <!--Enroll & Drop Button-->
+            {% if user.is_authenticated %}
+                    {% include 'includes/enroll_drop.html' with course=course %}
+            {% endif %}
+
+            <!-- Lecture List -->
+            {% include 'includes/sidebar.html' with course=course page="event" %}
+            <div class="text-end mt-3">
+                <a class="btn btn-primary" href="{% url 'event_new' title=course.title %}">Create Event</a>
+            </div>
+        </div>
+
+        <!--Event Content-->
+        <div class="col-sm-9">
+            <div class="row d-flex align-items-center">
+                <div class="col-sm-7">
+                </div>
+
+                <!-- search by keyword -->
+                <div class="col-sm-3">
+                    <form class="form-inline my-2 my-lg-0" method="POST" action="{% url 'event_list' title=course.title %}" >
+                        {% csrf_token %}
+                        {{ form_input.as_p}}
+                        <input class="form-control mr-sm-2" type="search"  placeholder="Search" aria-label="Search" name="searched"> 
+                    </form>        
+                </div>
+
+                <!-- filtering by category -->
+                <div class="col-sm-2">
+                    <form action="{% url 'event_list' title=course.title %}" method="POST">
+                        {% csrf_token %}
+                        {{ form.as_p }}
+                    </form>        
+                </div>
+            </div>
+
+           <div class="row">
+            <div class="d-inline-flex flex-wrap">
+                {% for event in event_list %}
+                    {% include 'includes/event.html' with event=event course=course %}
+                {% endfor %}
+            </div>    
+           </div>
+        </div>
+    </div> 
+</div>
+
+{% endblock %}

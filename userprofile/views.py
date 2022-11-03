@@ -215,17 +215,40 @@ def learn_page(response):
 
 @login_required(login_url="/login")
 def event_list(response, title):
+    startdate = datetime.today()
+    enddate = startdate + timedelta(days=365)
     course=get_object_or_404(Course, title=title)
-    event_list= Event.objects.filter(course=course).order_by('-event_date')
+    event_list= Event.objects.filter(course=course, event_date__range=[startdate, enddate]).order_by('-event_date')
     form = CategorySortingForm(response.POST)
     if response.method == "POST":
         if form.is_valid():
             filtered_category = response.POST['category']                
             if filtered_category!="All" :
-                event_list = Event.objects.filter(category=filtered_category)
+                event_list = Event.objects.filter(course=course,category=filtered_category, event_date__range=[startdate, enddate])
         else:
             searched = response.POST["searched"]
             event_list=Event.objects.filter(title__icontains=searched)
+            form = CategorySortingForm(course=course, use_required_attribute=False, event_date__range=[startdate, enddate])
+    else:
+        form = CategorySortingForm(initial={'category': "All"})
+    return render(response, "userprofile/event_list.html", {'course': course, 'event_list':event_list, "form": form})
+
+@login_required(login_url="/login")
+def past_event(response, title):
+    enddate = datetime.today()
+    startdate = enddate - timedelta(days=365)
+    course=get_object_or_404(Course, title=title)
+    event_list= Event.objects.filter(course=course, event_date__range=[startdate, enddate]).order_by('-event_date')
+    form = CategorySortingForm(response.POST)
+    
+    if response.method == "POST":
+        if form.is_valid():
+            filtered_category = response.POST['category']                
+            if filtered_category!="All" :
+                event_list = Event.objects.filter(course=course,category=filtered_category, event_date__range=[startdate, enddate])
+        else:
+            searched = response.POST["searched"]
+            event_list=Event.objects.filter(course=course, title__icontains=searched, event_date__range=[startdate, enddate])
             form = CategorySortingForm( use_required_attribute=False)
     else:
         form = CategorySortingForm(initial={'category': "All"})
@@ -283,14 +306,5 @@ def event_enroll(request,pk):
     event.enrolled_users.add(request.user)
     return redirect('event_list', title=event.course.title)
 
-@login_required(login_url="/login")
-def search_event(request,title):
-    if request.method == "POST":
-        searched = request.POST["searched"]
-        results = Event.objects.filter(title__icontains=searched)
-
-        return render(request, "userprofile/search_event.html", {'searched': searched, 'results': results}) 
-    else:
-        return render(request, "userprofile/search_event.html", {})
 
 
