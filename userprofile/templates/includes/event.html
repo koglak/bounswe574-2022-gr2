@@ -6,7 +6,13 @@
             <div class="card" style="width: 20rem; margin: 10px">
                 <img class="card-img-top" src="{{event.img.url}}" alt="Card image cap" >
                 <div class="card-body">
-                <h5 class="card-title">{{ event.title }}
+                <h5 class="card-title">
+                    {% if event.enrolled_users.count == event.quota and event.quota != 0 %}
+                        <span class="text-danger"><del>{{ event.title }}</del></span>
+                    {% else %}
+                        {{ event.title }}
+                    {% endif %}
+                        
                     {% if user == event.user %}
                       • <a href="{% url 'event_edit' pk=event.pk %}" style="text-decoration:none; font-size: 0.75em">Edit</a>
                     {% endif %}
