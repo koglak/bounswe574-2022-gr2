@@ -1,5 +1,6 @@
 
 # Create your models here.
+import datetime
 from email.mime import image
 from django.conf import settings
 from django.db import models
@@ -82,6 +83,13 @@ class Event(models.Model):
     img = models.ImageField(upload_to='images', help_text="event_image", null=True)
     quota = models.PositiveIntegerField(default=0, blank=True)
 
+    def get_remaining_days(self):
+        remaining = (self.event_date - datetime.datetime.today()).days
+        print(type(remaining))
+        return remaining
+
     
     def __str__(self):
         return self.title
+
+
