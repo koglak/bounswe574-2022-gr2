@@ -30,6 +30,7 @@ urlpatterns = [
     path('myspace/', include("userprofile.urls")),
     path('learning/', include("quiz.urls")),
     path('activity/', include("activity.urls")),
+    path('tinymce/', include('tinymce.urls')),
 
 
 

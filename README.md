@@ -37,7 +37,7 @@ Project Team
         
 4. Create docker images:
 
-        docker build . -t <container_name>
+        docker build . -t project_web
         
 5. Run docker container:
 

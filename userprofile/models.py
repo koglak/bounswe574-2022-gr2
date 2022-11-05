@@ -7,11 +7,13 @@ from django.utils import timezone
 from django.contrib.auth.models import User
 from taggit.managers import TaggableManager
 from django.db.models import Avg
+from tinymce import models as tinymce_models
 
 
 class Profile(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    bio = models.TextField(default="This is my bio!")
+    #bio = models.TextField(default="This is my bio!")
+    bio = tinymce_models.HTMLField()
     img = models.ImageField(upload_to='images')
     followers = models.ManyToManyField(User, related_name='followers', blank=True)
 
@@ -22,7 +24,8 @@ class Course(models.Model):
    
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     title = models.CharField(max_length=255)
-    description=models.TextField()
+    #description=models.TextField()
+    description = tinymce_models.HTMLField()
     img = models.ImageField(upload_to='images')
     published_date=models.DateTimeField(blank=True, null=True)
     collaborative_members = models.ManyToManyField(User, blank=True, related_name='collaborative_members')
@@ -53,7 +56,8 @@ class Lecture(models.Model):
     user=models.ForeignKey(User,default=None, on_delete=models.CASCADE)
 
     title = models.CharField(max_length=255)
-    content=models.TextField()
+    #content=models.TextField()
+    content = tinymce_models.HTMLField()
     published_date=models.DateTimeField(blank=True, null=True)
 
     def __str__(self):
@@ -61,7 +65,8 @@ class Lecture(models.Model):
 
 class Event(models.Model):
     title = models.CharField(max_length=200)
-    description = models.TextField()
+    #description = models.TextField()
+    description = tinymce_models.HTMLField()
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     start_time = models.DateTimeField()
     enrolled_users = models.ManyToManyField(User, blank=True, related_name='event_enrolled_users')
