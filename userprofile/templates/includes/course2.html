@@ -7,9 +7,18 @@
             <!--Profile Picture-->
             <div class="col-sm-3">
                 <div class="d-flex flex-start align-items-center" style="margin:5px">
-                    <img class="rounded-circle shadow-1-strong me-3"
-                    src="https://i.pinimg.com/564x/a6/58/32/a65832155622ac173337874f02b218fb.jpg" alt="avatar" width="60"
-                    height="60" />
+                    {% if course.userProfileImg %}
+
+                        <img class="rounded-circle shadow-1-strong me-3"
+                        src="{{course.userProfileImg.url}}" alt="avatar" width="60"
+                        height="60" />
+
+                    {% else %}
+                        <img class="rounded-circle shadow-1-strong me-3"
+                        src="http://cdn.onlinewebfonts.com/svg/img_24787.png" alt="avatar" width="60"
+                        height="60" />
+
+                    {% endif %}
                 </div>
             </div>
 

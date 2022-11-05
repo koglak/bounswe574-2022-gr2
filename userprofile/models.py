@@ -36,6 +36,10 @@ class Course(models.Model):
             avg=float(rating["avarage"])
         return avg
 
+    def userProfileImg(self):
+        user = Profile.objects.get(user=self.user)
+        return user.img
+
     def __str__(self):
         return self.title
 
