@@ -6,6 +6,7 @@ from django.conf import settings
 from django.utils import timezone
 from django.contrib.auth.models import User
 from taggit.managers import TaggableManager
+from userprofile.models import Profile
 
 
 
@@ -43,6 +44,10 @@ class Post(models.Model):
     def publish(self):
         self.published_date=timezone.now()
         self.save()
+    
+    def userProfileImg(self):
+        user = Profile.objects.get(user=self.author)
+        return user.img
 
     # when we call __str__, it will turn a text
     def __str__(self):
