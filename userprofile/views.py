@@ -108,6 +108,9 @@ def other_user_profile(response, name):
     name = response.GET.get('name')
     if name=="follow":
         user_profile.followers.add(response.user)
+    elif name=="unfollow":
+        user_profile.followers.remove(response.user)
+
     return render(response, "userprofile/profile.html", {'courses': courses, 'user_profile': user_profile, 'collaborative_member': collaborative_member, 'question': question})
 
 

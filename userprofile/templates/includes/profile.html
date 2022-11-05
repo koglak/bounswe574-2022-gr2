@@ -12,7 +12,11 @@
             {% endif %}
 
             {% if user != user_profile.user %}
-                <a class="btn btn-outline-success mt-3" href="{% url 'other_user_profile' name=user_profile.user %}?name=follow" role="button">Follow</a>
+                {% if not user in user_profile.followers.all %}
+                    <a class="btn btn-outline-success mt-3" href="{% url 'other_user_profile' name=user_profile.user %}?name=follow" role="button">Follow</a>
+                {% else %}
+                    <a class="btn btn-outline-danger mt-3" href="{% url 'other_user_profile' name=user_profile.user %}?name=unfollow" role="button">Unfollow</a>
+                {% endif %}
             {% endif %}
         </div>
 
