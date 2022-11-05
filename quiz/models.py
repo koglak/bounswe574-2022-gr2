@@ -57,9 +57,14 @@ class Case(models.Model):
     course=models.ForeignKey(Course, default=None, on_delete=models.CASCADE, related_name='case_list')
     title=models.CharField(max_length=200,null=True)
     description=models.TextField()
+    published_date = models.DateTimeField(auto_now_add=True)
+    due_date = models.DateTimeField(blank = True, null = True)
 
     def __str__(self):
         return self.title
+
+    class Meta:
+        ordering = ['published_date']
 
 class CaseResult(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)

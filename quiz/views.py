@@ -108,6 +108,7 @@ def quiz_delete(request, title):
 def case_create(request,title):
     course=Course.objects.get(title=title)
     form = CaseForm()
+    due_date = request.POST['due_date']
     if request.method == "POST":
         form = CaseForm(request.POST)
         if form.is_valid():
