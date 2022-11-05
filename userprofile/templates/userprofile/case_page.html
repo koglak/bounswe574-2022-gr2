@@ -28,34 +28,36 @@
                     <a href="{% url 'case_create' title=course.title %}"  class="btn btn-primary">Create Case-Study</a>
                 {% endif %}
             </div>
+            {% if course.case_list.all != null %}
             Tarih bilgisi tutulmalı ***
+           <br><br>
+            {% bs_icon 'envelope-open' size='1em' %} <a href = "">Newly Opened Cases</a>
+                    {% for case in course.case_list.all %}
+                    <li class="list-group-item list-group-item-action">
+                        <a href="{% url 'case_grade' title=case.title %}" class="post-text" style="text-decoration:none"> {% bs_icon 'eye' size='1.5em' %}|</a>
+                        <a href="{% url 'case_detail' title=case.title %}" class="post-text" style="text-decoration:none"> Case: {{case.title}}</a>
+                        {{case.published_date}}
+                    </li> 
+                    {% endfor %}
             <br><br>
-            {% bs_icon 'envelope-open' size='1em' %} <a>Newly Opened Cases</a>
+            {% bs_icon 'folder2-open' size='1em' %}<a href = "">Cases In-progess</a> 
                 {% for case in course.case_list.all %}
                 <li class="list-group-item list-group-item-action">
                     <a href="{% url 'case_grade' title=case.title %}" class="post-text" style="text-decoration:none"> {% bs_icon 'eye' size='1.5em' %}|</a>
                     <a href="{% url 'case_detail' title=case.title %}" class="post-text" style="text-decoration:none"> Case: {{case.title}}</a>
-                    case.published_date
-                </li> 
-                {% endfor %}
-            <br><br>
-            {% bs_icon 'folder2-open' size='1em' %}<a>Cases In-progess</a> 
-                {% for case in course.case_list.all %}
-                <li class="list-group-item list-group-item-action">
-                    <a href="{% url 'case_grade' title=case.title %}" class="post-text" style="text-decoration:none"> {% bs_icon 'eye' size='1.5em' %}|</a>
-                    <a href="{% url 'case_detail' title=case.title %}" class="post-text" style="text-decoration:none"> Case: {{case.title}}</a>
-                    case.published_date
+                    {{case.due_date}}
                 </li> 
                 {% endfor %}    
             <br><br>
-            {% bs_icon 'archive' size='1em' %} <a>Cases Closed</a> 
+            {% bs_icon 'archive' size='1em' %} <a href = "">Cases Closed</a> 
                 {% for case in course.case_list.all %}
                 <li class="list-group-item list-group-item-action">
                     <a href="{% url 'case_grade' title=case.title %}" class="post-text" style="text-decoration:none"> {% bs_icon 'eye' size='1.5em' %}|</a>
                     <a href="{% url 'case_detail' title=case.title %}" class="post-text" style="text-decoration:none"> Case: {{case.title}}</a>
-                    case.published_date
+                   {{case.case_grade}}
                 </li> 
                 {% endfor %}
+            {% endif %}
         </div>
 
         
