@@ -17,8 +17,9 @@ from datetime import datetime, timedelta, time
 
 @login_required(login_url="/login")
 def user_profile(response):
+    print(response.user)
     courses=Course.objects.filter(user = response.user).order_by('published_date')
-    user_profile=Profile.objects.get(user=response.user)
+    user_profile = get_object_or_404(Profile, user=response.user)
     collaborative_member=Course.objects.filter(collaborative_members = response.user)
     question=Post.objects.filter(author=response.user)
     return render(response, "userprofile/profile.html", {'courses':courses, 'user_profile':user_profile, 'collaborative_member': collaborative_member, 'question':question})
@@ -104,8 +105,13 @@ def other_user_profile(response, name):
     user_profile=Profile.objects.get(user__username=name)
     collaborative_member=Course.objects.filter(collaborative_members__username = name)
     question=Post.objects.filter(author=user_profile.user)
-
+    name = response.GET.get('name')
+    if name=="follow":
+        user_profile.followers.add(response.user)
     return render(response, "userprofile/profile.html", {'courses': courses, 'user_profile': user_profile, 'collaborative_member': collaborative_member, 'question': question})
+
+
+
 
 @login_required(login_url="/login")
 def profile_edit(request,pk):

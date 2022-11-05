@@ -10,16 +10,20 @@
             {% else %}
                 <img src="{{user_profile.img.url}}" width="120"> </div>
             {% endif %}
+
+            {% if user != user_profile.user %}
+                <a class="btn btn-outline-success mt-3" href="{% url 'other_user_profile' name=user_profile.user %}?name=follow" role="button">Follow</a>
+            {% endif %}
         </div>
 
           
 
-        <div class="mt-5 text-center">
+        <div class="mt-2 text-center">
             <h4 class="mb-0">{{user_profile.user}}</h4> 
             <span class="text-muted d-block mb-2">{{user_profile.bio}}</span> 
             <div class="d-flex justify-content-between align-items-center mt-4 px-4">
                 <div class="stats">
-                    <h6 class="mb-0">Followers|</h6> <span>8,797</span>
+                    <h6 class="mb-0">Followers|</h6> <span>{{user_profile.followers.count}}</span>
                 </div>
                 <div class="stats">
                     <h6 class="mb-0">Spaces|</h6> <span>{{courses.all.count}}</span>
