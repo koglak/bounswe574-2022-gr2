@@ -220,25 +220,38 @@ def event_list(response, title):
     course=get_object_or_404(Course, title=title)
     event_list= Event.objects.filter(course=course, event_date__range=[startdate, enddate])
     
+    form = CategorySortingForm(response.POST or None)
+    form_date=DateFilterForm(response.POST or None)
     if response.method == "POST":
-        form = CategorySortingForm(response.POST, use_required_attribute=False)
-        form_date=DateFilterForm(response.POST, use_required_attribute=False)
-        
-        if form.is_valid():
-            filtered_category = response.POST['category']                
-            if filtered_category!="All" :
-                event_list = Event.objects.filter(course=course,category=filtered_category, event_date__range=[startdate, enddate])
-        elif form_date.is_valid():
-                date_filter= response.POST['event_date']
-                if date_filter =="Ascending":
-                    event_list= Event.objects.filter(course=course, event_date__range=[startdate, enddate]).order_by('event_date')
+        if 'category' in response.POST:
+            form = CategorySortingForm(response.POST)
+            if form.is_valid():
+                filtered_category = response.POST['category']                
+                if filtered_category!="All" :
+                    event_list = Event.objects.filter(course=course,category=filtered_category, event_date__range=[startdate, enddate])
                 else:
-                    event_list= Event.objects.filter(course=course, event_date__range=[startdate, enddate]).order_by('-event_date')
+                    event_list = Event.objects.filter(course=course, event_date__range=[startdate, enddate])
+        elif 'event_date' in response.POST:
+                form_date=DateFilterForm(response.POST)
+                form= CategorySortingForm(use_required_attribute=False)
+                print("event_date")
+                if form_date.is_valid():
+                    print("valid")
+                    date_filter= response.POST['event_date']
+                    print(date_filter)
+                    if date_filter =="Ascending":
+                        print("here")
+                        event_list= Event.objects.filter(course=course, event_date__range=[startdate, enddate]).order_by('event_date__day', 'event_date__month')
+                    else:
+                        print("else")
+                        event_list= Event.objects.filter(course=course, event_date__range=[startdate, enddate]).order_by('-event_date__day', '-event_date__month')
+
         else:
             searched = response.POST["searched"]
             event_list=Event.objects.filter(course=course, title__icontains=searched, event_date__range=[startdate, enddate])
             form = CategorySortingForm(use_required_attribute=False)
             form_date=DateFilterForm(use_required_attribute=False)
+   
     else:
         form = CategorySortingForm(initial={'category': "All"})
         form_date=DateFilterForm(use_required_attribute=False)

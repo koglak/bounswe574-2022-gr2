@@ -1,7 +1,7 @@
 from django import forms
 
 from .models import Lecture, Profile,Course, Event
-from django.forms import ImageField, ModelForm, Select, TextInput
+from django.forms import ModelForm, Select, TextInput, Form
 from taggit.forms import TagWidget
 from django.utils.safestring import mark_safe
 from django.forms.widgets import NumberInput
@@ -58,24 +58,30 @@ class CategorySortingForm(ModelForm):
         widgets = {
            # Here you define what input type should the field have
            'category': Select(attrs = { 
+                "required": False,
                'class': 'dropdown',
                'onchange': 'this.form.submit();',
-               "name":"category"
+               "name":"category",
            })
         }
 
-class DateFilterForm(ModelForm):
-    class Meta:
-        model = Event
-        fields = ['event_date']
-        DATE_CHOICES =(
-                ("Ascending", "Ascending"),
-                ("Descending", "Descending"),
-                )
-        widgets = {
-                'event_date': forms.Select(choices=DATE_CHOICES,attrs={'class': 'dropdown'}),
+
+class DateFilterForm(forms.Form):
+    DATE_CHOICES =(
+            ("Ascending", "Ascending"),
+            ("Descending", "Descending"),
+            )
+    
+    event_date = forms.CharField(
+        required=False,
+        widget=forms.Select(choices=DATE_CHOICES, attrs={
+                'class': 'dropdown',
                 'onchange': 'this.form.submit();',
-                "name":"event_date"
-            }
+                'name':'event_date'
+                })
+)
+
+
+  
 
     

@@ -37,10 +37,11 @@
                     <form class="form-inline my-2 my-lg-0" method="POST" action="{% url 'event_list' title=course.title %}" >
                         {% csrf_token %}
                         {{ form_input.as_p}}
-                        <input class="form-control mr-sm-2" type="search"  placeholder="Search" aria-label="Search" name="searched"> 
+                        <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" name="searched"> 
                     </form>        
                 </div>
 
+                <!-- date sorting -->
                 <div class="col-sm-2">
                     <form action="{% url 'event_list' title=course.title %}" method="POST">
                         {% csrf_token %}
