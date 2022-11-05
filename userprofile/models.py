@@ -85,9 +85,11 @@ class Event(models.Model):
 
     def get_remaining_days(self):
         remaining = (self.event_date - datetime.datetime.today()).days
-        print(type(remaining))
         return remaining
 
+    def get_remaining_quota(self):
+        remaining = (self.quota - self.enrolled_users.count())
+        return remaining
     
     def __str__(self):
         return self.title

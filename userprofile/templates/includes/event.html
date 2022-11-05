@@ -9,10 +9,10 @@
                 <h5 class="card-title">
                     {% if event.enrolled_users.count == event.quota and event.quota != 0 %}
                         <span class="text-danger"><del>{{ event.title }}</del></span>
-                    {% elif event.get_remaining_days > 4 %}
+                    {% elif event.get_remaining_days > 4 and event.get_remaining_quota > 4 %}
                         {{ event.title }} 
                     {% else %}
-                    <span class="text-danger"><strong>{{ event.title }}</strong></span>
+                        <span class="text-danger"><strong>{{ event.title }}</strong></span>
                     {% endif %}
                         
                     {% if user == event.user %}
