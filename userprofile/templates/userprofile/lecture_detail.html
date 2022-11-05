@@ -5,7 +5,7 @@
 {% endblock %}
 
 {% block content %}
-{{ form.media }}
+
 
 
     <div class="container-fluid" style="margin-top: 10px;">
@@ -29,7 +29,7 @@
 
             <!--Lecture Content-->
             <div class="col-sm-6">
-                {{lecture.content}}
+                {{lecture.content|safe}}
             </div>
 
             <!--Course Block: Course2 Template-->
