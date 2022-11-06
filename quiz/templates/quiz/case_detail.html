@@ -30,24 +30,19 @@
             <hr>
         </form>
     {% endif %}
-    Submitted answers
-    {% for list_form in list_formset %}
-    <tr id="row_{{ list_form.instance.id }}">
-      <th scope="row">{{forloop.counter}}</th>
-      
-      <td> 
-        <a href="{% url 'other_user_profile' name=list_form.instance.user.username %}" class="post-author" style="font-family:'Poppins';font-size:18px; font-weight: 600px; margin-right:5px">
-          {{list_form.instance.user}}
-        </a>
-      </td>
-      
-      <td>{{ list_form.instance.shared_date }}</td>
-      
-      <td><a href="{{ MEDIA_URL }}{{list_form.instance.upload.url}}">Download</a></td>
-      
-      <td>{{list_form.instance.score}}/100</td>
-    </tr>
-    {% endfor %}
 </div>
 
+<h3>Comments</h3>
+<div class = "section">
+    <div class = "container">
+        <div class = "row">
+            <div class = "col-lg-8 mx-auto">
+                <!--Display comment-->
+
+                <!--Display form-->
+                
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock %}
