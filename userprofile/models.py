@@ -88,7 +88,10 @@ class Event(models.Model):
         return remaining
 
     def get_remaining_quota(self):
-        remaining = (self.quota - self.enrolled_users.count())
+        if self.quota != 0:
+            remaining = (self.quota - self.enrolled_users.count())
+        else:
+            remaining = 5
         return remaining
     
     def __str__(self):
