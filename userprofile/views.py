@@ -312,6 +312,7 @@ def event_new(request, title):
             event = form.save(commit=False)
             event.user = request.user
             event.course=course
+            event.published_date = timezone.now()
             event.save()
             return redirect('event_list', title=title)
     else:

@@ -82,6 +82,8 @@ class Event(models.Model):
     link= models.URLField(default='http://www.helloworld.com')
     img = models.ImageField(upload_to='images', help_text="event_image", null=True)
     quota = models.PositiveIntegerField(default=0, blank=True)
+    published_date = models.DateTimeField(blank=True, null=True, default=timezone.now)  
+
 
     def get_remaining_days(self):
         remaining = (self.event_date - datetime.datetime.today()).days
