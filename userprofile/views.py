@@ -12,8 +12,7 @@ from taggit.models import Tag
 from django.template.defaultfilters import slugify
 from django.contrib.auth.decorators import login_required
 from datetime import datetime, timedelta, time
-
-# Create your views here.
+from django.core.paginator import Paginator
 
 @login_required(login_url="/login")
 def user_profile(response):
@@ -219,10 +218,12 @@ def event_list(response, title):
     enddate = startdate + timedelta(days=365)
     course=get_object_or_404(Course, title=title)
     event_list= Event.objects.filter(course=course, event_date__range=[startdate, enddate])
-    
+
     form = CategorySortingForm(response.POST or None)
     form_date=DateFilterForm(response.POST or None)
+
     if response.method == "POST":
+        # Category Filtering
         if 'category' in response.POST:
             form = CategorySortingForm(response.POST)
             if form.is_valid():
@@ -231,6 +232,7 @@ def event_list(response, title):
                     event_list = Event.objects.filter(course=course,category=filtered_category, event_date__range=[startdate, enddate])
                 else:
                     event_list = Event.objects.filter(course=course, event_date__range=[startdate, enddate])
+        # Date Sorting
         elif 'event_date' in response.POST:
                 form_date=DateFilterForm(response.POST)
                 form= CategorySortingForm(use_required_attribute=False)
@@ -245,18 +247,22 @@ def event_list(response, title):
                     else:
                         print("else")
                         event_list= Event.objects.filter(course=course, event_date__range=[startdate, enddate]).order_by('-event_date__day', '-event_date__month')
-
+        # Keyword Search
         else:
             searched = response.POST["searched"]
             event_list=Event.objects.filter(course=course, title__icontains=searched, event_date__range=[startdate, enddate])
             form = CategorySortingForm(use_required_attribute=False)
             form_date=DateFilterForm(use_required_attribute=False)
-   
+    # No post request
     else:
         form = CategorySortingForm(initial={'category': "All"})
         form_date=DateFilterForm(use_required_attribute=False)
 
-    return render(response, "userprofile/event_list.html", {'course': course, 'event_list':event_list, "form": form, "form_date": form_date})
+    paginator = Paginator(event_list,3) 
+    page = response.GET.get('page')
+    events= paginator.get_page(page)
+
+    return render(response, "userprofile/event_list.html", {'course': course, 'events':events, "form": form, "form_date": form_date})
 
 @login_required(login_url="/login")
 def past_event(response, title):
@@ -277,7 +283,12 @@ def past_event(response, title):
             form = CategorySortingForm( use_required_attribute=False)
     else:
         form = CategorySortingForm(initial={'category': "All"})
-    return render(response, "userprofile/event_list.html", {'course': course, 'event_list':event_list, "form": form})
+    
+    paginator = Paginator(event_list,3) 
+    page = response.GET.get('page')
+    events= paginator.get_page(page)
+
+    return render(response, "userprofile/event_list.html", {'course': course, 'events':events, "form": form})
 
 @login_required(login_url="/login")
 def quiz_page(response, title):

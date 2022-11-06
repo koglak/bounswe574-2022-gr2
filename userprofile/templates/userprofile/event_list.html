@@ -61,10 +61,30 @@
             </div>
            <div class="row">
             <div class="d-inline-flex flex-wrap">
-                {% for event in event_list %}
+                {% for event in events %}
                     {% include 'includes/event.html' with event=event course=course %}
                 {% endfor %}
             </div>    
+           </div>
+
+           <div class="row">
+            <div class="pagination">
+                <span class="step-links">
+                    {% if events.has_previous %}
+                        <a href="?page=1">&laquo; first</a>
+                        <a href="?page={{ events.previous_page_number }}">previous</a>
+                    {% endif %}
+            
+                    <span class="current">
+                        Page {{ events.number }} of {{ events.paginator.num_pages }}.
+                    </span>
+            
+                    {% if events.has_next %}
+                        <a href="?page={{ events.next_page_number }}">next</a>
+                        <a href="?page={{ events.paginator.num_pages }}">last &raquo;</a>
+                    {% endif %}
+                </span>
+            </div>
            </div>
             
         </div>
