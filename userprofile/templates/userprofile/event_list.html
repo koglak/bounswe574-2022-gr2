@@ -42,7 +42,7 @@
                 </div>
 
                 <!-- date sorting -->
-                <div class="col-sm-2">
+                <div class="col-sm-2 text-end">
                     <form action="{% url 'event_list' title=course.title %}" method="POST">
                         {% csrf_token %}
                         {{ form_date.as_p }}
@@ -51,7 +51,7 @@
                 </div>
 
                 <!-- filtering by category -->
-                <div class="col-sm-2">
+                <div class="col-sm-2 text-end">
                     <form action="{% url 'event_list' title=course.title %}" method="POST">
                         {% csrf_token %}
                         {{ form.as_p }}

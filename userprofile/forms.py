@@ -58,10 +58,10 @@ class CategorySortingForm(ModelForm):
         widgets = {
            # Here you define what input type should the field have
            'category': Select(attrs = { 
-                "required": False,
+               'required': False,
                'class': 'dropdown',
                'onchange': 'this.form.submit();',
-               "name":"category",
+                'name':'category'
            })
         }
 
