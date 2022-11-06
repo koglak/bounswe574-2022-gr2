@@ -2,7 +2,14 @@ from django.forms import ModelForm
 from .models import *
 from django import forms
 
- 
+ #class CommentForm(ModelForm):
+ #    content = forms.CharField(widget = forms.Textarea(attrs = {
+ #        'rows':'4',
+ #    }))
+ #
+ #    class Meta:
+ #        model = Comment
+ #        fields = ('content', )
  
 class QuestionForm(ModelForm):
     class Meta:
@@ -19,10 +26,12 @@ class QuizForm(ModelForm):
 
 
 class CaseForm(ModelForm):
-
+    
     class Meta:
         model=Case
-        fields=('title','description')
+        fields=('title','description', 'due_date')
+
+
 
 class CaseResultForm(ModelForm):
 

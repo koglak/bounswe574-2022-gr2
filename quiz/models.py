@@ -64,7 +64,16 @@ class Case(models.Model):
         return self.title
 
     class Meta:
-        ordering = ['published_date']
+        ordering = ['-published_date']
+
+#class CaseComment(models.Model):
+#    user = models.ForeignKey(User, on_delete = models.CASCADE)
+#    date = models.DateField(auto_now_add = True)
+#    post = models.ForeignKey('Case', on_delete = models.CASCADE)
+#    content = models.TextField()
+#
+#    def __str__(self):
+#        return self.user.username
 
 class CaseResult(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)

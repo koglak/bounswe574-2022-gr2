@@ -108,7 +108,6 @@ def quiz_delete(request, title):
 def case_create(request,title):
     course=Course.objects.get(title=title)
     form = CaseForm()
-    due_date = request.POST['due_date']
     if request.method == "POST":
         form = CaseForm(request.POST)
         if form.is_valid():
@@ -126,9 +125,11 @@ def case_detail(request,title):
     course=Course.objects.get(case_list=case)
 
     form= CaseResultForm()
+#    caseform = CommentForm()
 
     if request.method == 'POST':  
         form = CaseResultForm(request.POST, request.FILES)  
+#        caseform = CommentForm(request.POST)
         if form.is_valid():  
             result = form.save(commit=False)
             result.user=request.user
@@ -138,6 +139,7 @@ def case_detail(request,title):
             return redirect('course_detail', title=course.title)  
     else:  
         form= CaseResultForm()
+#        caseForm=CommentForm()
         return render(request, 'quiz/case_detail.html', {'case':case, 'form': form, 'course': course})
 
 

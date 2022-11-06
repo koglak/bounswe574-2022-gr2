@@ -8,19 +8,19 @@
 <div class="jumbotron container row">
 
     <!--Page Navigation-->
-    <h5> <a href="{% url 'course_detail' title=course.title %}"> Space: {{course.title}} </a> > Case Page </h5>
-    <br>
+    <h5> Space: <a href="{% url 'course_detail' title=course.title %}"> {{course.title}} </a> > Case Page </h5>
+    <br><br>
 
-    <p class="post-title">Title of the case study: {{case.title}}</p>
-    <br>
+    <p class="post-title">Title of the case study:</p>
+    <P class = "post-title">{{case.title}}</p>
+    <br><br>
     <hr>
-    <p class="post-text">Description: {{case.description}}</p>
-
+    <strong>Description: </strong>
+    <p class = "post-text">{{case.description}}</p>
     <hr>
    {% if user in course.enrolled_users.all %}
-       ** if the user submitted his/her work, do not show submit button
-        You have submitted your answer for this case.
-        <hr>
+    <strong style = "background-color:red">You have submitted your answer for this case.</stong>
+    {% else %}
         <p class="post-author"> Upload Your Work:</p>
         <form method="POST" class="post-form" enctype="multipart/form-data">  
             {% csrf_token %}  
@@ -32,15 +32,20 @@
     {% endif %}
 </div>
 
-<h3>Comments</h3>
-<div class = "section">
+<br><br>
+
+<div class = "jumbotron container row">
+    <h2 class = "post-title">Comments</h2>
     <div class = "container">
         <div class = "row">
             <div class = "col-lg-8 mx-auto">
                 <!--Display comment-->
 
-                <!--Display form-->
-                
+                <!--Display form
+                <form method="POST" class="" enctype="multipart/form-data">  
+                   
+                </form>
+                -->
             </div>
         </div>
     </div>
