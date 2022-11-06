@@ -86,8 +86,7 @@ class Event(models.Model):
 
 
     def get_remaining_days(self):
-        remaining = (self.event_date - datetime.datetime.today()).days
-        return remaining
+        return (self.event_date - datetime.datetime.today()).days
 
     def get_remaining_quota(self):
         if self.quota != 0:
@@ -97,8 +96,6 @@ class Event(models.Model):
         return remaining
     
     def publish_date_check(self):
-        print(self.published_date)
-        print(datetime.datetime.today())
         return (datetime.datetime.today() - self.published_date).days < 1
          
     
