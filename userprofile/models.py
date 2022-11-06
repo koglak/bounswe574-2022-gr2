@@ -96,6 +96,12 @@ class Event(models.Model):
             remaining = 5
         return remaining
     
+    def publish_date_check(self):
+        print(self.published_date)
+        print(datetime.datetime.today())
+        return (datetime.datetime.today() - self.published_date).days < 1
+         
+    
     def __str__(self):
         return self.title
 

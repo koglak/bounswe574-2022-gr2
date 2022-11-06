@@ -15,10 +15,14 @@
                 {% else %}
                     <span class="text-danger"><strong>{{ event.title }}</strong></span>
                 {% endif %}
+                {% if event.publish_date_check %}
+                    <img src="https://img.icons8.com/parakeet/48/null/new.png" style="width: 30px; height: 30px"/>
+                {% endif %}
                     
                 {% if user == event.user %}
                     • <a href="{% url 'event_edit' pk=event.pk %}" style="text-decoration:none; font-size: 0.75em">Edit</a>
                 {% endif %}
+
             </h5>
 
             <p class="card-text">{{ event.description }}</p>
