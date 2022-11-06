@@ -67,25 +67,40 @@
             </div>    
            </div>
 
-           <div class="row">
-            <div class="pagination">
-                <span class="step-links">
-                    {% if events.has_previous %}
-                        <a href="?page=1">&laquo; first</a>
-                        <a href="?page={{ events.previous_page_number }}">previous</a>
-                    {% endif %}
+                <nav aria-label="Page navigation example">
+                    <ul class="pagination justify-content-end">
+                        {% if events.has_previous %}
+                            <li class="page-item">
+                                <a class="page-link" href="?page=1" tabindex="-1">&laquo; First</a>
+                            </li>
+                            <li class="page-item">
+                                <a class="page-link" href="?page={{ events.previous_page_number }}" tabindex="-1">Previous</a>
+                            </li>
+                        {% else %}
+                            <li class="page-item disabled">
+                                <a class="page-link" href="#" tabindex="-1">Previous</a>
+                            </li>
+                        {% endif %}
+                    
+                    <li class="page-item"><a class="page-link text-dark" >Page {{ events.number }} of {{ events.paginator.num_pages }}</a></li>
             
-                    <span class="current">
-                        Page {{ events.number }} of {{ events.paginator.num_pages }}.
-                    </span>
-            
+
                     {% if events.has_next %}
-                        <a href="?page={{ events.next_page_number }}">next</a>
-                        <a href="?page={{ events.paginator.num_pages }}">last &raquo;</a>
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ events.next_page_number }}">Next</a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ events.paginator.num_pages }}">Last &raquo;</a>
+                        </li>
+                    {% else %}
+                        <li class="page-item disabled">
+                            <a class="page-link" href="#" tabindex="-1">Last</a>
+                        </li>
                     {% endif %}
-                </span>
+                    </ul>
+                </nav>
+
             </div>
-           </div>
             
         </div>
 
