@@ -29,14 +29,14 @@
                 {% endif %}
             </div>
             {% if course.case_list.all != null %}
-            Tarih bilgisi tutulmalı ***
            <br><br>
             {% bs_icon 'envelope-open' size='1em' %} <a href = "">Newly Opened Cases</a>
                     {% for case in course.case_list.all %}
                     <li class="list-group-item list-group-item-action">
                         <a href="{% url 'case_grade' title=case.title %}" class="post-text" style="text-decoration:none"> {% bs_icon 'eye' size='1.5em' %}|</a>
                         <a href="{% url 'case_detail' title=case.title %}" class="post-text" style="text-decoration:none"> Case: {{case.title}}</a>
-                        {{case.published_date}}
+                        <p>Published date: {{case.published_date}}</p>
+                        <p>Created by: <a href="">{{case.user}}</p></a>
                     </li> 
                     {% endfor %}
             <br><br>
@@ -45,7 +45,8 @@
                 <li class="list-group-item list-group-item-action">
                     <a href="{% url 'case_grade' title=case.title %}" class="post-text" style="text-decoration:none"> {% bs_icon 'eye' size='1.5em' %}|</a>
                     <a href="{% url 'case_detail' title=case.title %}" class="post-text" style="text-decoration:none"> Case: {{case.title}}</a>
-                    {{case.due_date}}
+                    <p>Due date: {{case.due_date}}</p>
+                    <p>Created by: <a href="">{{case.user}}</p></a>
                 </li> 
                 {% endfor %}    
             <br><br>
@@ -54,7 +55,8 @@
                 <li class="list-group-item list-group-item-action">
                     <a href="{% url 'case_grade' title=case.title %}" class="post-text" style="text-decoration:none"> {% bs_icon 'eye' size='1.5em' %}|</a>
                     <a href="{% url 'case_detail' title=case.title %}" class="post-text" style="text-decoration:none"> Case: {{case.title}}</a>
-                   {{case.case_grade}}
+                    <p>Grade: {{case.case_grade}}</p>
+                    <p>Created by: <a href="">{{case.user}}</p></a>
                 </li> 
                 {% endfor %}
             {% endif %}
