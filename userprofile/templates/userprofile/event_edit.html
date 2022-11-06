@@ -13,8 +13,8 @@
         {{form.media}}
         {{form.as_p}}
         <button type="submit" class="save btn btn-success mt-4">Post</button>
-        {% if title != "none" %}
-        <a class="btn btn-outline-danger mt-4" href="#">Delete Activity</a>
+        {% if pk != "none" %}
+            <a class="btn btn-outline-danger mt-4" href="{% url 'delete_event' pk=pk %}">Delete Activity</a>
         {% endif %}
     </form>
 </div>

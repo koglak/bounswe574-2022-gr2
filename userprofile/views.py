@@ -305,8 +305,8 @@ def event_new(request, title):
             return redirect('event_list', title=title)
     else:
         form = EventForm()
-        title ="none"
-    return render(request, 'userprofile/event_edit.html', {'form': form, 'title':title})
+        pk ="none"
+    return render(request, 'userprofile/event_edit.html', {'form': form, 'pk':pk})
 
 
 @login_required(login_url="/login")
@@ -321,9 +321,7 @@ def event_edit(request, pk):
             return redirect('event_list', title=event.course.title)
     else:
         form = EventForm(instance=event)
-        title ="none"
-
-    return render(request, 'userprofile/event_edit.html', {'form': form, 'title':title})
+    return render(request, 'userprofile/event_edit.html', {'form': form, 'pk': event.pk})
 
 @login_required(login_url="/login")
 def event_enroll(request,pk):
@@ -331,5 +329,9 @@ def event_enroll(request,pk):
     event.enrolled_users.add(request.user)
     return redirect('event_list', title=event.course.title)
 
-
+@login_required(login_url="/login")
+def delete_event(request, pk):
+    event = Event.objects.get(pk=pk)
+    event.delete()
+    return redirect('event_list', title=event.course.title)
 
