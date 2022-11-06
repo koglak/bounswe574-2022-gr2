@@ -10,11 +10,17 @@
             <h5 class="card-title">
                 {% if event.enrolled_users.count == event.quota and event.quota != 0 %}
                     <span class="text-danger"><del>{{ event.title }}</del></span>
-                {% elif event.get_remaining_days > 4 and event.get_remaining_quota > 4 %}
-                    {{ event.title }} 
-                {% else %}
+                {% elif 3 > event.get_remaining_days %}
                     <span class="text-danger"><strong>{{ event.title }}</strong></span>
+                    <img src="https://img.icons8.com/office/40/null/last-48-hours.png" style="width: 30px; height: 30px"/>
+                {% elif 4 > event.get_remaining_quota %}
+                    <span class="text-danger"><strong>{{ event.title }}</strong></span>
+                {% else %}
+                    {{ event.title }} 
                 {% endif %}
+
+
+
                 {% if event.publish_date_check %}
                     <img src="https://img.icons8.com/parakeet/48/null/new.png" style="width: 30px; height: 30px"/>
                 {% endif %}
