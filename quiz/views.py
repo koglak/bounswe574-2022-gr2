@@ -2,7 +2,7 @@ from django.shortcuts import render
 
 from quiz.models import Case, CaseResult, Question, QuestionList, Score, CaseRating
 from userprofile.models import Course
-from .forms import CaseForm, QuestionForm, QuizForm, CaseResultForm, ScoreForm
+from .forms import CaseForm, QuestionForm, QuizForm, CaseResultForm, ScoreForm, CommentForm
 from django.shortcuts import redirect, get_object_or_404
 from django.utils import timezone
 from django.forms import modelformset_factory
@@ -48,7 +48,7 @@ def quiz_detail(request,title):
         questions=quiz.question_list.all()
         course= Course.objects.get(question_list__pk=quiz.pk)
         
-        context = {
+        context = { 
             'quiz': quiz,
             'questions':questions,
             'course':course
@@ -125,11 +125,9 @@ def case_detail(request,title):
     course=Course.objects.get(case_list=case)
 
     form= CaseResultForm()
-#    caseform = CommentForm()
 
     if request.method == 'POST':  
         form = CaseResultForm(request.POST, request.FILES)  
-#        caseform = CommentForm(request.POST)
         if form.is_valid():  
             result = form.save(commit=False)
             result.user=request.user
@@ -139,7 +137,6 @@ def case_detail(request,title):
             return redirect('course_detail', title=course.title)  
     else:  
         form= CaseResultForm()
-#        caseForm=CommentForm()
         return render(request, 'quiz/case_detail.html', {'case':case, 'form': form, 'course': course})
 
 
@@ -177,3 +174,38 @@ def case_rate(request, pk):
             case_result.averagereview()
 
     return redirect('case_grade', title=case.title)
+
+def comment_new(request):
+    if request.method == "POST":
+        form = CommentForm(request.POST)
+
+        if form.is_valid():
+            post = form.save(commit=False)
+            post.author = request.user
+            post.published_date = timezone.now()
+            post.save()
+            form.save_m2m()
+
+            return redirect(reverse('quiz/case_comment_detail.html', kwargs = {
+                'pk' : post.pk
+            }))
+    else:
+       form = CommentForm()
+       pk ="none"
+    return render(request, 'quiz/case_detail.html', {'form': form,'pk': pk})
+
+def comment_edit(request, pk):
+    post = get_object_or_404(Post, pk=pk)
+    if request.method == "POST":
+        form = PostForm(request.POST, instance=post)
+        if form.is_valid():
+            post = form.save(commit=False)
+            post.author = request.user
+            post.published_date = timezone.now()
+            post.save()
+            form.save_m2m() 
+
+            return redirect('question_detail', pk=post.pk)
+    else:
+        form = PostForm(instance=post)
+    return render(request, 'blog/question_edit.html', {'form': form, 'pk': pk})

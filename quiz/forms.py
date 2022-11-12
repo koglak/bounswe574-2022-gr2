@@ -2,14 +2,26 @@ from django.forms import ModelForm
 from .models import *
 from django import forms
 
- #class CommentForm(ModelForm):
- #    content = forms.CharField(widget = forms.Textarea(attrs = {
- #        'rows':'4',
- #    }))
- #
- #    class Meta:
- #        model = Comment
- #        fields = ('content', )
+class CommentForm(forms.ModelForm):
+    class Meta:
+        model = Comment
+        fields = ('text',)
+        widgets = {
+            'text': forms.Textarea(attrs={ 
+               'class': "form-control",
+                'style': 'max-width: 300px;',
+                'placeholder': 'Text',
+                })
+            }
+
+class ReplyForm(forms.ModelForm):
+    class Meta:
+        model = ReplyComment
+        fields = ('body',)
+        labels = {
+        'body': (''),
+         }
+
  
 class QuestionForm(ModelForm):
     class Meta:
