@@ -33,7 +33,6 @@
             {% bs_icon 'envelope-open' size='1em' %} <a href = "#">Newly Opened Cases</a>
                     {% for case in course.case_list.all %}
                     <li class="list-group-item list-group-item-action">
-                        <a href="{% url 'case_grade' title=case.title %}" class="post-text" style="text-decoration:none"> {% bs_icon 'eye' size='1.5em' %}|</a>
                         <a href="{% url 'case_detail' title=case.title %}" class="post-text" style="text-decoration:none"> Case: {{case.title}}</a>
                         <p>Published date: {{case.published_date}}</p>
                         <p>Created by: <a href="{% url 'other_user_profile' name=course.user %}">{{case.user}}</p></a>
@@ -43,7 +42,6 @@
             {% bs_icon 'folder2-open' size='1em' %}<a href = "#">Cases In-progess</a> 
                 {% for case in course.case_list.all %}
                 <li class="list-group-item list-group-item-action">
-                    <a href="{% url 'case_grade' title=case.title %}" class="post-text" style="text-decoration:none"> {% bs_icon 'eye' size='1.5em' %}|</a>
                     <a href="{% url 'case_detail' title=case.title %}" class="post-text" style="text-decoration:none"> Case: {{case.title}}</a>
                     <p>Due date: {{case.due_date}}</p>
                     <p>Created by: <a href="#">{{case.user}}</p></a>
@@ -53,7 +51,6 @@
             {% bs_icon 'archive' size='1em' %} <a href = "#">Cases Closed</a> 
                 {% for case in course.case_list.all %}
                 <li class="list-group-item list-group-item-action">
-                    <a href="{% url 'case_grade' title=case.title %}" class="post-text" style="text-decoration:none"> {% bs_icon 'eye' size='1.5em' %}|</a>
                     <a href="{% url 'case_detail' title=case.title %}" class="post-text" style="text-decoration:none"> Case: {{case.title}}</a>
                     <p>Grade: {{case.case_grade}}</p>
                     <p>Created by: <a href="#">{{case.user}}</p></a>
