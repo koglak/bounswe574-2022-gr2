@@ -5,10 +5,19 @@ from django.forms import ModelForm, Select, TextInput, Form
 from taggit.forms import TagWidget
 from django.utils.safestring import mark_safe
 from django.forms.widgets import NumberInput
+from tinymce.widgets import TinyMCE
 
-
+class TinyMCEWidget (TinyMCE) :
+    def use_required_attribute(self, *args):
+        return False
   
 class CourseForm(forms.ModelForm):
+    description = forms.CharField(
+        widget=TinyMCEWidget(
+            attrs={'required': False, 'cols': 30, 'rows': 10}
+        )
+    )
+    
     class Meta:
        model = Course
        fields = ('title', 'description','img', 'collaborative_members', 'tags')
@@ -28,11 +37,22 @@ class CourseForm(forms.ModelForm):
                 }
 
 class ProfileForm(forms.ModelForm):
+    bio = forms.CharField(
+        widget=TinyMCEWidget(
+            attrs={'required': False, 'cols': 30, 'rows': 10}
+        )
+    )
     class Meta:
         model = Profile
         fields = ('bio', 'img')
 
 class LectureForm(forms.ModelForm):
+    content = forms.CharField(
+        widget=TinyMCEWidget(
+            attrs={'required': False, 'cols': 30, 'rows': 10}
+        )
+    )
+
     class Meta:
         model = Lecture
         fields = ('title', 'content')
@@ -40,6 +60,12 @@ class LectureForm(forms.ModelForm):
 
 class EventForm(forms.ModelForm):
 
+    description = forms.CharField(
+        widget=TinyMCEWidget(
+            attrs={'required': False, 'cols': 30, 'rows': 10}
+        )
+    )
+    
     class Meta:
         model = Event
         fields = ('title', 'description', 'img', 'event_date', 'event_time', 'category', 'link', 'quota', 'duration')

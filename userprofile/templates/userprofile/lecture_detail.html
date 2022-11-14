@@ -7,6 +7,7 @@
 {% block content %}
 
 
+
     <div class="container-fluid" style="margin-top: 10px;">
         <div class="row">
             <div class="col-sm-3">
@@ -28,7 +29,7 @@
 
             <!--Lecture Content-->
             <div class="col-sm-6">
-                {{lecture.content}}
+                {{lecture.content|safe}}
             </div>
 
             <!--Course Block: Course2 Template-->
