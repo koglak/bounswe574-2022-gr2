@@ -58,7 +58,7 @@ class Case(models.Model):
     course=models.ForeignKey(Course, default=None, on_delete=models.CASCADE, related_name='case_list')
     title=models.CharField(max_length=200,null=True)
     description=models.TextField()
-    published_date = models.DateTimeField(auto_now_add=True)
+    published_date = models.DateTimeField(default=timezone.now)
     due_date = models.DateTimeField(blank = True, null = True)
 
     def __str__(self):
@@ -72,7 +72,7 @@ class Comment(models.Model):
     text=models.TextField()
     post = models.ForeignKey(Case, on_delete=models.CASCADE)
     created_date = models.DateTimeField(default=timezone.now)
-    published_date=models.DateTimeField(blank=True, null=True)
+    published_date=models.DateTimeField(default=timezone.now)
     likes = models.ManyToManyField(User, related_name='comment_like')
     dislikes = models.ManyToManyField(User, related_name='comment_dislike')
 
