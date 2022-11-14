@@ -42,7 +42,7 @@ class EventForm(forms.ModelForm):
 
     class Meta:
         model = Event
-        fields = ('title', 'description', 'img', 'event_date', 'event_time', 'category', 'link', 'quota')
+        fields = ('title', 'description', 'img', 'event_date', 'event_time', 'category', 'link', 'quota', 'duration')
 
         widgets = {
             'event_date': NumberInput(attrs={'type':'date'}),

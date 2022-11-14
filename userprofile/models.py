@@ -83,6 +83,7 @@ class Event(models.Model):
     img = models.ImageField(upload_to='images', help_text="event_image", null=True)
     quota = models.PositiveIntegerField(default=0, blank=True)
     published_date = models.DateTimeField(blank=True, null=True, default=timezone.now)  
+    duration = models.PositiveIntegerField( default=0, blank=True)
 
 
     def get_remaining_days(self):
