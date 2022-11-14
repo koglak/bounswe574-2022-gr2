@@ -20,11 +20,13 @@ urlpatterns = [
     path('lecture_new/<int:pk>', views.lecture_new, name='lecture_new'),
     path('<int:pk>/lecture_edit/', views.lecture_edit, name='lecture_edit'),
     path('<str:title>/lecture_delete',views.delete_lecture,name='delete_lecture'),
-    path('<str:title>/event_list',views.event_list,name='event_list'),
+    path('<str:title>/upcoming_events',views.event_list,name='event_list'),
+    path('<str:title>/past_events',views.past_event,name='past_event'),
     path('<str:title>/quiz_page',views.quiz_page,name='quiz_page'),
     path('<str:title>/case_page',views.case_page,name='case_page'),
     path('<str:title>/event_new/', views.event_new,name='event_new'),
     path('event_edit/<int:pk>', views.event_edit,name='event_edit'),
     path('event_enroll/<int:pk>', views.event_enroll,name='event_enroll'),
+    path('<int:pk>/event_delete',views.delete_event,name='delete_event'),
 ]
 

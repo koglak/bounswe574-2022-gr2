@@ -2,7 +2,26 @@ from django.forms import ModelForm
 from .models import *
 from django import forms
 
- 
+class CommentForm(forms.ModelForm):
+    class Meta:
+        model = Comment
+        fields = ('text',)
+        widgets = {
+            'text': forms.Textarea(attrs={ 
+               'class': "form-control",
+                'style': 'max-width: 300px;',
+                'placeholder': 'Text',
+                })
+            }
+
+class ReplyForm(forms.ModelForm):
+    class Meta:
+        model = ReplyComment
+        fields = ('body',)
+        labels = {
+        'body': (''),
+         }
+
  
 class QuestionForm(ModelForm):
     class Meta:
@@ -19,10 +38,12 @@ class QuizForm(ModelForm):
 
 
 class CaseForm(ModelForm):
-
+    
     class Meta:
         model=Case
-        fields=('title','description')
+        fields=('title','description', 'due_date')
+
+
 
 class CaseResultForm(ModelForm):
 

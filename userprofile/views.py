@@ -6,19 +6,19 @@ from django.shortcuts import render
 from blog.models import Post
 from quiz.models import Case, Question, QuestionList, Score
 from .models import Course, Profile, Rating, Lecture, Event
-from .forms import CourseForm, ProfileForm, LectureForm, EventForm
+from .forms import CourseForm, ProfileForm, LectureForm, EventForm, CategorySortingForm, DateFilterForm
 from django.shortcuts import redirect, get_object_or_404
 from taggit.models import Tag
 from django.template.defaultfilters import slugify
 from django.contrib.auth.decorators import login_required
 from datetime import datetime, timedelta, time
-
-# Create your views here.
+from django.core.paginator import Paginator
 
 @login_required(login_url="/login")
 def user_profile(response):
+    print(response.user)
     courses=Course.objects.filter(user = response.user).order_by('published_date')
-    user_profile=Profile.objects.get(user=response.user)
+    user_profile = get_object_or_404(Profile, user=response.user)
     collaborative_member=Course.objects.filter(collaborative_members = response.user)
     question=Post.objects.filter(author=response.user)
     return render(response, "userprofile/profile.html", {'courses':courses, 'user_profile':user_profile, 'collaborative_member': collaborative_member, 'question':question})
@@ -104,8 +104,16 @@ def other_user_profile(response, name):
     user_profile=Profile.objects.get(user__username=name)
     collaborative_member=Course.objects.filter(collaborative_members__username = name)
     question=Post.objects.filter(author=user_profile.user)
+    name = response.GET.get('name')
+    if name=="follow":
+        user_profile.followers.add(response.user)
+    elif name=="unfollow":
+        user_profile.followers.remove(response.user)
 
     return render(response, "userprofile/profile.html", {'courses': courses, 'user_profile': user_profile, 'collaborative_member': collaborative_member, 'question': question})
+
+
+
 
 @login_required(login_url="/login")
 def profile_edit(request,pk):
@@ -215,10 +223,81 @@ def learn_page(response):
 
 @login_required(login_url="/login")
 def event_list(response, title):
+    startdate = datetime.today()
+    enddate = startdate + timedelta(days=365)
     course=get_object_or_404(Course, title=title)
-    score_list = Score.objects.filter(user=response.user)
-    event_list= Event.objects.filter(course=course).order_by('-start_time')
-    return render(response, "userprofile/event_list.html", {'course': course, 'score_list': score_list, 'event_list':event_list})
+    event_list= Event.objects.filter(course=course, event_date__range=[startdate, enddate])
+
+    form = CategorySortingForm(response.POST or None)
+    form_date=DateFilterForm(response.POST or None)
+
+    if response.method == "POST":
+        # Category Filtering
+        if 'category' in response.POST:
+            form = CategorySortingForm(response.POST)
+            if form.is_valid():
+                filtered_category = response.POST['category']                
+                if filtered_category!="All" :
+                    event_list = Event.objects.filter(course=course,category=filtered_category, event_date__range=[startdate, enddate])
+                else:
+                    event_list = Event.objects.filter(course=course, event_date__range=[startdate, enddate])
+        # Date Sorting
+        elif 'event_date' in response.POST:
+                form_date=DateFilterForm(response.POST)
+                form= CategorySortingForm(use_required_attribute=False)
+                print("event_date")
+                if form_date.is_valid():
+                    print("valid")
+                    date_filter= response.POST['event_date']
+                    print(date_filter)
+                    if date_filter =="Ascending":
+                        print("here")
+                        event_list= Event.objects.filter(course=course, event_date__range=[startdate, enddate]).order_by('event_date__day', 'event_date__month')
+                    else:
+                        print("else")
+                        event_list= Event.objects.filter(course=course, event_date__range=[startdate, enddate]).order_by('-event_date__day', '-event_date__month')
+        # Keyword Search
+        else:
+            searched = response.POST["searched"]
+            event_list=Event.objects.filter(course=course, title__icontains=searched, event_date__range=[startdate, enddate])
+            form = CategorySortingForm(use_required_attribute=False)
+            form_date=DateFilterForm(use_required_attribute=False)
+    # No post request
+    else:
+        form = CategorySortingForm(initial={'category': "All"})
+        form_date=DateFilterForm(use_required_attribute=False)
+
+    paginator = Paginator(event_list,3) 
+    page = response.GET.get('page')
+    events= paginator.get_page(page)
+
+    return render(response, "userprofile/event_list.html", {'course': course, 'events':events, "form": form, "form_date": form_date})
+
+@login_required(login_url="/login")
+def past_event(response, title):
+    enddate = datetime.today()
+    startdate = enddate - timedelta(days=365)
+    course=get_object_or_404(Course, title=title)
+    event_list= Event.objects.filter(course=course, event_date__range=[startdate, enddate]).order_by('-event_date')
+    form = CategorySortingForm(response.POST)
+    
+    if response.method == "POST":
+        if form.is_valid():
+            filtered_category = response.POST['category']                
+            if filtered_category!="All" :
+                event_list = Event.objects.filter(course=course,category=filtered_category, event_date__range=[startdate, enddate])
+        else:
+            searched = response.POST["searched"]
+            event_list=Event.objects.filter(course=course, title__icontains=searched, event_date__range=[startdate, enddate])
+            form = CategorySortingForm( use_required_attribute=False)
+    else:
+        form = CategorySortingForm(initial={'category': "All"})
+    
+    paginator = Paginator(event_list,3) 
+    page = response.GET.get('page')
+    events= paginator.get_page(page)
+
+    return render(response, "userprofile/event_list.html", {'course': course, 'events':events, "form": form})
 
 @login_required(login_url="/login")
 def quiz_page(response, title):
@@ -237,17 +316,18 @@ def case_page(response, title):
 def event_new(request, title):
     course=get_object_or_404(Course, title=title)
     if request.method == "POST":
-        form = EventForm(request.POST)
+        form = EventForm(request.POST, request.FILES)
         if form.is_valid():
             event = form.save(commit=False)
             event.user = request.user
             event.course=course
+            event.published_date = timezone.now()
             event.save()
             return redirect('event_list', title=title)
     else:
         form = EventForm()
-        title ="none"
-    return render(request, 'userprofile/event_edit.html', {'form': form, 'title':title})
+        pk ="none"
+    return render(request, 'userprofile/event_edit.html', {'form': form, 'pk':pk})
 
 
 @login_required(login_url="/login")
@@ -262,12 +342,17 @@ def event_edit(request, pk):
             return redirect('event_list', title=event.course.title)
     else:
         form = EventForm(instance=event)
-        title ="none"
-
-    return render(request, 'userprofile/event_edit.html', {'form': form, 'title':title})
+    return render(request, 'userprofile/event_edit.html', {'form': form, 'pk': event.pk})
 
 @login_required(login_url="/login")
 def event_enroll(request,pk):
     event = get_object_or_404(Event, pk=pk)
     event.enrolled_users.add(request.user)
     return redirect('event_list', title=event.course.title)
+
+@login_required(login_url="/login")
+def delete_event(request, pk):
+    event = Event.objects.get(pk=pk)
+    event.delete()
+    return redirect('event_list', title=event.course.title)
+
