@@ -43,12 +43,7 @@
         {% endfor %}
 
     {% elif page == 'case' %}
-        {% for case in course.case_list.all %}
-            <li class="list-group-item list-group-item-action">
-                <a href="{% url 'case_grade' title=case.title %}" class="post-text" style="text-decoration:none"> {% bs_icon 'eye' size='1.5em' %}|</a>
-                <a href="{% url 'case_detail' title=case.title %}" class="post-text" style="text-decoration:none"> Case: {{case.title}}</a>
-            </li> 
-        {% endfor %}
+       
     
     {% elif page == 'event' %}
         <li class="list-group-item list-group-item-action">
