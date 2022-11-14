@@ -1,19 +1,77 @@
 {% load bootstrap_icons %}
 
 {% block content %}
-        <div style="float:left">
-            <div class="card" style="width: 18rem; float:left; margin:10px">
-            <div class="card-body"> 
-                {% if user == event.user %}
-                <a href="{% url 'event_edit' pk=event.pk %}" style="text-decoration:none; ">Edit</a>
+
+    <div class="card" style="width: 20rem; margin: 10px">
+
+        <img class="card-img-top" src="{{event.img.url}}" alt="Card image cap">
+
+        <div class="card-body">
+            <h5 class="card-title">
+                {% if event.enrolled_users.count == event.quota and event.quota != 0 %}
+                    <span class="text-danger"><del>{{ event.title }}</del></span>
+                {% elif 3 > event.get_remaining_days and event.get_remaining_days > 0 %}
+                    <span class="text-danger"><strong>{{ event.title }}</strong></span>
+                    <a data-toggle="tooltip" data-placement="top" title="There is less than 3 days to event!">
+                        <img src="https://img.icons8.com/office/40/null/last-48-hours.png" style="width: 30px; height: 30px"/>
+                    </a>
+                {% elif 4 > event.get_remaining_quota %}
+                    <span class="text-danger"><strong>{{ event.title }}</strong></span>
+                    <a data-toggle="tooltip" data-placement="top" title="Quota about to run out!">
+                        <img src="https://img.icons8.com/officel/80/null/delete-ticket.png" style="width: 30px; height: 30px"/>
+                    </a>
+                {% else %}
+                    {{ event.title }} 
                 {% endif %}
-                <h5 class="card-title">{% bs_icon 'calendar' size='1.5em' %} {{event.title}}</h5>
-                <h6 class="card-subtitle mb-2 text-muted">{{event.start_time|date:"M d, Y" }}</h6>
-                <p class="card-text">{{event.description}}</p>
-                <a href="{% url 'event_enroll' pk=event.pk %}" class="card-link">Join</a> | <strong>People:</strong>{{event.enrolled_users.count}}
-            </div>
-            </div>
+
+                {% if event.publish_date_check %}
+                    <a data-toggle="tooltip" data-placement="top" title="Event created today!">
+                        <img src="https://img.icons8.com/parakeet/48/null/new.png" style="width: 30px; height: 30px"/>
+                    </a>
+                {% endif %}
+                    
+                {% if user == event.user %}
+                    • <a href="{% url 'event_edit' pk=event.pk %}" style="text-decoration:none; font-size: 0.75em">Edit</a>
+                {% endif %}
+
+            </h5>
+
+            <p class="card-text">{{ event.description }}</p>
         </div>
+
+        <ul class="list-group list-group-flush">
+            <li class="list-group-item"> {% bs_icon 'bell' size='1em' %} {{ event.event_date |date }} | {{ event.event_time }} </li>
+            <li class="list-group-item"> {% bs_icon 'alarm' size='1em' %} {{ event.duration }} min </li>
+            <li class="list-group-item"> {% bs_icon 'link' size='1em' %} 
+                <a href="{{ event.link }}">
+                    {% if "zoom" in event.link %}
+                        Zoom Link
+                    {% elif "map" in event.link %}
+                        Map Location
+                    {% elif "meet.google" in event.link %}
+                        Google Meet Link
+                    {% elif "teams" in event.list %}
+                        Teams Link
+                    {% else %}
+                        {{ event.link }}
+                    {% endif %}
+            </a></li>
+            <li class="list-group-item"> {% bs_icon 'bookmarks' size='1em' %} {{ event.category}}</li>
+        </ul>
+
+        <div class="card-body">
+            {% if event.enrolled_users.count == event.quota and event.quota != 0 %}
+                <span class="text-danger">Quota is filled! | <strong> {{event.enrolled_users.count}} / {{ event.quota }} </strong> </span>
+            {% else %}
+                <a href="{% url 'event_enroll' pk=event.pk %}" class="card-link">Join</a> | 
+                <strong>Joined Users: </strong>{{event.enrolled_users.count}} / 
+                {% if event.quota == 0 %}
+                    No quota!
+                {% else %}
+                    {{ event.quota }}
+                {% endif %}
+            {% endif %}
+        </div>
+    </div>
+   
 {% endblock %}
-
-

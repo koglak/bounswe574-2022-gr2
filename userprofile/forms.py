@@ -1,16 +1,13 @@
 from django import forms
 
 from .models import Lecture, Profile,Course, Event
-from django.forms import ImageField, ModelForm, TextInput
+from django.forms import ModelForm, Select, TextInput, Form
 from taggit.forms import TagWidget
 from django.utils.safestring import mark_safe
 from django.forms.widgets import NumberInput
 
 
-
-# RATING_CHOICES = [(i+1,i+1) for i in range(5)]
-
-
+  
 class CourseForm(forms.ModelForm):
     class Meta:
        model = Course
@@ -45,11 +42,46 @@ class EventForm(forms.ModelForm):
 
     class Meta:
         model = Event
-        fields = ('title', 'description', 'start_time')
+        fields = ('title', 'description', 'img', 'event_date', 'event_time', 'category', 'link', 'quota', 'duration')
 
         widgets = {
-            'start_time': NumberInput(attrs={'type':'date'}),
+            'event_date': NumberInput(attrs={'type':'date'}),
+            'event_time': forms.TimeInput(attrs={'type': 'time'}),
+            'img': forms.FileInput(),
         }
 
-   
-                
+class CategorySortingForm(ModelForm):
+    class Meta:
+        model = Event
+        fields = ['category']
+
+        widgets = {
+           # Here you define what input type should the field have
+           'category': Select(attrs = { 
+               'required': False,
+               'class': 'dropdown',
+               'onchange': 'this.form.submit();',
+                'name':'category'
+           })
+        }
+
+
+class DateFilterForm(forms.Form):
+    DATE_CHOICES =(
+            ("Ascending", "Ascending"),
+            ("Descending", "Descending"),
+            )
+    
+    event_date = forms.CharField(
+        required=False,
+        widget=forms.Select(choices=DATE_CHOICES, attrs={
+                'class': 'dropdown',
+                'onchange': 'this.form.submit();',
+                'name':'event_date'
+                })
+)
+
+
+  
+
+    

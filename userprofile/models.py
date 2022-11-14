@@ -1,5 +1,6 @@
 
 # Create your models here.
+import datetime
 from email.mime import image
 from django.conf import settings
 from django.db import models
@@ -7,7 +8,6 @@ from django.utils import timezone
 from django.contrib.auth.models import User
 from taggit.managers import TaggableManager
 from django.db.models import Avg
-
 
 class Profile(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
@@ -62,16 +62,49 @@ class Lecture(models.Model):
 
     def __str__(self):
         return self.course.title
-
 class Event(models.Model):
+    CATEGORY_CHOICES = (
+    ("All", "All"),
+    ("Outside", "Outside"),
+    ("Workshop", "Workshop"),
+    ("Social", "Social"),
+    ("Presentation", "Presentation"),
+    ("Introductory", "Introductory"),
+    ("Training", "Training")
+    )
+
     title = models.CharField(max_length=200)
     description = models.TextField()
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    start_time = models.DateTimeField()
+    event_date = models.DateTimeField(default=timezone.now)  
+    event_time = models.TimeField(default='20:00')
     enrolled_users = models.ManyToManyField(User, blank=True, related_name='event_enrolled_users')
     course=models.ForeignKey(Course, default=None, on_delete=models.CASCADE, related_name='event_list')
+    category = models.CharField(max_length=12,
+                  choices=CATEGORY_CHOICES,
+                  default="Workshop")
+    link= models.URLField(default='http://www.helloworld.com')
+    img = models.ImageField(upload_to='images', help_text="event_image", null=True)
+    quota = models.PositiveIntegerField(default=0, blank=True)
+    published_date = models.DateTimeField(blank=True, null=True, default=timezone.now)  
+    duration = models.PositiveIntegerField( default=0, blank=True)
 
+
+    def get_remaining_days(self):
+        return (self.event_date - datetime.datetime.today()).days
+
+    def get_remaining_quota(self):
+        if self.quota != 0:
+            remaining = (self.quota - self.enrolled_users.count())
+        else:
+            remaining = 5
+        return remaining
+    
+    def publish_date_check(self):
+        return (datetime.datetime.today() - self.published_date).days < 1
+         
     
     def __str__(self):
         return self.title
+
 
