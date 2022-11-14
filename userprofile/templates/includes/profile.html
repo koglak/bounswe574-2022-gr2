@@ -24,7 +24,7 @@
 
         <div class="mt-2 text-center">
             <h4 class="mb-0">{{user_profile.user}}</h4> 
-            <span class="text-muted d-block mb-2">{{user_profile.bio}}</span> 
+            <span class="text-muted d-block mb-2">{{user_profile.bio|safe}}</span> 
             <div class="d-flex justify-content-between align-items-center mt-4 px-4">
                 <div class="stats">
                     <h6 class="mb-0">Followers|</h6> <span>{{user_profile.followers.count}}</span>

@@ -52,9 +52,9 @@
         {% endif %}
         
         {% if select == 'home' %}
-            <p class="card-text">{{course.description|truncatechars:150}}</p>
+            <p class="card-text">{{course.description|truncatechars:150|safe}}</p>
         {% else %}
-            <p class="card-text">{{course.description}}</p>
+            <p class="card-text">{{course.description|safe}}</p>
         {% endif %}
 
     </div>
