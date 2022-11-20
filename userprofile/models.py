@@ -107,8 +107,7 @@ class Event(models.Model):
     
     def publish_date_check(self):
         return (datetime.datetime.today() - self.published_date).days < 1
-         
-    
+
     def __str__(self):
         return self.title
 

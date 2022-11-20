@@ -362,6 +362,7 @@ def event_detail(response, pk):
     context = {
         'course': event.course,
         'event': event,
+        'enrolled_users': Event.enrolled_users.through.objects.all()
     }
 
     return render(response, "userprofile/event_detail.html", context)

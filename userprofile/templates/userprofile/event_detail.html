@@ -9,64 +9,122 @@ Event Detail
 {% block content %}
 
 
-<!--Page Navigation-->
-<h5> <a href="{% url 'course_detail' title=course.title %}"> Space: {{course.title}} </a> 
-    > 
-    <a href="{% url 'event_list' title=course.title %}" > Up Coming Events </a>
-    >
-    {{event.title}}
-</h5>
 
-<div class="card">
-    <div class="card-header">
-        <h5 class="card-title">
-            {% if event.enrolled_users.count == event.quota and event.quota != 0 %}
-            <span class="text-danger"><del>{{ event.title }}</del></span>
-            {% elif 3 > event.get_remaining_days and event.get_remaining_days > 0 %}
-            <span class="text-danger"><strong>{{ event.title }}</strong></span>
-            <a data-toggle="tooltip" data-placement="top" title="There is less than 3 days to event!">
-                <img src="https://img.icons8.com/office/40/null/last-48-hours.png" style="width: 30px; height: 30px" />
-            </a>
-            {% elif 4 > event.get_remaining_quota %}
-            <span class="text-danger"><strong>{{ event.title }}</strong></span>
-            <a data-toggle="tooltip" data-placement="top" title="Quota about to run out!">
-                <img src="https://img.icons8.com/officel/80/null/delete-ticket.png" style="width: 30px; height: 30px" />
-            </a>
-            {% else %}
-            {{ event.title }}
-            {% endif %}
 
-            {% if event.publish_date_check %}
-            <a data-toggle="tooltip" data-placement="top" title="Event created today!">
-                <img src="https://img.icons8.com/parakeet/48/null/new.png" style="width: 30px; height: 30px" />
-            </a>
-            {% endif %}
-
-            {% if user == event.user %}
-            • <a href="{% url 'event_edit' pk=event.pk %}" style="text-decoration:none; font-size: 0.75em">Edit</a>
-            {% endif %}
-
+<div class="container ">
+    <div class="row mt-2 p-2">
+        <!--Page Navigation-->
+        <h5> <a href="{% url 'course_detail' title=course.title %}"> Space: {{course.title}} </a>
+            >
+            <a href="{% url 'event_list' title=course.title %}"> Up Coming Events </a>
+            >
+            {{event.title}}
         </h5>
     </div>
-    <div class="card-body">
-        <img class="card-img-top" src="{{event.img.url}}" alt="Card image cap">
-        <p class="card-text">{{ event.description | safe }}</p>
-        <p>{% bs_icon 'bell' size='1em' %} {{ event.event_date |date }} | {{ event.event_time }}</p>
-        <p>{% bs_icon 'alarm' size='1em' %} {{ event.duration }} min </p>
-        <p>{% bs_icon 'link' size='1em' %}
-            <a href="{{ event.link }}"> {% if "zoom" in event.link %}
-                Zoom Link
-                {% elif "map" in event.link %}
-                Map Location
-                {% elif "meet.google" in event.link %}
-                Google Meet Link
-                {% elif "teams" in event.list %}
-                Teams Link
-                {% else %}
-                {{ event.link }}
-                {% endif %} </a>
-        </p>
-        <p>{% bs_icon 'bookmarks' size='1em' %} {{ event.category}}</p>
+    <div class="row mt-3">
+        <div class="col-md-9">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="card-title">
+                        {% if event.enrolled_users.count == event.quota and event.quota != 0 %}
+                        <span class="text-danger"><del>{{ event.title }}</del></span>
+                        {% elif 3 > event.get_remaining_days and event.get_remaining_days > 0 %}
+                        <span class="text-danger"><strong>{{ event.title }}</strong></span>
+                        <a data-toggle="tooltip" data-placement="top" title="There is less than 3 days to event!">
+                            <img src="https://img.icons8.com/office/40/null/last-48-hours.png"
+                                style="width: 30px; height: 30px" />
+                        </a>
+                        {% elif 4 > event.get_remaining_quota %}
+                        <span class="text-danger"><strong>{{ event.title }}</strong></span>
+                        <a data-toggle="tooltip" data-placement="top" title="Quota about to run out!">
+                            <img src="https://img.icons8.com/officel/80/null/delete-ticket.png"
+                                style="width: 30px; height: 30px" />
+                        </a>
+                        {% else %}
+                        {{ event.title }}
+                        {% endif %}
+
+                        {% if event.publish_date_check %}
+                        <a data-toggle="tooltip" data-placement="top" title="Event created today!">
+                            <img src="https://img.icons8.com/parakeet/48/null/new.png"
+                                style="width: 30px; height: 30px" />
+                        </a>
+                        {% endif %}
+
+                        {% if user == event.user %}
+                        • <a href="{% url 'event_edit' pk=event.pk %}"
+                            style="text-decoration:none; font-size: 0.75em">Edit</a>
+                        {% endif %}
+
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <img class="card-img-top" src="{{event.img.url}}" alt="Card image cap">
+                    <p class="card-text">{{ event.description | safe }}</p>
+                    <p>{% bs_icon 'bell' size='1em' %} {{ event.event_date |date }} | {{ event.event_time }}</p>
+                    <p>{% bs_icon 'alarm' size='1em' %} {{ event.duration }} min </p>
+                    <p>{% bs_icon 'link' size='1em' %}
+                        <a href="{{ event.link }}"> {% if "zoom" in event.link %}
+                            Zoom Link
+                            {% elif "map" in event.link %}
+                            Map Location
+                            {% elif "meet.google" in event.link %}
+                            Google Meet Link
+                            {% elif "teams" in event.list %}
+                            Teams Link
+                            {% else %}
+                            {{ event.link }}
+                            {% endif %} </a>
+                    </p>
+                    <p>{% bs_icon 'bookmarks' size='1em' %} {{ event.category}}</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <h5>Participant List</h5>
+            <div class="overflow-auto" style="max-height: 300px">
+                <div class="container fluid">
+                    {% for enrolled_user in enrolled_users %}
+                    <div class="row border border-secondary rounded mt-2 ">
+                        <!--Profile Picture-->
+                        <div class="col-sm-3">
+                            <div class="d-flex flex-start align-items-center" style="margin:5px">
+                                {% if enrolled_user.userProfileImg %}
+
+                                <img class="rounded-circle shadow-1-strong me-3"
+                                    src="{{enrolled_user.userProfileImg.url}}" alt="avatar" width="60" height="60" />
+
+                                {% else %}
+                                <img class="rounded-circle shadow-1-strong me-3"
+                                    src="http://cdn.onlinewebfonts.com/svg/img_24787.png" alt="avatar" width="60"
+                                    height="60" />
+
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <!--Author name & Follow Link-->
+                        <div class="col-sm-9" style="display: flex;justify-content: center;align-items: center; ">
+                            {% if user == enrolled_user.user %}
+                            <a href="{% url 'user_profile' %}" class="post-author"
+                                style="font-family: 'Poppins';font-size:18px; font-weight: 600px; margin-right:5px">{{enrolled_user.user}}</a>
+                            {% else %}
+                            <a href="{% url 'other_user_profile' name=enrolled_user.user %}" class="post-author"
+                                style="font-family: 'Poppins';font-size:18px; font-weight: 600px; margin-right:5px">{{enrolled_user.user}}</a>
+                            {% endif %}
+                            {% if user.is_authenticated %}
+                            <a href="#" class="link-success"
+                                style="font-family: 'Poppins';font-style: normal;font-weight: 800;font-size: 10px;">Follow</a>
+                            {% endif %}
+                        </div>
+
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+        </div>
     </div>
 </div>
 
