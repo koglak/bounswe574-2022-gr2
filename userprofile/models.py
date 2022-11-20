@@ -112,3 +112,16 @@ class Event(models.Model):
         return self.title
 
 
+
+class Comments(models.Model):
+    event = models.ForeignKey(Event, on_delete=models.CASCADE, related_name="comments")
+    user=models.ForeignKey(User,default=None, on_delete=models.CASCADE)
+    body = models.TextField()
+    date_added = models.DateTimeField(auto_now_add=True)
+
+    def userProfileImg(self):
+        user = Profile.objects.get(user=self.user)
+        return user.img
+
+    def __str__(self):
+        return self.event.title
