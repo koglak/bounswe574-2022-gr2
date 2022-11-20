@@ -356,3 +356,12 @@ def delete_event(request, pk):
     event.delete()
     return redirect('event_list', title=event.course.title)
 
+@login_required(login_url="/login")
+def event_detail(response, pk):
+    event = Event.objects.get(pk=pk)
+    context = {
+        'course': event.course,
+        'event': event,
+    }
+
+    return render(response, "userprofile/event_detail.html", context)
