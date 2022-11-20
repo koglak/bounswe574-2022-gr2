@@ -374,7 +374,7 @@ def event_detail(response, pk):
         'course': event.course,
         'event': event,
         'enrolled_users': Event.enrolled_users.through.objects.all(),
-        'form': form
+        'form': form,
     }
 
     return render(response, "userprofile/event_detail.html", context)
