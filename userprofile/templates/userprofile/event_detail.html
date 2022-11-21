@@ -176,9 +176,6 @@ Event Detail
                                                 {{comment.date_added}}
                                             </p>
 
-                                            <a href="{% url 'delete_comment' pk=comment.pk %}" class="btn btn-outline-danger">Delete</a>
-
-
                                         </div>
 
                                     </div>
@@ -200,7 +197,7 @@ Event Detail
                             <div class="card-footer" style="background-color: #f8f9fa;">
                                 <div class="d-flex flex-start">
                                     <img class="rounded-circle shadow-1-strong me-3"
-                                        src="{{current_user.img.url}}"
+                                        src="http://cdn.onlinewebfonts.com/svg/img_24787.png"
                                         alt="avatar" width="40" height="40" />
                                     <div class="form-outline">
                                         <form method="POST" class="post-form">

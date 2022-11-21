@@ -5,7 +5,7 @@ from django.utils import timezone
 from django.shortcuts import render
 from blog.models import Post
 from quiz.models import Case, Question, QuestionList, Score
-from .models import Course, Profile, Rating, Lecture, Event, Comments
+from .models import Course, Profile, Rating, Lecture, Event
 from .forms import CourseForm, ProfileForm, LectureForm, EventForm, CategorySortingForm, DateFilterForm, CommentsForm
 from django.shortcuts import redirect, get_object_or_404
 from taggit.models import Tag
@@ -359,7 +359,6 @@ def delete_event(request, pk):
 @login_required(login_url="/login")
 def event_detail(response, pk):
     event = Event.objects.get(pk=pk)
-    current_user = get_object_or_404(Profile, user=response.user)
     if response.method == "POST":
         form = CommentsForm(response.POST)
         if form.is_valid():
@@ -376,14 +375,6 @@ def event_detail(response, pk):
         'event': event,
         'enrolled_users': Event.enrolled_users.through.objects.all(),
         'form': form,
-        'current_user': current_user
     }
 
     return render(response, "userprofile/event_detail.html", context)
-
-
-@login_required(login_url="/login")
-def delete_comment(request, pk):
-    comment = Comments.objects.get(pk=pk)
-    comment.delete()   
-    return redirect('event_detail')
