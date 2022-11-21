@@ -74,7 +74,8 @@ class Event(models.Model):
     ("Social", "Social"),
     ("Presentation", "Presentation"),
     ("Introductory", "Introductory"),
-    ("Training", "Training")
+    ("Training", "Training"),
+    ("Others", "Others")
     )
 
     title = models.CharField(max_length=200)
@@ -92,7 +93,7 @@ class Event(models.Model):
     img = models.ImageField(upload_to='images', help_text="event_image", null=True)
     quota = models.PositiveIntegerField(default=0, blank=True)
     published_date = models.DateTimeField(blank=True, null=True, default=timezone.now)  
-    duration = models.PositiveIntegerField( default=0, blank=True)
+    duration = models.CharField(max_length=10)
 
 
     def get_remaining_days(self):

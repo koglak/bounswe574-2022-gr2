@@ -62,7 +62,7 @@ Event Detail
                     <img class="card-img-top" src="{{event.img.url}}" alt="Card image cap">
                     <p class="card-text">{{ event.description | safe }}</p>
                     <p>{% bs_icon 'bell' size='1em' %} {{ event.event_date |date }} | {{ event.event_time }}</p>
-                    <p>{% bs_icon 'alarm' size='1em' %} {{ event.duration }} min </p>
+                    <p>{% bs_icon 'alarm' size='1em' %} {{ event.duration }} </p>
                     <p>{% bs_icon 'link' size='1em' %}
                         <a href="{{ event.link }}"> {% if "zoom" in event.link %}
                             Zoom Link
