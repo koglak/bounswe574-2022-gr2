@@ -25,30 +25,34 @@ Project Team
 
 1. Clone repository:
 
-        git clone https://github.com/koglak/SWE573.git
+        git clone https://github.com/koglak/bounswe574-2022-gr2.git
         
-2. Activate virtual environment:
+2. Go to new project file:
+
+        cd C:\Users\<user>\<folder>\bounswe574-2022-gr2
+        
+3. Activate virtual environment:
       
         python3 -m venv myvenv
         
-3. Run requirments:
+4. Run requirments:
 
         pip install -r requirements.txt
         
-4. Create docker images:
+5. Create docker images:
 
         docker build . -t project_web
         
-5. Run docker container:
+6. Run docker container: 
 
         docker-compose up
 
-6. Go to your local host: [http://localhost:8000/](http://127.0.0.1:8000/)
+7. Go to your local host: [http://localhost:8000/](http://127.0.0.1:8000/)
 
-7. Get your container id
+8. Get your container id
 
         docker container ls
         
-8. Create superuser for django admin
+9. Create superuser for django admin
 
         docker exec -it container_id python manage.py createsuperuser
