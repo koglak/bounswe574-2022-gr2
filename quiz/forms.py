@@ -11,7 +11,7 @@ class CommentForm(forms.ModelForm):
                'class': "form-control",
                 'style': 'max-width: 300px;',
                 'placeholder': 'Text',
-                })
+                }) 
             }
 
 class ReplyForm(forms.ModelForm):
@@ -43,7 +43,11 @@ class CaseForm(ModelForm):
         model=Case
         fields=('title','description', 'due_date')
 
-
+class DateFilterForm(forms.Form):
+    DATE_CHOICES =(
+            ("Ascending", "Ascending"),
+            ("Descending", "Descending"),
+            )
 
 class CaseResultForm(ModelForm):
 
