@@ -7,7 +7,7 @@ from django.contrib.auth.models import User
 from django.db.models import Avg
 from django.core.validators import MaxValueValidator, MinValueValidator 
 from django.utils import timezone
-
+from tinymce import models as tinymce_models
 
 OPTION_CHOICES = (
     ('option1','option1'),
@@ -57,7 +57,7 @@ class Case(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     course=models.ForeignKey(Course, default=None, on_delete=models.CASCADE, related_name='case_list')
     title=models.CharField(max_length=200,null=True)
-    description=models.TextField()
+    description=tinymce_models.HTMLField()
     published_date = models.DateTimeField(default=timezone.now)
     due_date = models.DateTimeField(blank = True, null = True)
 
@@ -71,10 +71,10 @@ class Comment(models.Model):
     author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     text=models.TextField()
     post = models.ForeignKey(Case, on_delete=models.CASCADE)
-    created_date = models.DateTimeField(default=timezone.now)
+    #created_date = models.DateTimeField(default=timezone.now)
     published_date=models.DateTimeField(default=timezone.now)
-    likes = models.ManyToManyField(User, related_name='comment_like')
-    dislikes = models.ManyToManyField(User, related_name='comment_dislike')
+    likes = models.ManyToManyField(User, related_name='comment_like', blank = True, null = True)
+    dislikes = models.ManyToManyField(User, related_name='comment_dislike', blank = True, null = True)
 
     def total_likes(self):
         return self.likes.count()
