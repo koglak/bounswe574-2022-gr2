@@ -19,15 +19,37 @@
 
             <!-- Lecture List -->
             {% include 'includes/sidebar.html' with course=course page="case" %}
+            <br>
+            <div>
+                <div class = col-sm-12>
+                    <li class="list-group-item list-group-item-action">
+                    <strong>Active users</strong>
+                    <br>
+                    {% for user in enrolled_users%}
+                    <a href="{% url 'other_user_profile' name=user %}">{% bs_icon 'person' size='1em'%}</a> {{user}} 
+                    {% endfor %}
+                    </li>
+                </div> 
+                <br><br><br>
+            </div>
+
         </div>
 
-        <!--Quiz Content-->
         <div class="col-sm-6">
-            <div class="col-sm">
-                {% if user in course.collaborative_members.all or user == course.user %}
+            <div class="col-sm-12">
+                
                     <a href="{% url 'case_create' title=course.title %}"  class="btn btn-primary">Create Case-Study</a>
-                {% endif %}
-            </div>
+                
+                <hr>
+                 <!-- search by keyword -->
+                 <div class="col-sm-12">
+                    <form class="form-inline my-2 my-lg-10" method="POST" action="#" >
+                        {% csrf_token %}
+                        {{ form_input.as_p}}
+                        <input class="form-control mr-sm-10" type="search" placeholder="Search" aria-label="Search" name="searched"> 
+                    </form>        
+                </div>
+            </div> 
             {% if course.case_list.all != null %}
            <br><br>
             {% bs_icon 'envelope-open' size='1em' %} <a href = "#">Newly Opened Cases</a>
@@ -35,7 +57,7 @@
                     <li class="list-group-item list-group-item-action">
                         <a href="{% url 'case_detail' title=case.title %}" class="post-text" style="text-decoration:none"> Case: {{case.title}}</a>
                         <p>Published date: {{case.published_date}}</p>
-                        <p>Created by: <a href="{% url 'other_user_profile' name=course.user %}">{{case.user}}</p></a>
+                        <p>Created by: <a href="{% url 'other_user_profile' name=case.user %}">{{case.user}}</p></a>
                     </li> 
                     {% endfor %}
             <br><br>
@@ -52,12 +74,14 @@
                 {% for case in course.case_list.all %}
                 <li class="list-group-item list-group-item-action">
                     <a href="{% url 'case_detail' title=case.title %}" class="post-text" style="text-decoration:none"> Case: {{case.title}}</a>
-                    <p>Grade: {{case.case_grade}}</p>
+                    <p>Rating: {{list_form.instance.score}}</p>
                     <p>Created by: <a href="#">{{case.user}}</p></a>
                 </li> 
                 {% endfor %}
             {% endif %}
+     
         </div>
+        
 
         
         <!--Course Block: Course2 Template-->
