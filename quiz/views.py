@@ -8,7 +8,7 @@ from django.utils import timezone
 from django.forms import modelformset_factory
 from django.contrib.auth.decorators import login_required
 
-
+ 
 # Create your views here.
 @login_required(login_url="/login")
 def quiz_detail(request,title):
@@ -139,6 +139,44 @@ def case_detail(request,title):
         form= CaseResultForm()
         return render(request, 'quiz/case_detail.html', {'case':case, 'form': form, 'course': course})
 
+@login_required(login_url="/login")
+def case_list(response, title):
+    startdate = datetime.today()
+    enddate = startdate + timedelta(days=365)
+    case=get_object_or_404(Case, title=title)
+    case_list= Event.objects.filter(case=case, event_date__range=[startdate, enddate])
+
+    form = CategorySortingForm(response.POST or None)
+    form_date=DateFilterForm(response.POST or None)
+
+    if response.method == "POST":
+        # Date Sorting
+        if 'published_date' in response.POST:
+                form_date=DateFilterForm(response.POST)
+                print("published_date")
+                if form_date.is_valid():
+                    print("valid")
+                    date_filter= response.POST['published_date']
+                    print(date_filter)
+                    if date_filter =="Ascending":
+                        print("here")
+                        case_list= Event.objects.filter(course=course, case_date__range=[startdate, enddate]).order_by('published_date__day', 'published_date__month')
+                    else:
+                        print("else")
+                        event_list= Event.objects.filter(course=course, event_date__range=[startdate, enddate]).order_by('-event_date__day', '-event_date__month')
+        # Keyword Search
+        else:
+            searched = response.POST["searched"]
+            event_list=Event.objects.filter(course=course, title__icontains=searched, event_date__range=[startdate, enddate])
+            form = CategorySortingForm(use_required_attribute=False)
+            form_date=DateFilterForm(use_required_attribute=False)
+
+    paginator = Paginator(case_list,3) 
+    page = response.GET.get('page')
+    events= paginator.get_page(page)
+
+    return render(response, "quiz/case_list.html", {'course': course, 'case':case, "form": form, "form_date": form_date})
+
 
 @login_required(login_url="/login")
 def case_grade(request,title):
@@ -186,9 +224,9 @@ def comment_new(request):
             post.save()
             form.save_m2m()
 
-            return redirect(reverse('quiz/case_comment_detail.html', kwargs = {
+            return redirect(reverse('quiz/case_detail.html', kwargs = {
                 'pk' : post.pk
-            }))
+            })) 
     else:
        form = CommentForm()
        pk ="none"
@@ -205,7 +243,59 @@ def comment_edit(request, pk):
             post.save()
             form.save_m2m() 
 
-            return redirect('question_detail', pk=post.pk)
+            return redirect('case_detail', pk=post.pk)
     else:
         form = PostForm(instance=post)
-    return render(request, 'blog/question_edit.html', {'form': form, 'pk': pk})
+    return render(request, 'quiz/case_edit.html', {'form': form, 'pk': pk})
+
+def delete_comment(request, pk):
+    post = Post.objects.get(pk=pk)
+    post.delete()
+    return redirect('/comment')
+
+@login_required(login_url="/login")
+def LikeView_comment(request, pk):
+    post = get_object_or_404(Post, id=request.POST.get('post_id'))
+    post.likes.add(request.user)
+    post.dislikes.remove(request.user)
+    return redirect('case_detail', pk=pk)
+
+
+@login_required(login_url="/login")
+def LikeViewList_comment(request):
+    post = get_object_or_404(Post, id=request.POST.get('post_id'))
+    post.likes.add(request.user)
+    post.dislikes.remove(request.user)
+    return redirect('comment')
+
+
+@login_required(login_url="/login")
+def DislikeView_comment(request, pk):
+    post = get_object_or_404(Post, id=request.POST.get('post_id'))
+    post.dislikes.add(request.user)
+    post.likes.remove(request.user)
+    return redirect('case_detail', pk=pk)
+
+
+@login_required(login_url="/login")
+def DislikeViewList_comment(request):
+    post = get_object_or_404(Post, id=request.POST.get('post_id'))
+    post.dislikes.add(request.user)
+    post.likes.remove(request.user)
+    return redirect('case_page')
+
+@login_required(login_url="/login")
+def ReplyCommentLikeView(request, pk):
+    answer = get_object_or_404(Answer, id=request.POST.get('answer_id'))
+    answer.likes.add(request.user)
+    answer.dislikes.remove(request.user)
+    return redirect('case_detail', pk=pk)
+
+
+@login_required(login_url="/login")
+def ReplyCommentDislikeView(request,pk ):
+    answer = get_object_or_404(Answer, id=request.POST.get('answer_id'))
+    answer.dislikes.add(request.user)
+    answer.likes.remove(request.user)
+    return redirect('case_detail', pk=pk)
+
