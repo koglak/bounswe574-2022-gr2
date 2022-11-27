@@ -14,7 +14,6 @@
             <!--Enroll & Drop Button-->
             {% if user.is_authenticated %}
                     {% include 'includes/enroll_drop.html' with course=course %}
-                  
             {% endif %}
 
             <!-- Lecture List -->
@@ -25,7 +24,7 @@
                     <li class="list-group-item list-group-item-action">
                     <strong>Active users</strong>
                     <br>
-                    {% for user in enrolled_users%}
+                    {% for user in course.enrolled_users.all %}
                     <a href="{% url 'other_user_profile' name=user %}">{% bs_icon 'person' size='1em'%}</a> {{user}} 
                     {% endfor %}
                     </li>
@@ -37,11 +36,14 @@
 
         <div class="col-sm-6">
             <div class="col-sm-12">
-                
+                {% if user in course.enrolled_users.all %}
                     <a href="{% url 'case_create' title=course.title %}"  class="btn btn-primary">Create Case-Study</a>
-                
+                {% else %}
+                <p>To create a case please follow the space</p>
+                {% endif %}
                 <hr>
                  <!-- search by keyword -->
+                 {% if user in course.enrolled_users.all %}
                  <div class="col-sm-12">
                     <form class="form-inline my-2 my-lg-10" method="POST" action="#" >
                         {% csrf_token %}
@@ -49,36 +51,46 @@
                         <input class="form-control mr-sm-10" type="search" placeholder="Search" aria-label="Search" name="searched"> 
                     </form>        
                 </div>
-            </div> 
+                {% endif %}
+            </div>  
             {% if course.case_list.all != null %}
-           <br><br>
-            {% bs_icon 'envelope-open' size='1em' %} <a href = "#">Newly Opened Cases</a>
+                {% if user in course.enrolled_users.all %}
+                <br><br>
+                {% bs_icon 'envelope-open' size='1em' %} <a href = "#">Newly Opened Cases</a>
                     {% for case in course.case_list.all %}
-                    <li class="list-group-item list-group-item-action">
-                        <a href="{% url 'case_detail' title=case.title %}" class="post-text" style="text-decoration:none"> Case: {{case.title}}</a>
-                        <p>Published date: {{case.published_date}}</p>
-                        <p>Created by: <a href="{% url 'other_user_profile' name=case.user %}">{{case.user}}</p></a>
-                    </li> 
+                        {% if case.publish_date_check %}
+                            <li class="list-group-item list-group-item-action">
+                                <a href="{% url 'case_detail' title=case.title %}" class="post-text" style="text-decoration:none"> Case: {{case.title}}</a>
+                                <p>Published date: {{case.published_date}}</p>
+                                <p>Created by: <a href="{% url 'other_user_profile' name=case.user %}">{{case.user}}</p></a>
+                            </li> 
+                        {% endif %}
                     {% endfor %}
-            <br><br>
-            {% bs_icon 'folder2-open' size='1em' %}<a href = "#">Cases In-progess</a> 
-                {% for case in course.case_list.all %}
-                <li class="list-group-item list-group-item-action">
-                    <a href="{% url 'case_detail' title=case.title %}" class="post-text" style="text-decoration:none"> Case: {{case.title}}</a>
-                    <p>Due date: {{case.due_date}}</p>
-                    <p>Created by: <a href="#">{{case.user}}</p></a>
-                </li> 
-                {% endfor %}    
-            <br><br>
-            {% bs_icon 'archive' size='1em' %} <a href = "#">Cases Closed</a> 
-                {% for case in course.case_list.all %}
-                <li class="list-group-item list-group-item-action">
-                    <a href="{% url 'case_detail' title=case.title %}" class="post-text" style="text-decoration:none"> Case: {{case.title}}</a>
-                    <p>Rating: {{list_form.instance.score}}</p>
-                    <p>Created by: <a href="#">{{case.user}}</p></a>
-                </li> 
-                {% endfor %}
-            {% endif %}
+                <br><br>
+                {% bs_icon 'folder2-open' size='1em' %}<a href = "#">Cases In-progess</a> 
+                    {% for case in course.case_list.all %}
+                        {% if case.get_remaining_days %}
+                            <li class="list-group-item list-group-item-action">
+                                <a href="{% url 'case_detail' title=case.title %}" class="post-text" style="text-decoration:none"> Case: {{case.title}}</a>
+                                <p>Due date: {{case.due_date}}</p>
+                                <p>Created by: <a href="#">{{case.user}}</p></a>
+                            </li> 
+                        {% endif %}
+                    {% endfor %}    
+                <br><br>
+                    {% if 0 > case.get_remaining_days and case.averageview > 80 %}  
+                        {% bs_icon 'archive' size='1em' %} <a href = "#">Cases Closed</a> 
+                            {% for case in course.case_list.all %}
+                                <li class="list-group-item list-group-item-action">
+                                    <a href="{% url 'case_detail' title=case.title %}" class="post-text" style="text-decoration:none"> Case: {{case.title}}</a>
+                                    <p>Rating: {{case.score}}</p>
+                                    <p>Created by: <a href="#">{{case.user}}</p></a>
+                                </li> 
+                            {% endfor %}
+                    {% endif %}   
+                {% endif %} 
+        {% endif %}
+                            
      
         </div>
         
