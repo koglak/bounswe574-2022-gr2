@@ -1,3 +1,4 @@
+import datetime
 from django import forms
 from django.db import models
 from django.conf import settings
@@ -60,6 +61,12 @@ class Case(models.Model):
     description=tinymce_models.HTMLField()
     published_date = models.DateTimeField(default=timezone.now)
     due_date = models.DateTimeField(blank = True, null = True)
+
+    def get_remaining_days(self):
+        return (self.due_date - datetime.datetime.today()).days
+    
+    def publish_date_check(self):
+        return (datetime.datetime.today() - self.published_date).days <= 3
 
     def __str__(self):
         return self.title
