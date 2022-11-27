@@ -11,14 +11,15 @@
     <h5> Space: <a href="{% url 'course_detail' title=course.title %}"> {{course.title}} </a> > Case Page </h5>
     <br><br>
 
-    <p class="post-title">Title of the case study:</p>
-    <P class = "post-title">{{case.title}}</p>
+    <p class="post-title">Title of the case study: <light style = "color: brown;">"{{case.title}}"</light></p>
+    <p>has opened by {{case.user}}</light></p>
     <br><br>
     <hr>
     <strong>Description: </strong>
-    <p class = "post-text">{{case.description}}</p>
+    <p class = "post-text">{{case.description | safe}}</p>
     <hr>
-    {% for grade in grades %}
+    {% if case.user == user %}
+    
         <p class="post-author"> Upload Your Work:</p>
         <form method="POST" class="post-form" enctype="multipart/form-data">  
             {% csrf_token %}  
@@ -27,16 +28,13 @@
             <button type="submit" class="save btn btn-success">Submit</button>  
             <hr>
         </form>
-    {% empty %}
-    <h5><strong style = "background-color:lightcoral">You have submitted your answer for this case.</stong></h5>
-    {% endfor %}
+    {% endif %}
 </div>
-
 <br>
+{% for s in score %}
 <div class="jumbotron container row">
-<p class = "post-title"> Grades given </p>
+<p class = "post-title"> Top rated studies </p>
   <br>
-{% for grade in grades %}
   <table class="table table-striped">
     <thead>
       <tr>
@@ -44,7 +42,6 @@
         <th scope="col">User Name</th>
         <th scope="col">Submission Date</th>
         <th scope="col">File</th>
-        <th scope="col">Rated By Owner</th>
         <th scope="col">Rated By Users</th>
 
       </tr>
@@ -107,41 +104,44 @@
     </tbody>
   </table>
   {% empty %}
-  <h5><strong style = "background-color:lightcoral">There is no graded work yet.</stong></h5>  {% endfor %}
+  <div class="jumbotron container row">
+  <h5><p><strong style = "background-color:lightcoral">There is no rated work yet.   </stong></p></h5>  {% endfor %}
+  </div>
 </div>
 <br><br>
 <hr>
-
 <div class = "container">
   <div class = "row">
-      <div class = "col-lg-8 mx-auto">
-          <!--Display comment-->
-          {% if comments %}                
+      <div class = "mx-auto">
+          <!--Display comment-->          
           <div class = "row mt-5">
             <div class = "col-lg-6">
-              Comment {{ comments.count | pluralize }}
+              {% if comment == null %}
+              {% else %}
+              Comment {{ post.count | pluralize }}
+              {% endif %}
             </div>
           {% for comment in comments %}
-          <div class = "col-lg-6 offset-lg-3 mt-2">
-            <div class = card p-2>
+          <div class = "col-lg-16 mt-4">
+            <div class = card>
               <div class = "row">
-                <div class = "col-12">
+                <div class = "col-18">
                   <img class = "rounded-circle mr-2" src = "#" alt = "Avatar">
-                  <strong>{{ comment.author }}</strong> said
+                  <strong>{{ post.author }}</strong> said
                 </div>
-                <div class = "col-12">
-                  <p class = "m-1 mt-3">{{ comment.text }}</p>
-                  <p class = "text-right text-muted"><small>{{ comment.published_date}}</small></p>
+                <div class = "col-14">
+                  <p class = "mt-5 mt-3">{{ post.text }}</p>
+                  <p class = "text-right text-muted"><small>{{ post.published_date}}</small></p>
                 </div>
               </div>
             </div>
           </div>
           {% endfor %}
           </div>
-          {% endif %}
+       
           <!--Display form-->
           <div class="row mt-7">
-            <div class="col-lg-12">
+            <div class="col-lg-8">
               <h3>Leave a comment</h3>
               <form method='POST'>
                 {% csrf_token %}
@@ -150,7 +150,7 @@
                   <textarea class="form-control {% if form.content.errors %}is-invalid{% endif %}" id="id_content"
                     name="content" rows="4">{{ form.content.value|default:'' }}</textarea>
                 </div>
-                <button class="btn btn-primary mt-2 ml-3" type="submit">Reply</button>
+                <button class="btn btn-primary mt-2 ml-3" type="submit">Submit</button>
               </form>
             </div>
           </div>
