@@ -146,7 +146,7 @@ def case_list(response, title):
     case=get_object_or_404(Case, title=title)
     case_list= Event.objects.filter(case=case, event_date__range=[startdate, enddate])
 
-    form = CategorySortingForm(response.POST or None)
+
     form_date=DateFilterForm(response.POST or None)
 
     if response.method == "POST":
@@ -166,16 +166,16 @@ def case_list(response, title):
                         event_list= Event.objects.filter(course=course, event_date__range=[startdate, enddate]).order_by('-event_date__day', '-event_date__month')
         # Keyword Search
         else:
-            searched = response.POST["searched"]
+            searched = response.POST["case_searched"]
             event_list=Event.objects.filter(course=course, title__icontains=searched, event_date__range=[startdate, enddate])
             form = CategorySortingForm(use_required_attribute=False)
             form_date=DateFilterForm(use_required_attribute=False)
 
     paginator = Paginator(case_list,3) 
     page = response.GET.get('page')
-    events= paginator.get_page(page)
+    cases= paginator.get_page(page)
 
-    return render(response, "quiz/case_list.html", {'course': course, 'case':case, "form": form, "form_date": form_date})
+    return render(response, "userprofile/case_page.html", {'course': course, 'case':case, "form": form, "form_date": form_date})
 
 
 @login_required(login_url="/login")
@@ -227,9 +227,7 @@ def comment_new(request):
             return redirect(reverse('quiz/case_detail.html', kwargs = {
                 'pk' : post.pk
             })) 
-    else:
-       form = CommentForm()
-       pk ="none"
+ 
     return render(request, 'quiz/case_detail.html', {'form': form,'pk': pk})
 
 def comment_edit(request, pk):
