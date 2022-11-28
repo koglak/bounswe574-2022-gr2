@@ -6,7 +6,7 @@ from django.shortcuts import render
 from blog.models import Post
 from quiz.models import Case, Question, QuestionList, Score
 from .models import Course, Profile, Rating, Lecture, Event
-from .forms import CourseForm, ProfileForm, LectureForm, EventForm, CategorySortingForm, DateFilterForm
+from .forms import CourseForm, ProfileForm, LectureForm, EventForm, CategorySortingForm, DateFilterForm, CommentsForm
 from django.shortcuts import redirect, get_object_or_404
 from taggit.models import Tag
 from django.template.defaultfilters import slugify
@@ -356,3 +356,25 @@ def delete_event(request, pk):
     event.delete()
     return redirect('event_list', title=event.course.title)
 
+@login_required(login_url="/login")
+def event_detail(response, pk):
+    event = Event.objects.get(pk=pk)
+    if response.method == "POST":
+        form = CommentsForm(response.POST)
+        if form.is_valid():
+
+            comment = form.save(commit=False)
+            comment.event = event
+            comment.user = response.user
+            comment.save()
+            form = CommentsForm()
+    else:
+        form = CommentsForm()
+    context = {
+        'course': event.course,
+        'event': event,
+        'enrolled_users': Event.enrolled_users.through.objects.all(),
+        'form': form,
+    }
+
+    return render(response, "userprofile/event_detail.html", context)

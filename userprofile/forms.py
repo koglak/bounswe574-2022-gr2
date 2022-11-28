@@ -1,6 +1,6 @@
 from django import forms
 
-from .models import Lecture, Profile,Course, Event
+from .models import Lecture, Profile,Course, Event, Comments
 from django.forms import ModelForm, Select, TextInput, Form
 from taggit.forms import TagWidget
 from django.utils.safestring import mark_safe
@@ -108,6 +108,14 @@ class DateFilterForm(forms.Form):
 )
 
 
-  
+class CommentsForm(forms.ModelForm):
+
+    class Meta:
+        model = Comments
+        fields = ('body',)
+        labels = {
+        'body': (''),
+         }
+ 
 
     

@@ -9,19 +9,27 @@
         <div class="card-body">
             <h5 class="card-title">
                 {% if event.enrolled_users.count == event.quota and event.quota != 0 %}
-                    <span class="text-danger"><del>{{ event.title }}</del></span>
+                   <a href="{% url 'event_detail' pk=event.pk %}" class="post-text" style="text-decoration:none">
+                        <span class="text-danger"><del>{{ event.title }}</del></span>
+                    </a> 
                 {% elif 3 > event.get_remaining_days and event.get_remaining_days > 0 %}
-                    <span class="text-danger"><strong>{{ event.title }}</strong></span>
+                    <a href="{% url 'event_detail' pk=event.pk %}" class="post-text" style="text-decoration:none">
+                        <span class="text-danger"><strong>{{ event.title }}</strong></span>
+                    </a>
                     <a data-toggle="tooltip" data-placement="top" title="There is less than 3 days to event!">
                         <img src="https://img.icons8.com/office/40/null/last-48-hours.png" style="width: 30px; height: 30px"/>
                     </a>
                 {% elif 4 > event.get_remaining_quota %}
-                    <span class="text-danger"><strong>{{ event.title }}</strong></span>
+                    <a href="{% url 'event_detail' pk=event.pk %}" class="post-text" style="text-decoration:none">
+                        <span class="text-danger"><strong>{{ event.title }}</strong></span>
+                    </a>
                     <a data-toggle="tooltip" data-placement="top" title="Quota about to run out!">
                         <img src="https://img.icons8.com/officel/80/null/delete-ticket.png" style="width: 30px; height: 30px"/>
                     </a>
                 {% else %}
-                    {{ event.title }} 
+                    <a href="{% url 'event_detail' pk=event.pk %}" class="post-text" style="text-decoration:none">
+                        {{ event.title }} 
+                    </a>
                 {% endif %}
 
                 {% if event.publish_date_check %}
@@ -36,12 +44,12 @@
 
             </h5>
 
-            <p class="card-text">{{ event.description | safe }}</p>
+            <p class="card-text">{{ event.description | truncatechars:150 | safe }}</p>
         </div>
 
         <ul class="list-group list-group-flush">
             <li class="list-group-item"> {% bs_icon 'bell' size='1em' %} {{ event.event_date |date }} | {{ event.event_time }} </li>
-            <li class="list-group-item"> {% bs_icon 'alarm' size='1em' %} {{ event.duration }} min </li>
+            <li class="list-group-item"> {% bs_icon 'alarm' size='1em' %} {{ event.duration }} </li>
             <li class="list-group-item"> {% bs_icon 'link' size='1em' %} 
                 <a href="{{ event.link }}">
                     {% if "zoom" in event.link %}
