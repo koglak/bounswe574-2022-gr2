@@ -2,39 +2,44 @@
 
 
 {% block title %}
-Space Detail
+    Space Detail
 {% endblock %}
 
 {% block content %}
 
 
 
-<div class="container-fluid" style="margin-top: 10px;">
+    <div class="container-fluid" style="margin-top: 10px;">
 
-  <div class="row">
-    <div class="col-sm-9">
-      <div class="card" style="width: 18rem;">
-        {% load static %}
-        <img src="{% static %}userprofile\templates\userprofile\icons\bell.png" class="card-img-top"></img>
-        <div class="card-body">
-          <h5 class="card-title">Space Resources</h5>
-          <p class="card-text">Articles, Videos and all contents.</p>
-          <a href="#" class="btn btn-primary">Go somewhere</a>
-        </div>
-      </div>
+        <div class="row">
+              <div class="col-sm-3">
+                    <!--Enroll & Drop Button -->
+                    {% if user.is_authenticated %}
+                        {% include 'includes/enroll_drop.html' with course=course %}
+                    {% endif %}
 
+                    <!-- Side List-->
+                    {% include 'includes/sidebar.html' with course=course page="lecture" %}                 
+              
+                    <div class="text-end mt-3">
+                      {% if user in course.collaborative_members.all or user == course.user %}
+                              <a href="{% url 'lecture_new' pk=course.pk %}" type="button" class="btn btn-primary">Create Content</a>
+                      {% endif %}
+                    </div>
+              
+                  </div>
+              
+              <div class="col-sm-6">
+                {{course.lecture.first.content|safe}}
+              </div>
 
+              <div class="col-sm-3">
+                {% include 'includes/course2.html' with course=course select='course' %}
+              </div>
+
+              
+
+        </div> 
     </div>
-
-
-
-    <div class="col-sm-3">
-      {% include 'includes/course2.html' with course=course select='course' %}
-    </div>
-
-
-
-  </div>
-</div>
-
+      
 {% endblock %}
