@@ -7,6 +7,8 @@ from django.shortcuts import redirect, get_object_or_404
 from django.utils import timezone
 from django.forms import modelformset_factory
 from django.contrib.auth.decorators import login_required
+#from hitcount.views import HitCountDetailView
+
 
  
 # Create your views here.
@@ -213,87 +215,102 @@ def case_rate(request, pk):
 
     return redirect('case_grade', title=case.title)
 
+
+def comment_detail(request):
+    case = Case.objects.get(pk = pk)
+    #count_hit = True
+
+    if request.method == "POST":
+        form = CommentForm(response.POST)
+
+        if form.is_valid():
+            comment = form.save(commit=False)
+            commment.case = case
+            comment.author = request.user
+            #comments.count = Comment.objects.all().filter(comment = self.object.id).count()
+            comment.save()
+            form = CommentForm()
+
+    else:
+        form = CommentForm()
+    context = {
+        'course': case.course,
+        'case': case,
+        'enrolled_users': Case.enrolled_users.through.objects.all(),
+        'count': count,
+        'form': form
+    }
+ 
+    return render(request, 'quiz/case_detail.html', context)
+
 def comment_new(request):
     if request.method == "POST":
         form = CommentForm(request.POST)
 
         if form.is_valid():
-            post = form.save(commit=False)
-            post.author = request.user
-            post.published_date = timezone.now()
-            post.save()
+            comment = form.save(commit=False)
+            commment.published_date = timezone.now()
+            comment.author = request.user
+            comment.save()
             form.save_m2m()
 
-            return redirect(reverse('quiz/case_detail.html', kwargs = {
-                'pk' : post.pk
-            })) 
- 
-    return render(request, 'quiz/case_detail.html', {'form': form,'pk': pk})
+            return redirect('case_detail', pk = comment.pk)
+    else:
+        form = CommentForm()
+        pk = "none"
+    return render(request, 'quiz/case_detail.html', {'form': form, 'pk': pk})
 
+            
 def comment_edit(request, pk):
-    post = get_object_or_404(Post, pk=pk)
+    comment = get_object_or_404(Comment, pk=pk)
     if request.method == "POST":
-        form = PostForm(request.POST, instance=post)
+        form = CommentForm(request.POST, instance=comment)
         if form.is_valid():
-            post = form.save(commit=False)
-            post.author = request.user
-            post.published_date = timezone.now()
-            post.save()
-            form.save_m2m() 
+            comment = form.save(commit=False)
+            commment.published_date = timezone.now()
+            comment.author = request.user
+            comment.save()
+            form.save_m2m()
 
             return redirect('case_detail', pk=post.pk)
     else:
-        form = PostForm(instance=post)
+        form = CommentForm(instance=comment)
     return render(request, 'quiz/case_edit.html', {'form': form, 'pk': pk})
 
 def delete_comment(request, pk):
-    post = Post.objects.get(pk=pk)
-    post.delete()
-    return redirect('/comment')
+    comment = Comment.objects.get(pk=pk)
+    comment.delete()
+    return redirect('comment')
 
 @login_required(login_url="/login")
 def LikeView_comment(request, pk):
-    post = get_object_or_404(Post, id=request.POST.get('post_id'))
-    post.likes.add(request.user)
-    post.dislikes.remove(request.user)
+    comment = get_object_or_404(Comment, id=request.POST.get('comment_id'))
+    comment.likes.add(request.user)
+    comment.dislikes.remove(request.user)
     return redirect('case_detail', pk=pk)
 
 
 @login_required(login_url="/login")
 def LikeViewList_comment(request):
-    post = get_object_or_404(Post, id=request.POST.get('post_id'))
-    post.likes.add(request.user)
-    post.dislikes.remove(request.user)
+    comment = get_object_or_404(Post, id=request.POST.get('comment_id'))
+    comment.likes.add(request.user)
+    comment.dislikes.remove(request.user)
     return redirect('comment')
 
 
 @login_required(login_url="/login")
 def DislikeView_comment(request, pk):
-    post = get_object_or_404(Post, id=request.POST.get('post_id'))
-    post.dislikes.add(request.user)
-    post.likes.remove(request.user)
+    comment = get_object_or_404(Post, id=request.POST.get('comment_id'))
+    comment.dislikes.add(request.user)
+    comment.likes.remove(request.user)
     return redirect('case_detail', pk=pk)
 
 
 @login_required(login_url="/login")
 def DislikeViewList_comment(request):
-    post = get_object_or_404(Post, id=request.POST.get('post_id'))
-    post.dislikes.add(request.user)
-    post.likes.remove(request.user)
+    comment = get_object_or_404(Post, id=request.POST.get('comment_id'))
+    comment.dislikes.add(request.user)
+    comment.likes.remove(request.user)
     return redirect('case_page')
 
-@login_required(login_url="/login")
-def ReplyCommentLikeView(request, pk):
-    answer = get_object_or_404(Answer, id=request.POST.get('answer_id'))
-    answer.likes.add(request.user)
-    answer.dislikes.remove(request.user)
-    return redirect('case_detail', pk=pk)
-
-
-@login_required(login_url="/login")
-def ReplyCommentDislikeView(request,pk ):
-    answer = get_object_or_404(Answer, id=request.POST.get('answer_id'))
-    answer.dislikes.add(request.user)
-    answer.likes.remove(request.user)
-    return redirect('case_detail', pk=pk)
 
