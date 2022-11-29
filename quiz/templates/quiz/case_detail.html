@@ -18,12 +18,11 @@
     <strong>Description: </strong>
     <p class = "post-text">{{case.description | safe}}</p>
     <hr>
-    {% if case.user == user %}
+    {% if user.is_authenticated or submission.user.id == user.id %}
     
         <p class="post-author"> Upload Your Work:</p>
         <form method="POST" class="post-form" enctype="multipart/form-data">  
             {% csrf_token %}  
-
             {{form.as_p}}
             <button type="submit" class="save btn btn-success">Submit</button>  
             <hr>
@@ -31,7 +30,7 @@
     {% endif %}
 </div>
 <br>
-{% for s in score %}
+{% for submission in submitted %}
 <div class="jumbotron container row">
 <p class = "post-title"> Top rated studies </p>
   <br>
@@ -105,7 +104,8 @@
   </table>
   {% empty %}
   <div class="jumbotron container row">
-  <h5><p><strong style = "background-color:lightcoral">There is no rated work yet.   </stong></p></h5>  {% endfor %}
+  <h5><p><strong style = "background-color:lightcoral">There is no rated work yet.   </stong></p></h5> 
+     {% endfor %}
   </div>
 </div>
 <br><br>
@@ -116,29 +116,61 @@
           <!--Display comment-->          
           <div class = "row mt-5">
             <div class = "col-lg-6">
-              {% if comment == null %}
+              {% if not case.comments.all %}
+              No comments yet
               {% else %}
-              Comment {{ post.count | pluralize }}
+              Comment {{ comment.count | pluralize }}
               {% endif %}
             </div>
-          {% for comment in comments %}
-          <div class = "col-lg-16 mt-4">
+          {% for comment in case.comments.all %}
+          <div class = "col-lg-12 mt-4">
             <div class = card>
               <div class = "row">
-                <div class = "col-18">
-                  <img class = "rounded-circle mr-2" src = "#" alt = "Avatar">
-                  <strong>{{ post.author }}</strong> said
+                {% if comment.authorProfileImg %}
+                <div class = "col-12">
+                  <img class="rounded-circle shadow-1-strong me-3" src="{{enrolled_user.userProfileImg.url}}" alt="avatar" width="60" height="60" />                  
+                  <strong>{{ comment.author }}</strong> <i>said</i>
                 </div>
-                <div class = "col-14">
-                  <p class = "mt-5 mt-3">{{ post.text }}</p>
-                  <p class = "text-right text-muted"><small>{{ post.published_date}}</small></p>
+                {% else %}
+                <div class = "col-12">
+                  <img class="rounded-circle shadow-1-strong me-3" src="http://cdn.onlinewebfonts.com/svg/img_24787.png" alt="avatar" width="60" height="60" />                 
+                  <strong>{{ comment.author }}</strong> <i>said</i>
                 </div>
+                {% endif %}
+                <div class = "col-12">
+                  <p class = "mt-2 mt-3">{{ comment.body }}</p>
+                  <p class = "text-right text-muted"><small>{{ comment.published_date}}</small></p>
+                </div>
+                <!--Like Button-->
+                <div class="col-sm-1 col-lg-1 col-xl-1">
+                  <form action="{% url 'like_comment' pk=comment.pk %}" method="POST">
+                      {% csrf_token %}
+                          <button type="submit", name="post_id", value="{{post.id}}", class="btn btn-outline-primary btn-sm" >Like</button>
+                          <p style="display: inline; font-weight: bold;">{{comment.total_likes}}</p>
+                  </form>
+                </div>
+                <br>
+                <!--Disike Button-->
+                <div class="col-sm-1 col-lg-1 col-xl-1">
+                  <form action="{% url 'dislike_comment' pk=comment.pk %}" method="POST">
+                      {% csrf_token %}
+                          <button type="submit", name="post_id", value="{{post.id}}", class="btn btn-outline-warning btn-sm" >Dislike</button>
+                          <p style="display: inline; font-weight: bold;">{{comment.total_dislikes}}</p>
+                  </form>
+                </div>
+                <br>
+                <!--Comment Edit
+                <form method="POST" class="question-form">
+                    {% csrf_token %}
+                    <a class="btn btn-outline-danger" href="{% url 'comment'  %}">Delete</a>
+                </form>
+                -->
               </div>
             </div>
           </div>
           {% endfor %}
           </div>
-       
+          <br>
           <!--Display form-->
           <div class="row mt-7">
             <div class="col-lg-8">
