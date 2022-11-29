@@ -75,13 +75,18 @@ class Case(models.Model):
         ordering = ['-published_date']
 
 class Comment(models.Model):
-    author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    text=models.TextField()
-    post = models.ForeignKey(Case, on_delete=models.CASCADE)
+    author = models.ForeignKey(User, on_delete=models.CASCADE)
+    body = models.TextField(blank = True, null = True, default = None)
+    case = models.ForeignKey(Case, on_delete=models.CASCADE, related_name = "comments")
     #created_date = models.DateTimeField(default=timezone.now)
-    published_date=models.DateTimeField(default=timezone.now)
-    likes = models.ManyToManyField(User, related_name='comment_like', blank = True, null = True)
-    dislikes = models.ManyToManyField(User, related_name='comment_dislike', blank = True, null = True)
+    published_date = models.DateTimeField(default=timezone.now)
+    likes = models.ManyToManyField(User, related_name='comment_like', blank = True, default = None)
+    dislikes = models.ManyToManyField(User, related_name='comment_dislike', blank = True,  default = None)
+    #hit_count_generic = GenericRelation(HitCount, object_id_field = "object_pk", related_query_name = "hit_count_generic_relation")
+
+    def userProfileImg(self):
+        author = Profile.objects.get(author = self.user)
+        return author.img
 
     def total_likes(self):
         return self.likes.count()
@@ -93,34 +98,22 @@ class Comment(models.Model):
 
     # when we call __str__, it will turn a text
     def __str__(self):
-        return self.text
+        return self.case.title
 
-class ReplyComment(models.Model):
-    comment = models.ForeignKey(Comment, on_delete=models.CASCADE, related_name="reply_comment")
-    body = models.TextField()
-    date_added = models.DateTimeField(auto_now_add=True)
-    likes = models.ManyToManyField(User, related_name='reply_comment_like')
-    dislikes = models.ManyToManyField(User, related_name='reply_comment_dislike')
-
-    def total_likes(self):
-        return self.likes.count()
-
-    def total_dislikes(self):
-        like=self.likes.count()
-        like=like-1
-        return self.dislikes.count()
-
-
-#    def __str__(self):
-#        return '%s - %s' % (self.comment.text, self.body)
 
 class CaseResult(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     case=models.ForeignKey(Case, default=None, on_delete=models.CASCADE)
     upload = models.FileField(upload_to='uploads/')
     shared_date=models.DateTimeField(blank=True, null=True)
-    
     score=models.IntegerField(null=True, default='0', validators=[MinValueValidator(0), MaxValueValidator(100)])
+
+    def get_context_data(self, **kwargs):
+        submissions = Case.objects.filter(pk = self.kwargs['pk'])
+        submissons_object = get_object_or_404(submissions)
+        context = super(Case, self).get_context_data(**kwargs)
+        context['submissions'] = submissons_object
+        return context
 
     def averagereview(self):
         rating = CaseRating.objects.filter(case_result=self).aggregate(avarage=Avg('rating'))
