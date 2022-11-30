@@ -314,3 +314,11 @@ def DislikeViewList_comment(request):
     return redirect('case_page')
 
 
+def search_case(request):
+    if request.method == "POST":
+        searched = request.POST["searched"]
+        results = Case.objects.filter(title__icontains=searched)
+
+        return render(request, "quiz/search_case.html", {'searched': searched, 'results': results}) 
+    else:
+        return render(request, "quiz/search_case.html", {})
