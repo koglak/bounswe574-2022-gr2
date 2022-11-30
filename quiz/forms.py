@@ -29,6 +29,18 @@ class CaseForm(ModelForm):
     class Meta:
         model=Case
         fields=('title','description', 'due_date')
+        widgets = {
+            'title': forms.TextInput(attrs={
+                'class': "form-control",
+                'style': 'max-width: 700px;',
+                'placeholder': 'Title',
+                }),
+            'due_date': forms.TextInput(attrs={
+                'class': "form-control",
+                'style': 'max-width: 700px;',
+                'placeholder': 'YYYY-MM-DD',
+                })
+        }
 
 class DateFilterForm(forms.Form):
     DATE_CHOICES =(
