@@ -18,6 +18,7 @@ urlpatterns = [
 
     path('<str:title>/case_grade/', views.case_grade,name='case_grade'),
     path('<int:pk>/case_rate',views.case_rate,name='case_rate'),
+    path('case/search_result',views.search_case,name='search_case'),
 
 
 
