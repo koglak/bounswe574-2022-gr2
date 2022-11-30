@@ -31,7 +31,6 @@
                 </div> 
                 <br><br><br>
             </div>
-
         </div>
 
         <div class="col-sm-6">
@@ -44,12 +43,12 @@
                 <hr>
                  <!-- search by keyword -->
                  {% if user in course.enrolled_users.all %}
-                 <div class="col-sm-12">
-                    <form class="form-inline my-2 my-lg-10" method="POST" action="#" >
+                 <div class="col-sm-16">
+                    <form class="form-inline" method=POST action="{% url 'search_case' %}" style="margin:15px; padding-top:20px;">
                         {% csrf_token %}
-                        {{ form_input.as_p}}
-                        <input class="form-control mr-sm-10" type="search" placeholder="Search" aria-label="Search" name="searched"> 
-                    </form>        
+                        <input class="form-control mr-sm-2" style="width:650px; float:left; margin-right:10px" type="search"  placeholder="Search any case study" aria-label="Search" name="searched"> 
+                        <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+                    </form>      
                 </div>
                 {% endif %}
             </div>  
