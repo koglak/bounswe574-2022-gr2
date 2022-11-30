@@ -1,7 +1,7 @@
 {% extends 'blog/base.html' %}
 
 {% block title %}
-    Search Results - Spaces
+    Search Results - Case Studies
 {% endblock %}
 
 {% block content %}
@@ -9,14 +9,12 @@
     <h2>Search Results</h2>
     <hr>
     {% if searched %}
-        You searched for {{case_searched}}
+        You searched for {{searched}}
 
         <ul class="list-group">
-
+        <br>
         {% for result in results %}
-         
-            <li class="list-group-item"><a href="{% url 'case_detail' title=case.title %}" class="post-title">{{result}}</a></li>
-
+            <li class="list-group-item"><a href="{% url 'case_detail' title=result.title %}" class="post-title">{{result}}</a></li>
         {% endfor %}
 
         </ul>
