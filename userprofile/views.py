@@ -446,9 +446,13 @@ def question_edit(request, pk, title):
 @login_required(login_url="/login")
 def LikeView(request, pk, title):
     question = get_object_or_404(Question, pk=pk)
-    course=get_object_or_404(Course, title=title)
     question.likes.add(request.user)
     question.dislikes.remove(request.user)
     return redirect(f'/myspace/{title}/forum_page/{pk}')
 
-
+@login_required(login_url="/login")
+def DislikeView(request, pk, title):
+    question = get_object_or_404(Question, pk=pk)
+    question.dislikes.add(request.user)
+    question.likes.remove(request.user)
+    return redirect(f'/myspace/{title}/forum_page/{pk}')
