@@ -379,3 +379,8 @@ def event_detail(response, pk):
 
     return render(response, "userprofile/event_detail.html", context)
 
+@login_required(login_url="/login")
+def forum_page(response, title):
+    course=get_object_or_404(Course, title=title)
+    questions= Question.objects.filter(course=course).order_by('-published_date')
+    return render(response, 'userprofile/forum_page.html', {'course': course, 'questions': questions})
