@@ -145,7 +145,7 @@
                           <div class="row" style="padding: 4px; background: rgba(196, 196, 196, 0.22); margin-top:5px" >
                             <!--Like Button-->
                             <div class="col-sm-1 col-lg-1 col-xl-1">
-                                <form action="#" method="POST">
+                                <form action="{% url 'space_question_detail_answer_like' num=answer.pk title=course.title pk=question.pk  %}" method="POST">
                                         {% csrf_token %}
                                         {% if user.is_authenticated %}
                                         <button type="submit", name="answer_id", value="{{answer.id}}", class="btn btn-outline-primary btn-sm" >Like</button>
@@ -157,7 +157,7 @@
                             </div>
                             <!--Disike Button-->
                             <div class="col-sm-1 col-lg-1 col-xl-1">
-                                <form action="#" method="POST">
+                                <form action="{% url 'space_question_detail_answer_dislike' num=answer.pk title=course.title pk=question.pk %}" method="POST">
                                         {% csrf_token %}
                                         {% if user.is_authenticated %}
                                         <button type="submit", name="answer_id", value="{{answer.id}}", class="btn btn-outline-warning btn-sm" >Dislike</button>

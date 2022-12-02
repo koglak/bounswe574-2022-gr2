@@ -456,3 +456,18 @@ def DislikeView(request, pk, title):
     question.dislikes.add(request.user)
     question.likes.remove(request.user)
     return redirect(f'/myspace/{title}/forum_page/{pk}')
+
+@login_required(login_url="/login")
+def AnswerLikeView(request, pk, title,num):
+    answer = get_object_or_404(Answer, pk=num)
+    answer.likes.add(request.user)
+    answer.dislikes.remove(request.user)
+    return redirect(f'/myspace/{title}/forum_page/{pk}')
+
+
+@login_required(login_url="/login")
+def AnswerDislikeView(request,pk,title,num ):
+    answer = get_object_or_404(Answer, pk=num)
+    answer.dislikes.add(request.user)
+    answer.likes.remove(request.user)
+    return redirect(f'/myspace/{title}/forum_page/{pk}')

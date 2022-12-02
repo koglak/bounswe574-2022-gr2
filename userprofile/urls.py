@@ -35,7 +35,8 @@ urlpatterns = [
     path('<str:title>/forum_page/<int:pk>/question_edit/', views.question_edit, name='space_question_edit'),
     path('<str:title>/forum_page/<int:pk>/question_like', views.LikeView, name='space_question_detail_like'),
     path('<str:title>/forum_page/<int:pk>/question_dislike', views.DislikeView, name='space_question_detail_dislike'),
-
+    path('<str:title>/forum_page/<int:pk>/<int:num>/answer_like', views.AnswerLikeView, name='space_question_detail_answer_like'),
+    path('<str:title>/forum_page/<int:pk>/<int:num>/answer_dislike', views.AnswerDislikeView, name='space_question_detail_answer_dislike'),
 
 ]
 
