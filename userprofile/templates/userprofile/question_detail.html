@@ -48,7 +48,7 @@
                   <a href="#" class="post-title">{{ question.title }}</a>
                   {% if user.is_authenticated and user == question.user %}
                       <a class="btn btn-secondary btn-sm" href="#">
-                          {% include './icons/pencil-fill.svg' %}
+                          Edit
                       </a>
                   {% endif %}
                 </aside>

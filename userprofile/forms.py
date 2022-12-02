@@ -128,7 +128,7 @@ class QuestionForm(forms.ModelForm):
                 'style': 'max-width: 300px;',
                 'placeholder': 'Title',
                 }),
-            'quesion': forms.Textarea(attrs={
+            'question': TinyMCEWidget(attrs={
                 'class': "form-control",
                 'style': 'max-width: 300px;',
                 'placeholder': 'Text',
