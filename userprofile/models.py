@@ -171,6 +171,10 @@ class Answer(models.Model):
         like=self.likes.count()
         like=like-1
         return self.dislikes.count()
+    
+    def userProfileImg(self):
+        user = Profile.objects.get(user=self.user)
+        return user.img
 
     def __str__(self):
         return '%s - %s' % (self.question.title, self.answer)
