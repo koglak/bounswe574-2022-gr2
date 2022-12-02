@@ -148,7 +148,7 @@ class Question(models.Model):
         return self.dislikes.count()
     
     def userProfileImg(self):
-        user = Profile.objects.get(user=self.author)
+        user = Profile.objects.get(user=self.user)
         return user.img
 
     # when we call __str__, it will turn a text

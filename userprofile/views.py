@@ -384,3 +384,23 @@ def forum_page(response, title):
     course=get_object_or_404(Course, title=title)
     questions= Question.objects.filter(course=course).order_by('-published_date')
     return render(response, 'userprofile/forum_page.html', {'course': course, 'questions': questions})
+
+@login_required(login_url="/login")
+def question_new(request,title):
+    if request.method == "POST":
+        course=get_object_or_404(Course, title=title)
+        questions= Question.objects.filter(course=course).order_by('-published_date')
+        form = QuestionForm(request.POST)
+
+        if form.is_valid():
+            question = form.save(commit=False)
+            question.user = request.user
+            question.course = course
+            question.published_date = timezone.now()
+            question.save()
+
+            return redirect('forum_page', {'course': course, 'questions': questions})
+    else:
+        form = QuestionForm()
+        pk ="none"
+    return render(request, 'userprofile/question_edit.html', {'form': form,'pk': pk})

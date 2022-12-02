@@ -1,0 +1,23 @@
+{% extends 'blog/base.html' %}
+
+
+{% block title %}
+    Ask a Question
+{% endblock %}
+
+{% block content %}
+
+    <h2>Create New Question</h2>
+    <form method="POST" class="question-form">
+        {% csrf_token %}
+        {{ form.as_p}}
+        {{label}}
+        <button type="submit" class="save btn btn-success">Ask</button>
+        {% if pk != "none" %}
+        <a class="btn btn-outline-danger" href="#">Delete Question</a>
+        {% endif %}
+    </form>
+
+
+   
+{% endblock %}

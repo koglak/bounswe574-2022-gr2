@@ -34,7 +34,7 @@ Forum
                     </div>
                     {% if user.is_authenticated %}
                     <div class="col-sm-6" style="padding-top: 20px;">
-                        <a class="btn btn-success" href="#" role="button">Ask A Question!</a>
+                        <a class="btn btn-success" href="{% url 'space_question_new' title=course.title %}" role="button">Ask A Question!</a>
                     </div>
                     {% endif %}
 
@@ -85,7 +85,7 @@ Forum
                         <!--Question text-->
                         <div class="row">
                             <a href="#" class="post-title">{{ question.title }}</a>
-                            <p class="post-text">{{question.question|linebreaksbr|safe}}</p>
+                            <p class="post-text">{{question.question | safe}}</p>
                         </div>
                         <!--Question Footer-->
                         <div class="row" style="padding: 4px; background: rgba(196, 196, 196, 0.22); margin-top:5px">
