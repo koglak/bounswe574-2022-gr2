@@ -421,3 +421,22 @@ def question_detail(request, pk, title):
     else:
         form = AnswerForm()
     return render(request, 'userprofile/question_detail.html', {'question': question, "form":form, "course": course})
+
+@login_required(login_url="/login")
+def question_edit(request, pk, title):
+    course=get_object_or_404(Course, title=title)
+    question = get_object_or_404(Question, pk=pk)
+    if request.method == "POST":
+        form = QuestionForm(request.POST, instance=question)
+        if form.is_valid():
+            question = form.save(commit=False)
+            question.user = request.user
+            question.course = course
+            question.published_date = timezone.now()
+            question.save()
+            form.save_m2m()
+
+            return redirect('question_detail', {'pk': question.pk, 'title': course.title})
+    else:
+        form = QuestionForm(instance=question)
+    return render(request, 'userprofile/question_edit.html', {'form': form, 'pk': pk})

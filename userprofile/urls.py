@@ -32,5 +32,6 @@ urlpatterns = [
     path('<str:title>/forum_page',views.forum_page,name='forum_page'),
     path('<str:title>/forum_page/question_new/', views.question_new, name='space_question_new'),
     path('<str:title>/forum_page/<int:pk>/', views.question_detail, name='space_question_detail'),
+    path('<str:title>/forum_page/<int:pk>/question_edit/', views.question_edit, name='space_question_edit'),
 ]
 

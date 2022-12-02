@@ -47,7 +47,7 @@
                 <aside class="actions">
                   <a href="#" class="post-title">{{ question.title }}</a>
                   {% if user.is_authenticated and user == question.user %}
-                      <a class="btn btn-secondary btn-sm" href="#">
+                      <a class="btn btn-secondary btn-sm" href="{% url 'space_question_edit' pk=question.pk title=course.title %}">
                           Edit
                       </a>
                   {% endif %}
