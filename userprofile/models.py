@@ -158,6 +158,7 @@ class Question(models.Model):
 
 class Answer(models.Model):
     question = models.ForeignKey(Question, on_delete=models.CASCADE, related_name="space_question_answer")
+    user=models.ForeignKey(User,default=None, on_delete=models.CASCADE)
     answer = tinymce_models.HTMLField()
     published_date = models.DateTimeField(auto_now_add=True)
     likes = models.ManyToManyField(User, related_name='space_question_answer_likes')
@@ -172,4 +173,4 @@ class Answer(models.Model):
         return self.dislikes.count()
 
     def __str__(self):
-        return '%s - %s' % (self.post.title, self.name)
+        return '%s - %s' % (self.question.title, self.answer)

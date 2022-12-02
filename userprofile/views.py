@@ -416,6 +416,7 @@ def question_detail(request, pk, title):
             answer = form.save(commit=False)
             answer.question = question
             answer.user = request.user
+            answer.published_date = timezone.now()
             answer.save()
     else:
         form = AnswerForm()

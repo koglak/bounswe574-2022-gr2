@@ -84,6 +84,121 @@
           </div>              
         </div>
 </div>
+<hr>
+
+<!--Comment Section-->
+<section style="background-color: white;">
+    <div class="container my-5 py-5" style="margin-top:0px !important; padding:0px !important">
+      <div class="row d-flex justify-content-center">
+        <div class="col-md-12 col-lg-12 col-xl-12">
+          <div class="card">
+            <div class="card-body">
+
+                {% if not question.space_question_answer.all %}
+                    No Comments Yet ... 
+                {% else %}
+                    {% for answer in question.space_question_answer.all %}
+                          
+                      <div style=" margin: 5px; padding:3px">
+                            <form method="POST" style="float: right; opacity: 0.5;">
+                              <a class="btn btn-outline-danger btn-sm" href="#">Delete</a>
+                            </form>
+                          <div class="d-flex flex-start align-items-center">
+                            
+                            {% if question.userProfileImg %}
+                              <img class="rounded-circle shadow-1-strong me-3"
+                              src="{{question.userProfileImg.url}}" alt="avatar" width="60"
+                              height="60" />
+                            {% else %}
+                              <img class="rounded-circle shadow-1-strong me-3"
+                              src="http://cdn.onlinewebfonts.com/svg/img_24787.png" alt="avatar" width="60"
+                              height="60" />
+                            {% endif %}
+                              
+                              <div>
+                                <div style="float:left; margin-right:10px">
+                                    {% if user == answer.user %}
+                                    <a href="{% url 'user_profile' %}" class="post-author" style="font-family: 'Poppins';font-size:18px; font-weight: 600px; margin-right:5px">{{answer.user}}</a>
+                                    {% else %}
+                                    <a href="{% url 'other_user_profile' name=answer.user.username %}" class="post-author" style="font-family: 'Poppins';font-size:18px; font-weight: 600px; margin-right:5px">{{answer.user}}</a>
+                                    {% endif %}
+                                </div>
+
+
+                                  <div style="float:clear">
+
+                                      <a href="#" class="link-success" style="font-family: 'Poppins';font-style: normal;font-weight: 800;font-size: 16px;">Follow</a>
+                                    </div>
+
+                                <p class="text-muted small mb-0">
+                                  {{answer.published_date}}
+                                </p>
+                               
+                              </div>
+                              
+                          </div>
+                           <hr>
+                          <p class="mt-3 mb-4">
+                            {{answer.answer | safe}}
+                          </p>
+
+                          <div class="row" style="padding: 4px; background: rgba(196, 196, 196, 0.22); margin-top:5px" >
+                            <!--Like Button-->
+                            <div class="col-sm-1 col-lg-1 col-xl-1">
+                                <form action="#" method="POST">
+                                        {% csrf_token %}
+                                        {% if user.is_authenticated %}
+                                        <button type="submit", name="answer_id", value="{{answer.id}}", class="btn btn-outline-primary btn-sm" >Like</button>
+                                        {% else %}
+                                        <strong>Like:</strong>
+                                        {% endif %}
+                                        <p style="display: inline; font-weight: bold;">{{answer.total_likes}}</p>
+                                </form>
+                            </div>
+                            <!--Disike Button-->
+                            <div class="col-sm-1 col-lg-1 col-xl-1">
+                                <form action="#" method="POST">
+                                        {% csrf_token %}
+                                        {% if user.is_authenticated %}
+                                        <button type="submit", name="answer_id", value="{{answer.id}}", class="btn btn-outline-warning btn-sm" >Dislike</button>
+                                        {% else %}
+                                        <strong>Dislike:</strong>
+                                        {% endif %}
+                                        <p style="display: inline; font-weight: bold;">{{answer.total_dislikes}}</p>
+                                </form>
+                            </div>
+                        </div>
+                    {% endfor %}
+                {% endif %}
+              
+              
+            </div>
+            {% if user.is_authenticated %}
+
+            <div class="card-footer py-3 border-0" style="background-color: #f8f9fa;">
+              <div class="d-flex flex-start w-100">
+                <img class="rounded-circle shadow-1-strong me-3"
+                  src="https://i.pinimg.com/564x/a6/58/32/a65832155622ac173337874f02b218fb.jpg" alt="avatar" width="40"
+                  height="40" />
+                <div class="form-outline w-100">
+                  <form method="POST" class="post-form">
+                    {% csrf_token %}
+                    {{ form }}
+                    <br>
+                    <button type="submit" class="btn btn-outline-success">Answer!</button>
+                  </form>
+                </div>
+              </div>
+              
+            </div>
+            {% endif %}
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  
 
 
 {% endblock %}
