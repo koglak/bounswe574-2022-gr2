@@ -57,7 +57,7 @@
           <div class="row", style="padding: 4px; background: rgba(196, 196, 196, 0.22); margin-top:5px" >
             <!--Like Button-->
             <div class="col-sm-1 col-lg-1 col-xl-1">
-                <form action="#" method="POST">
+                <form action="{% url 'space_question_detail_like' pk=question.pk title=course.title %}" method="POST">
                     {% csrf_token %}
                         <button type="submit", name="post_id", value="{{question.id}}", class="btn btn-outline-primary btn-sm" >Like</button>
                         <p style="display: inline; font-weight: bold;">{{question.total_likes}}</p>

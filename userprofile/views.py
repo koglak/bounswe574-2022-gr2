@@ -13,6 +13,8 @@ from django.template.defaultfilters import slugify
 from django.contrib.auth.decorators import login_required
 from datetime import datetime, timedelta, time
 from django.core.paginator import Paginator
+from django.urls import reverse
+
 
 @login_required(login_url="/login")
 def user_profile(response):
@@ -436,7 +438,17 @@ def question_edit(request, pk, title):
             question.save()
             form.save_m2m()
 
-            return redirect('question_detail', {'pk': question.pk, 'title': course.title})
+            return redirect(f'/myspace/{course.title}/forum_page/{question.pk}')
     else:
         form = QuestionForm(instance=question)
     return render(request, 'userprofile/question_edit.html', {'form': form, 'pk': pk})
+
+@login_required(login_url="/login")
+def LikeView(request, pk, title):
+    question = get_object_or_404(Question, pk=pk)
+    course=get_object_or_404(Course, title=title)
+    question.likes.add(request.user)
+    question.dislikes.remove(request.user)
+    return redirect(f'/myspace/{title}/forum_page/{pk}')
+
+
