@@ -471,3 +471,18 @@ def AnswerDislikeView(request,pk,title,num ):
     answer.dislikes.add(request.user)
     answer.likes.remove(request.user)
     return redirect(f'/myspace/{title}/forum_page/{pk}')
+
+
+@login_required(login_url="/login")
+def LikeViewList(request, pk, title):
+    question = get_object_or_404(Question, pk=pk)
+    question.likes.add(request.user)
+    question.dislikes.remove(request.user)
+    return redirect("forum_page", title=title)
+
+@login_required(login_url="/login")
+def DislikeViewList(request, pk, title):
+    question = get_object_or_404(Question, pk=pk)
+    question.likes.remove(request.user)
+    question.dislikes.add(request.user)
+    return redirect("forum_page", title=title)
