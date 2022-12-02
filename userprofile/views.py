@@ -5,8 +5,8 @@ from django.utils import timezone
 from django.shortcuts import render
 from blog.models import Post
 from quiz.models import Case, Question, QuestionList, Score
-from .models import Course, Profile, Rating, Lecture, Event
-from .forms import CourseForm, ProfileForm, LectureForm, EventForm, CategorySortingForm, DateFilterForm, CommentsForm
+from .models import Course, Profile, Rating, Lecture, Event, Question, Answer
+from .forms import CourseForm, ProfileForm, LectureForm, EventForm, CategorySortingForm, DateFilterForm, CommentsForm, QuestionForm, AnswerForm
 from django.shortcuts import redirect, get_object_or_404
 from taggit.models import Tag
 from django.template.defaultfilters import slugify
@@ -378,3 +378,4 @@ def event_detail(response, pk):
     }
 
     return render(response, "userprofile/event_detail.html", context)
+
