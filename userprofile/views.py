@@ -404,3 +404,19 @@ def question_new(request,title):
         form = QuestionForm()
         pk ="none"
     return render(request, 'userprofile/question_edit.html', {'form': form,'pk': pk})
+
+
+@login_required(login_url="/login")
+def question_detail(request, pk, title):
+    course=get_object_or_404(Course, title=title)
+    question = get_object_or_404(Question, pk=pk)
+    if request.method == "POST":
+        form = AnswerForm(request.POST)
+        if form.is_valid():
+            answer = form.save(commit=False)
+            answer.question = question
+            answer.user = request.user
+            answer.save()
+    else:
+        form = AnswerForm()
+    return render(request, 'userprofile/question_detail.html', {'question': question, "form":form, "course": course})

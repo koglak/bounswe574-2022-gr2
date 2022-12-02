@@ -19,7 +19,7 @@ Forum
             </div>
         </div>
 
-        <div class="col-sm-9">
+        <div class="col-sm-11">
             <!-- Search and create new question button-->
             <div class="container-fluid">
                 <div class="row">
@@ -84,7 +84,7 @@ Forum
                         </div>
                         <!--Question text-->
                         <div class="row">
-                            <a href="#" class="post-title">{{ question.title }}</a>
+                            <a href="{% url 'space_question_detail' pk=question.pk title=course.title %}" class="post-title">{{ question.title }}</a>
                             <p class="post-text">{{question.question | safe}}</p>
                         </div>
                         <!--Question Footer-->

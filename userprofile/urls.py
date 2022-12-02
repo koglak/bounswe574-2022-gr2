@@ -31,6 +31,6 @@ urlpatterns = [
     path('event/<int:pk>',views.event_detail,name='event_detail'),
     path('<str:title>/forum_page',views.forum_page,name='forum_page'),
     path('<str:title>/forum_page/question_new/', views.question_new, name='space_question_new'),
-
+    path('<str:title>/forum_page/<int:pk>/', views.question_detail, name='space_question_detail'),
 ]
 
