@@ -4,6 +4,7 @@ from quiz.models import Case, CaseResult, Question, QuestionList, Score, CaseRat
 from userprofile.models import Course
 from .forms import CaseForm, QuestionForm, QuizForm, CaseResultForm, ScoreForm, CommentForm
 from django.shortcuts import redirect, get_object_or_404
+from django.urls import reverse, reverse_lazy
 from django.utils import timezone
 from django.forms import modelformset_factory
 from django.contrib.auth.decorators import login_required
@@ -142,7 +143,27 @@ def case_detail(request,title):
         return render(request, 'quiz/case_detail.html', {'case':case, 'form': form, 'course': course})
 
 @login_required(login_url="/login")
-def case_list(response, title):
+def case_list(request,title):
+    case=Case.objects.get(title=title)
+    course=Course.objects.get(case_list=case)
+
+    form= CaseResultForm()
+
+    if request.method == 'POST':  
+        form = CaseResultForm(request.POST, request.FILES)  
+        if form.is_valid():  
+            result = form.save(commit=False)
+            result.user=request.user
+            result.shared_date = timezone.now()
+            result.case=case
+            result.save()
+            return redirect('course_detail', title=course.title)  
+    else:  
+        form= CaseResultForm()
+        return render(request, 'quiz/case_list.html', {'case':case, 'form': form, 'course': course})
+
+@login_required(login_url="/login")
+def list_all_cases(response, title):
     startdate = datetime.today()
     enddate = startdate + timedelta(days=365)
     case=get_object_or_404(Case, title=title)
@@ -177,7 +198,7 @@ def case_list(response, title):
     page = response.GET.get('page')
     cases= paginator.get_page(page)
 
-    return render(response, "userprofile/case_page.html", {'course': course, 'case':case, "form": form, "form_date": form_date})
+    return render(response, "userprofile/case_list.html", {'course': course, 'case':case, "form": form, "form_date": form_date})
 
 
 @login_required(login_url="/login")
@@ -188,11 +209,16 @@ def case_grade(request,title):
         list_formset = ListFormSet(request.POST)
         if list_formset.is_valid():
             list_formset.save()
-            return redirect('case_grade', title=case.title)  
+            return redirect('case_list', title=case.title)  
     else: 
         list_formset = ListFormSet(queryset=CaseResult.objects.filter(case=case).order_by('shared_date'))
         course=Course.objects.get(case_list=case)
-        return render(request, 'quiz/case_grade.html', {'list_formset': list_formset, 'course':course} )
+        return render(request, 'quiz/case_list.html', {'list_formset': list_formset, 'course':course} )
+
+def delete_submission(request, title):
+    case=Case.objects.get(title=title)
+    success_url = reverse_lazy('case_list')
+
 
 @login_required(login_url="/login")
 def case_rate(request, pk):
@@ -213,14 +239,14 @@ def case_rate(request, pk):
             obj.save()
             case_result.averagereview()
 
-    return redirect('case_grade', title=case.title)
+    return redirect('case_list', title=case.title)
 
 
-def comment_detail(request):
+def comment_detail(response, pk):
     case = Case.objects.get(pk = pk)
     #count_hit = True
 
-    if request.method == "POST":
+    if response.method == "POST":
         form = CommentForm(response.POST)
 
         if form.is_valid():
@@ -237,30 +263,12 @@ def comment_detail(request):
         'course': case.course,
         'case': case,
         'enrolled_users': Case.enrolled_users.through.objects.all(),
-        'count': count,
         'form': form
     }
  
-    return render(request, 'quiz/case_detail.html', context)
+    return render(response, 'quiz/comment_detail.html', context)
 
-def comment_new(request):
-    if request.method == "POST":
-        form = CommentForm(request.POST)
-
-        if form.is_valid():
-            comment = form.save(commit=False)
-            commment.published_date = timezone.now()
-            comment.author = request.user
-            comment.save()
-            form.save_m2m()
-
-            return redirect('case_detail', pk = comment.pk)
-    else:
-        form = CommentForm()
-        pk = "none"
-    return render(request, 'quiz/case_detail.html', {'form': form, 'pk': pk})
-
-            
+        
 def comment_edit(request, pk):
     comment = get_object_or_404(Comment, pk=pk)
     if request.method == "POST":
@@ -272,22 +280,22 @@ def comment_edit(request, pk):
             comment.save()
             form.save_m2m()
 
-            return redirect('case_detail', pk=post.pk)
+            return redirect('comment_detail', pk=post.pk)
     else:
         form = CommentForm(instance=comment)
-    return render(request, 'quiz/case_edit.html', {'form': form, 'pk': pk})
+    return render(request, 'quiz/comment_detail.html', {'form': form, 'pk': pk})
 
 def delete_comment(request, pk):
     comment = Comment.objects.get(pk=pk)
     comment.delete()
-    return redirect('comment')
+    return redirect('comment_detail')
 
 @login_required(login_url="/login")
 def LikeView_comment(request, pk):
     comment = get_object_or_404(Comment, id=request.POST.get('comment_id'))
     comment.likes.add(request.user)
     comment.dislikes.remove(request.user)
-    return redirect('case_detail', pk=pk)
+    return redirect('comment_detail', pk=pk)
 
 
 @login_required(login_url="/login")
@@ -295,7 +303,7 @@ def LikeViewList_comment(request):
     comment = get_object_or_404(Post, id=request.POST.get('comment_id'))
     comment.likes.add(request.user)
     comment.dislikes.remove(request.user)
-    return redirect('comment')
+    return redirect('comment_detail')
 
 
 @login_required(login_url="/login")
@@ -303,7 +311,7 @@ def DislikeView_comment(request, pk):
     comment = get_object_or_404(Post, id=request.POST.get('comment_id'))
     comment.dislikes.add(request.user)
     comment.likes.remove(request.user)
-    return redirect('case_detail', pk=pk)
+    return redirect('comment_detail', pk=pk)
 
 
 @login_required(login_url="/login")
@@ -311,7 +319,7 @@ def DislikeViewList_comment(request):
     comment = get_object_or_404(Post, id=request.POST.get('comment_id'))
     comment.dislikes.add(request.user)
     comment.likes.remove(request.user)
-    return redirect('case_page')
+    return redirect('comment_detail')
 
 
 def search_case(request):
