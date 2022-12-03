@@ -18,9 +18,8 @@
     <strong>Description: </strong>
     <p class = "post-text">{{case.description | safe}}</p>
     <hr>
-    {% if user.is_authenticated or submission.user.id == user.id %}
-    
-        <p class="post-author"> Upload Your Work:</p>
+    {% if user in case.user %}
+    <p class="post-author"> Upload Your Work:</p>
         <form method="POST" class="post-form" enctype="multipart/form-data">  
             {% csrf_token %}  
             {{form.as_p}}
@@ -28,166 +27,9 @@
             <hr>
         </form>
     {% endif %}
+    <div>
+      <a href="#" class="btn btn-warning">Update</a>
+      <a href="{% url 'delete_submission' title=case.title %}" class="btn btn-danger">Delete</a>
+    </div>
 </div>
-<br>
-{% for submission in submitted %}
-<div class="jumbotron container row">
-<p class = "post-title"> Top rated studies </p>
-  <br>
-  <table class="table table-striped">
-    <thead>
-      <tr>
-        <th scope="col">#</th>
-        <th scope="col">User Name</th>
-        <th scope="col">Submission Date</th>
-        <th scope="col">File</th>
-        <th scope="col">Rated By Users</th>
-
-      </tr>
-    </thead>
-    <tbody>
-      <form enctype="multipart/form-data" method="POST">
-
-        {{ list_formset.management_form }}
-        {% csrf_token %}
-
-        {% for list_form in list_formset %}
-          <tr id="row_{{ list_form.instance.id }}">
-            <th scope="row">{{forloop.counter}}</th>
-            
-            <td> 
-              <a href="{% url 'other_user_profile' name=list_form.instance.user.username %}" class="post-author" style="font-family:'Poppins';font-size:18px; font-weight: 600px; margin-right:5px">
-                {{list_form.instance.user}}
-              </a>
-            </td>
-            
-            <td>{{ list_form.instance.shared_date }}</td>
-            
-            <td><a href="{{ MEDIA_URL }}{{list_form.instance.upload.url}}">See submitted work</a></td>
-            
-            <td>{{list_form.instance.score}}/100</td>
-
-            <td>
-              <!--All users can rate case studies-->
-              <form class="form-inline my-2 my-lg-0" action="{% url 'case_rate' pk=list_form.instance.pk %}" method="POST">
-                {% csrf_token %}
-                {% if user.is_authenticated %}
-                    <span class="star-rating">
-                        <input type="radio" name="rating" value="1"><i>1</i>
-                        <input type="radio" name="rating" value="2"><i>2</i>
-                        <input type="radio" name="rating" value="3"><i>3</i>
-                        <input type="radio" name="rating" value="4"><i>4</i>
-                        <input type="radio" name="rating" value="5"><i>5</i>
-                    </span>
-                    <button class="btn btn-outline-success my-2 my-sm-0 btn-sm" type="submit">Rate</button>
-                  {% endif %}
-                  <span style="font-family:'Poppins'; opacity:0.8">{{list_form.instance.averagereview|floatformat:'2' }}/5</span>      
-              </form>
-
-            </td>
-
-            <!--Only case owner can grade the case studies-->
-            <!--
-            {% if user == list_form.instance.case.user %}
-              {{ list_form }} 
-            {% endif %}
-            -->
-          </tr>
-
-        {% endfor %}
-
-        {% if user == list_form.instance.case.user %}
-          <button type="submit" class="save btn btn-success">Save</button>
-        {% endif %}
-      </form>
-    </tbody>
-  </table>
-  {% empty %}
-  <div class="jumbotron container row">
-  <h5><p><strong style = "background-color:lightcoral">There is no rated work yet.   </stong></p></h5> 
-     {% endfor %}
-  </div>
-</div>
-<br><br>
-<hr>
-<div class = "container">
-  <div class = "row">
-      <div class = "mx-auto">
-          <!--Display comment-->          
-          <div class = "row mt-5">
-            <div class = "col-lg-6">
-              {% if not case.comments.all %}
-              No comments yet
-              {% else %}
-              Comment {{ comment.count | pluralize }}
-              {% endif %}
-            </div>
-          {% for comment in case.comments.all %}
-          <div class = "col-lg-12 mt-4">
-            <div class = card>
-              <div class = "row">
-                {% if comment.authorProfileImg %}
-                <div class = "col-12">
-                  <img class="rounded-circle shadow-1-strong me-3" src="{{enrolled_user.userProfileImg.url}}" alt="avatar" width="60" height="60" />                  
-                  <strong>{{ comment.author }}</strong> <i>said</i>
-                </div>
-                {% else %}
-                <div class = "col-12">
-                  <img class="rounded-circle shadow-1-strong me-3" src="http://cdn.onlinewebfonts.com/svg/img_24787.png" alt="avatar" width="60" height="60" />                 
-                  <strong>{{ comment.author }}</strong> <i>said</i>
-                </div>
-                {% endif %}
-                <div class = "col-12">
-                  <p class = "mt-2 mt-3">{{ comment.body }}</p>
-                  <p class = "text-right text-muted"><small>{{ comment.published_date}}</small></p>
-                </div>
-                <!--Like Button-->
-                <div class="col-sm-1 col-lg-1 col-xl-1">
-                  <form action="{% url 'like_comment' pk=comment.pk %}" method="POST">
-                      {% csrf_token %}
-                          <button type="submit", name="post_id", value="{{post.id}}", class="btn btn-outline-primary btn-sm" >Like</button>
-                          <p style="display: inline; font-weight: bold;">{{comment.total_likes}}</p>
-                  </form>
-                </div>
-                <br>
-                <!--Disike Button-->
-                <div class="col-sm-1 col-lg-1 col-xl-1">
-                  <form action="{% url 'dislike_comment' pk=comment.pk %}" method="POST">
-                      {% csrf_token %}
-                          <button type="submit", name="post_id", value="{{post.id}}", class="btn btn-outline-warning btn-sm" >Dislike</button>
-                          <p style="display: inline; font-weight: bold;">{{comment.total_dislikes}}</p>
-                  </form>
-                </div>
-                <br>
-                <!--Comment Edit
-                <form method="POST" class="question-form">
-                    {% csrf_token %}
-                    <a class="btn btn-outline-danger" href="{% url 'comment'  %}">Delete</a>
-                </form>
-                -->
-              </div>
-            </div>
-          </div>
-          {% endfor %}
-          </div>
-          <br>
-          <!--Display form-->
-          <div class="row mt-7">
-            <div class="col-lg-8">
-              <h3>Leave a comment</h3>
-              <form method='POST'>
-                {% csrf_token %}
-                <div class="form-group">
-                  <span class="ml-2"></span>
-                  <textarea class="form-control {% if form.content.errors %}is-invalid{% endif %}" id="id_content"
-                    name="content" rows="4">{{ form.content.value|default:'' }}</textarea>
-                </div>
-                <button class="btn btn-primary mt-2 ml-3" type="submit">Submit</button>
-              </form>
-            </div>
-          </div>
-      </div>
-  </div>
-</div>
-
 {% endblock %}
