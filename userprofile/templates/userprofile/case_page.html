@@ -59,7 +59,7 @@
                     {% for case in course.case_list.all %}
                         {% if case.publish_date_check %}
                             <li class="list-group-item list-group-item-action">
-                                <a href="{% url 'case_detail' title=case.title %}" class="post-text" style="text-decoration:none"> Case: {{case.title}}</a>
+                                <a href="{% url 'case_list' title=case.title %}" class="post-text" style="text-decoration:none"> Case: {{case.title}}</a>
                                 <p>Published date: {{case.published_date}}</p>
                                 <p>Created by: <a href="{% url 'other_user_profile' name=case.user %}">{{case.user}}</p></a>
                             </li> 
@@ -70,7 +70,7 @@
                     {% for case in course.case_list.all %}
                         {% if case.get_remaining_days %}
                             <li class="list-group-item list-group-item-action">
-                                <a href="{% url 'case_detail' title=case.title %}" class="post-text" style="text-decoration:none"> Case: {{case.title}}</a>
+                                <a href="{% url 'case_list' title=case.title %}" class="post-text" style="text-decoration:none"> Case: {{case.title}}</a>
                                 <p>Due date: {{case.due_date}}</p>
                                 <p>Created by: <a href="#">{{case.user}}</p></a>
                             </li> 
@@ -81,7 +81,7 @@
                         {% bs_icon 'archive' size='1em' %} <a href = "#">Cases Closed</a> 
                             {% for case in course.case_list.all %}
                                 <li class="list-group-item list-group-item-action">
-                                    <a href="{% url 'case_detail' title=case.title %}" class="post-text" style="text-decoration:none"> Case: {{case.title}}</a>
+                                    <a href="{% url 'case_list' title=case.title %}" class="post-text" style="text-decoration:none"> Case: {{case.title}}</a>
                                     <p>Rating: {{case.score}}</p>
                                     <p>Created by: <a href="#">{{case.user}}</p></a>
                                 </li> 
