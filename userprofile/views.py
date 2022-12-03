@@ -441,7 +441,7 @@ def question_edit(request, pk, title):
             return redirect(f'/myspace/{course.title}/forum_page/{question.pk}')
     else:
         form = QuestionForm(instance=question)
-    return render(request, 'userprofile/question_edit.html', {'form': form, 'pk': pk})
+    return render(request, 'userprofile/question_edit.html', {'form': form, 'pk': pk, "course": course, "question": question})
 
 @login_required(login_url="/login")
 def LikeView(request, pk, title):
@@ -485,4 +485,10 @@ def DislikeViewList(request, pk, title):
     question = get_object_or_404(Question, pk=pk)
     question.likes.remove(request.user)
     question.dislikes.add(request.user)
+    return redirect("forum_page", title=title)
+
+@login_required(login_url="/login")
+def delete_question(request, pk, title):
+    question = Question.objects.get(pk=pk)
+    question.delete()
     return redirect("forum_page", title=title)

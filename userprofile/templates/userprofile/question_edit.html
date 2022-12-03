@@ -14,7 +14,7 @@
         {{label}}
         <button type="submit" class="save btn btn-success">Ask</button>
         {% if pk != "none" %}
-        <a class="btn btn-outline-danger" href="#">Delete Question</a>
+        <a class="btn btn-outline-danger" href="{% url 'space_delete_question' title=course.title pk=question.pk %}">Delete Question</a>
         {% endif %}
     </form>
 

@@ -39,5 +39,7 @@ urlpatterns = [
     path('<str:title>/forum_page/<int:pk>/<int:num>/answer_dislike', views.AnswerDislikeView, name='space_question_detail_answer_dislike'),
     path('<str:title>/forum_page/<int:pk>/question_like/', views.LikeViewList, name='space_question_like'),
     path('<str:title>/forum_page/<int:pk>/question_dislike/', views.DislikeViewList, name='space_question_dislike'),
+    path('<str:title>/forum_page/<int:pk>/delete_question/', views.delete_question, name='space_delete_question'),
+
 ]
 
