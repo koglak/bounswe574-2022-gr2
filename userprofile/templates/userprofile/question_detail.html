@@ -8,6 +8,15 @@
 
 
 <div class="container bootstrap snippets bootdey">
+  <div class="row mt-2 p-2">
+    <!--Page Navigation-->
+    <h5> <a href="{% url 'course_detail' title=course.title %}"> Space: {{course.title}} </a>
+        >
+        <a href="{% url 'forum_page' title=course.title %}"> Forum </a>
+        >
+        {{question.title}}
+    </h5>
+</div>
   <div class="row">
       <div class="post-list">
           <div class="row">
