@@ -1,0 +1,42 @@
+{% extends 'blog/base.html' %}
+
+{% block title %}
+    Space Metrics
+{% endblock %}
+
+{% block content %}
+
+
+
+    <div class="container-fluid" style="margin-top: 10px;">
+        <div class="row">
+            <div class="col-sm-3">
+                <!--Enroll & Drop Button-->
+                {% if user.is_authenticated %}
+                        {% include 'includes/enroll_drop.html' with course=course %}
+                {% endif %}
+
+                <!-- Side List -->
+                {% include 'includes/sidebar.html' with course=course page="lecture" %}
+            </div>
+
+            <div class="col-sm-6">
+                <h3>Space Metrics</h3>
+                <strong>Enrolled Users: </strong> {{course.enrolled_users.count}}
+                <br/>
+                <strong>Resources:</strong> {{course.lecture.count}}
+                <br/>
+                <strong>Case Studies:</strong> {{course.case_list.count}} 
+                <br/>
+                <strong>Events:</strong>{{course.event_list.count}}
+                <br/>
+                <strong>Quizzes:</strong> {{course.question_list.count}} 
+            </div>
+
+            <!--Course Block: Course2 Template-->
+            <div class="col-sm-3">
+                {% include 'includes/course2.html' with course=course select="course" %}
+            </div>
+        </div> 
+    </div>
+{% endblock %}

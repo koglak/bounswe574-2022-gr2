@@ -1,15 +1,20 @@
 {% load bootstrap_icons %}
 
-<div class="btn-group" role="group" >
-    <a href="{% url 'course_detail' title=course.title %}" class="btn btn-dark">Space Contents</a>
-    <a href="{% url 'quiz_page' title=course.title %}" type="button" class="btn btn-dark" >Space Quizzes</a>
-    <a href="{% url 'case_page' title=course.title %}" type="button" class="btn btn-dark" >Case Studies</a>
-    <a href="{% url 'event_list' title=course.title %}" type="button" class="btn btn-dark" >Space Events</a>
-    <a href="{% url 'forum_page' title=course.title %}" type="button" class="btn btn-dark" >Space Forum</a>
+<div class="btn-group" role="group">
+    <a href="{% url 'course_detail' title=course.title %}" class="btn btn-dark">Space Resources</a>
+    <a href="{% url 'quiz_page' title=course.title %}" type="button" class="btn btn-dark">Space Quizzes</a>
+    <a href="{% url 'case_page' title=course.title %}" type="button" class="btn btn-dark">Case Studies</a>
+</div>
+<div class="btn-group" role="group">
+    <a href="{% url 'event_list' title=course.title %}" type="button" class="btn btn-dark">Space Events</a>
+    <a href="{% url 'forum_page' title=course.title %}" type="button" class="btn btn-dark">Space Forum</a>
+    <a href="{% url 'metric_pages' title=course.title %}" type="button" class="btn btn-dark">Space Metrics</a>
+
+
 </div>
 
- <!-- Create Lecture & Quiz & Case Study Button-->
- <!-- {% if user in course.collaborative_members.all or user == course.user %}
+<!-- Create Lecture & Quiz & Case Study Button-->
+<!-- {% if user in course.collaborative_members.all or user == course.user %}
  <div class="btn-group" role="group" aria-label="Basic example">
      <a href="{% url 'lecture_new' pk=course.pk %}" type="button" class="btn btn-primary">Create Content</a>
      <a href="{% url 'quiz_create' title=course.title %}" class="btn btn-primary">Create Quiz</a>
@@ -21,39 +26,44 @@
 <div id="list-example" class="list-group">
 
     {% if page == 'lecture' %}
-        {% for lecture in course.lecture.all %} 
-        <li class="list-group-item list-group-item-action">
-                {% if user in course.collaborative_members.all or user == course.user %}
-                    <a href="{% url 'lecture_edit' pk=lecture.pk %}" class="post-text" style="text-decoration:none"> {% bs_icon 'pencil' size='1.5em' %}|</a>
-                {% endif %}
-            
-                <a href="{% url 'lecture_detail' pk=lecture.pk %}" class="post-text" style="text-decoration:none"> Content: {{lecture.title}}</a>
-            </li> 
-        {% endfor %}
-    
-    {% elif page == 'quiz' %}
-        {% for quiz in course.question_list.all %} 
+    {% for lecture in course.lecture.all %}
+    <li class="list-group-item list-group-item-action">
+        {% if user in course.collaborative_members.all or user == course.user %}
+        <a href="{% url 'lecture_edit' pk=lecture.pk %}" class="post-text" style="text-decoration:none"> {% bs_icon
+            'pencil' size='1.5em' %}|</a>
+        {% endif %}
 
-            <li class="list-group-item list-group-item-action">
-                {% if user in course.collaborative_members.all or user == course.user %}
-                    <a href="#" class="post-text" style="text-decoration:none"> {% bs_icon 'pencil' size='1.5em' %}|</a>
-                {% endif %}
-                <a href="{% url 'quiz_detail' title=quiz.title %}" class="post-text" style="text-decoration:none"> Quiz: {{quiz.title}}</a>
-                <span class="badge alert-success">Score: {{score_list | get_all_scores:quiz }} </span>
-            </li> 
-        {% endfor %}
+        <a href="{% url 'lecture_detail' pk=lecture.pk %}" class="post-text" style="text-decoration:none"> Content:
+            {{lecture.title}}</a>
+    </li>
+    {% endfor %}
+
+    {% elif page == 'quiz' %}
+    {% for quiz in course.question_list.all %}
+
+    <li class="list-group-item list-group-item-action">
+        {% if user in course.collaborative_members.all or user == course.user %}
+        <a href="#" class="post-text" style="text-decoration:none"> {% bs_icon 'pencil' size='1.5em' %}|</a>
+        {% endif %}
+        <a href="{% url 'quiz_detail' title=quiz.title %}" class="post-text" style="text-decoration:none"> Quiz:
+            {{quiz.title}}</a>
+        <span class="badge alert-success">Score: {{score_list | get_all_scores:quiz }} </span>
+    </li>
+    {% endfor %}
 
     {% elif page == 'case' %}
-       
-    
+
+
     {% elif page == 'event' %}
-        <li class="list-group-item list-group-item-action">
-            <a href="{% url 'event_list' title=course.title %}" class="post-text" style="text-decoration:none"> Up Coming Events</a> 
-        </li> 
-        <li class="list-group-item list-group-item-action">
-            <a href="{% url 'past_event' title=course.title %}" class="post-text" style="text-decoration:none"> Past Events</a>
-        </li>
-    
+    <li class="list-group-item list-group-item-action">
+        <a href="{% url 'event_list' title=course.title %}" class="post-text" style="text-decoration:none"> Up Coming
+            Events</a>
+    </li>
+    <li class="list-group-item list-group-item-action">
+        <a href="{% url 'past_event' title=course.title %}" class="post-text" style="text-decoration:none"> Past
+            Events</a>
+    </li>
+
     {% endif %}
 
 </div>

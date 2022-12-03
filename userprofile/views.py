@@ -503,3 +503,9 @@ def search_question(request, title):
         return render(request, 'userprofile/forum_page.html', {'course': course, 'questions': results}) 
     else:
         return render(request, "userprofile/forum_page.html", {'course': course}) 
+
+@login_required(login_url="/login")
+def metric_pages(request, title):
+    course=get_object_or_404(Course, title=title)
+    
+    return render(request, "userprofile/space_metrics.html", {"course":course}) 
