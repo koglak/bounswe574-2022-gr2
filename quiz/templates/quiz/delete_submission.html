@@ -1,0 +1,24 @@
+{% extends 'blog/base.html' %}
+
+{% block main_content %}
+    {% if user.is_authenticated or submission.author == user %}
+        <div class="container">
+            <div class="jumbotron">
+                <h2>Are you sure you want to delete this submission?</h2>
+                <form method="post">
+                    {% csrf_token %}
+                    <input type="submit" value="Confirm Delete" class="btn btn-danger btn-large">
+                    <a href="{% url 'case_detail' title=case.title %}" class="btn btn-primary btn-large">Cancel</a>
+                </form>
+            </div>
+        </div>
+    {% else %}
+        <div class="container">
+            <div class="jumbotron">
+                <h2>You are not allowed to delete the submission</h2>
+            </div>
+        </div>
+    {% endif %}
+        
+{% endblock %}
+    
