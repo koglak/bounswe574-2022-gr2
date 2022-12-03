@@ -107,6 +107,7 @@ class CaseResult(models.Model):
     upload = models.FileField(upload_to='uploads/')
     shared_date=models.DateTimeField(blank=True, null=True)
     score=models.IntegerField(null=True, default='0', validators=[MinValueValidator(0), MaxValueValidator(100)])
+    scored = models.BooleanField(default = False)
 
     def get_context_data(self, **kwargs):
         submissions = Case.objects.filter(pk = self.kwargs['pk'])
@@ -122,8 +123,17 @@ class CaseResult(models.Model):
             avg=float(rating["avarage"])
         return avg
 
+    def delete(self, *args, **kwargs):
+        os.remove(os.path.join(settings.MEDIA_ROOT, self.upload.name))
+        super().delete(*args, **kwargs)
+
+    def case_assignment(self, score):
+        self.score = score
+        self.rated = True
+        self.save()
+
     def __str__(self):
-        return str(self.score)
+        return str(self.case)
 
 class CaseRating(models.Model):
 
