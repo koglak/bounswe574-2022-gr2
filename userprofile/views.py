@@ -492,3 +492,14 @@ def delete_question(request, pk, title):
     question = Question.objects.get(pk=pk)
     question.delete()
     return redirect("forum_page", title=title)
+
+@login_required(login_url="/login")
+def search_question(request, title):
+    course=get_object_or_404(Course, title=title)
+    if request.method == "POST":
+        searched = request.POST["searched"]
+        results=Question.objects.filter(course=course, title__icontains=searched)
+
+        return render(request, 'userprofile/forum_page.html', {'course': course, 'questions': results}) 
+    else:
+        return render(request, "userprofile/forum_page.html", {'course': course}) 

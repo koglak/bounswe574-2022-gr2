@@ -24,7 +24,7 @@ Forum
             <div class="container-fluid">
                 <div class="row">
                     <div class="col-sm-6">
-                        <form class="form-inline my-2 my-lg-0" method=POST action="#"
+                        <form class="form-inline my-2 my-lg-0" method=POST action="{% url 'space_search_question' title=course.title %}"
                             style="margin:15px;padding-top: 20px;">
                             {% csrf_token %}
                             <input class="form-control mr-sm-2" style="width:250px; float:left; margin-right:10px"
