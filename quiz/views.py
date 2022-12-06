@@ -121,6 +121,14 @@ def case_create(request,title):
             return redirect('case_detail', title=case.title)
     return render(request, 'quiz/case_create.html', {'course': course, 'form':form})
 
+@login_required(login_url="/login")
+def case_delete(request, title):
+    case = Course.objects.get(title=title)
+    course= Course.objects.get(question_list__pk=case.pk)
+
+    quiz.delete()
+    return redirect('case_delete', title=course.title)
+
 
 @login_required(login_url="/login")
 def case_detail(request,title):
@@ -162,44 +170,6 @@ def case_list(request,title):
         form= CaseResultForm()
         return render(request, 'quiz/case_list.html', {'case':case, 'form': form, 'course': course})
 
-@login_required(login_url="/login")
-def list_all_cases(response, title):
-    startdate = datetime.today()
-    enddate = startdate + timedelta(days=365)
-    case=get_object_or_404(Case, title=title)
-    case_list= Event.objects.filter(case=case, event_date__range=[startdate, enddate])
-
-
-    form_date=DateFilterForm(response.POST or None)
-
-    if response.method == "POST":
-        # Date Sorting
-        if 'published_date' in response.POST:
-                form_date=DateFilterForm(response.POST)
-                print("published_date")
-                if form_date.is_valid():
-                    print("valid")
-                    date_filter= response.POST['published_date']
-                    print(date_filter)
-                    if date_filter =="Ascending":
-                        print("here")
-                        case_list= Event.objects.filter(course=course, case_date__range=[startdate, enddate]).order_by('published_date__day', 'published_date__month')
-                    else:
-                        print("else")
-                        event_list= Event.objects.filter(course=course, event_date__range=[startdate, enddate]).order_by('-event_date__day', '-event_date__month')
-        # Keyword Search
-        else:
-            searched = response.POST["case_searched"]
-            event_list=Event.objects.filter(course=course, title__icontains=searched, event_date__range=[startdate, enddate])
-            form = CategorySortingForm(use_required_attribute=False)
-            form_date=DateFilterForm(use_required_attribute=False)
-
-    paginator = Paginator(case_list,3) 
-    page = response.GET.get('page')
-    cases= paginator.get_page(page)
-
-    return render(response, "userprofile/case_list.html", {'course': course, 'case':case, "form": form, "form_date": form_date})
-
 
 @login_required(login_url="/login")
 def case_grade(request,title):
@@ -209,15 +179,16 @@ def case_grade(request,title):
         list_formset = ListFormSet(request.POST)
         if list_formset.is_valid():
             list_formset.save()
-            return redirect('case_list', title=case.title)  
+            return redirect('case_detail', title=case.title)  
     else: 
         list_formset = ListFormSet(queryset=CaseResult.objects.filter(case=case).order_by('shared_date'))
         course=Course.objects.get(case_list=case)
-        return render(request, 'quiz/case_list.html', {'list_formset': list_formset, 'course':course} )
+        return render(request, 'quiz/case_detail.html', {'list_formset': list_formset, 'course':course} )
+    
 
 def delete_submission(request, title):
     case=Case.objects.get(title=title)
-    success_url = reverse_lazy('case_list')
+    success_url = reverse_lazy('delete_submission')
 
 
 @login_required(login_url="/login")
@@ -239,7 +210,7 @@ def case_rate(request, pk):
             obj.save()
             case_result.averagereview()
 
-    return redirect('case_list', title=case.title)
+    return redirect('case_detail', title=case.title)
 
 
 def comment_detail(response, pk):
