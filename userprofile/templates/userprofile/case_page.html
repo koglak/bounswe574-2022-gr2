@@ -3,7 +3,7 @@
 {% load bootstrap_icons %}
 
 {% block title %}
-    Event Detail
+    Case Study Detail
 {% endblock %}
 
 {% block content %}
@@ -59,7 +59,7 @@
                     {% for case in course.case_list.all %}
                         {% if case.publish_date_check %}
                             <li class="list-group-item list-group-item-action">
-                                <a href="{% url 'case_list' title=case.title %}" class="post-text" style="text-decoration:none"> Case: {{case.title}}</a>
+                                <a href="{% url 'case_detail' title=case.title %}" class="post-text" style="text-decoration:none"> Case: {{case.title}}</a>
                                 <p>Published date: {{case.published_date}}</p>
                                 <p>Created by: <a href="{% url 'other_user_profile' name=case.user %}">{{case.user}}</p></a>
                             </li> 
@@ -70,7 +70,7 @@
                     {% for case in course.case_list.all %}
                         {% if case.get_remaining_days %}
                             <li class="list-group-item list-group-item-action">
-                                <a href="{% url 'case_list' title=case.title %}" class="post-text" style="text-decoration:none"> Case: {{case.title}}</a>
+                                <a href="{% url 'case_detail' title=case.title %}" class="post-text" style="text-decoration:none"> Case: {{case.title}}</a>
                                 <p>Due date: {{case.due_date}}</p>
                                 <p>Created by: <a href="#">{{case.user}}</p></a>
                             </li> 
@@ -81,7 +81,7 @@
                         {% bs_icon 'archive' size='1em' %} <a href = "#">Cases Closed</a> 
                             {% for case in course.case_list.all %}
                                 <li class="list-group-item list-group-item-action">
-                                    <a href="{% url 'case_list' title=case.title %}" class="post-text" style="text-decoration:none"> Case: {{case.title}}</a>
+                                    <a href="{% url 'case_detail' title=case.title %}" class="post-text" style="text-decoration:none"> Case: {{case.title}}</a>
                                     <p>Rating: {{case.score}}</p>
                                     <p>Created by: <a href="#">{{case.user}}</p></a>
                                 </li> 
@@ -89,9 +89,46 @@
                     {% endif %}   
                 {% endif %} 
         {% endif %}
-                            
+        <div class="row">  
+           </div>
+
+                <nav aria-label="Page navigation example">
+                    <ul class="pagination justify-content-end">
+                        {% if events.has_previous %}
+                            <li class="page-item">
+                                <a class="page-link" href="?page=1" tabindex="-1">&laquo; First</a>
+                            </li>
+                            <li class="page-item">
+                                <a class="page-link" href="?page={{ events.previous_page_number }}" tabindex="-1">Previous</a>
+                            </li>
+                        {% else %}
+                            <li class="page-item disabled">
+                                <a class="page-link" href="#" tabindex="-1">Previous</a>
+                            </li>
+                        {% endif %}
+                    
+                    <li class="page-item"><a class="page-link text-dark" >Page {{ events.number }} of {{ events.paginator.num_pages }}</a></li>
+            
+
+                    {% if events.has_next %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ events.next_page_number }}">Next</a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ events.paginator.num_pages }}">Last &raquo;</a>
+                        </li>
+                    {% else %}
+                        <li class="page-item disabled">
+                            <a class="page-link" href="#" tabindex="-1">Last</a>
+                        </li>
+                    {% endif %}
+                    </ul>
+                </nav>
+
+            </div>
+                              
      
-        </div>
+   
         
 
         
