@@ -315,40 +315,31 @@ def case_page(response, title):
 def case_list(response, title):
     startdate = datetime.today()
     enddate = startdate + timedelta(days=365)
-    case=get_object_or_404(Case, title=title)
-    case_list= Event.objects.filter(case=case, event_date__range=[startdate, enddate])
+    course=get_object_or_404(Course, title=title)
+    case_list= Case.objects.filter(course=course, case_date__range=[startdate, enddate])
+    paginate_by = 2
 
-    form = CategorySortingForm(response.POST or None)
     form_date=DateFilterForm(response.POST or None)
 
     if response.method == "POST":
         # Date Sorting
         if 'published_date' in response.POST:
                 form_date=DateFilterForm(response.POST)
-                print("published_date")
                 if form_date.is_valid():
-                    print("valid")
                     date_filter= response.POST['published_date']
-                    print(date_filter)
                     if date_filter =="Ascending":
-                        print("here")
-                        case_list= Event.objects.filter(course=course, case_date__range=[startdate, enddate]).order_by('published_date__day', 'published_date__month')
+                        case_list= Case.objects.filter(course=course, case_date__range=[startdate, enddate]).order_by('published_date__day', 'published_date__month')
                     else:
-                        print("else")
-                        event_list= Event.objects.filter(course=course, event_date__range=[startdate, enddate]).order_by('-event_date__day', '-event_date__month')
-        # Keyword Search
-        else:
-            searched = response.POST["case_searched"]
-            event_list=Event.objects.filter(course=course, title__icontains=searched, event_date__range=[startdate, enddate])
-            form = CategorySortingForm(use_required_attribute=False)
-            form_date=DateFilterForm(use_required_attribute=False)
+                        case_list= Case.objects.filter(course=course, case_date__range=[startdate, enddate]).order_by('-published_date__day', '-published_date__month')
+    # No post request
+    else:
+        form_date=DateFilterForm(use_required_attribute=False)
 
     paginator = Paginator(case_list,3) 
     page = response.GET.get('page')
     cases= paginator.get_page(page)
 
-    return render(response, "userprofile/case_page.html", {'course': course, 'case':case, "form": form, "form_date": form_date})
-
+    return render(response, "userprofile/case_page.html", {'course': course, ' cases': cases, "form": form, "form_date": form_date})
 
 
 @login_required(login_url="/login")
@@ -394,4 +385,7 @@ def delete_event(request, pk):
     event = Event.objects.get(pk=pk)
     event.delete()
     return redirect('event_list', title=event.course.title)
+
+
+
 
