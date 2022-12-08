@@ -126,3 +126,55 @@ class Comments(models.Model):
 
     def __str__(self):
         return self.event.title
+
+
+class Question(models.Model):
+   
+    course=models.ForeignKey(Course,default=None, on_delete=models.CASCADE, related_name="space_question")
+    user=models.ForeignKey(User,default=None, on_delete=models.CASCADE)
+    title = models.CharField(max_length=255)
+    question = tinymce_models.HTMLField()
+    published_date=models.DateTimeField(blank=True, null=True)
+    tags = TaggableManager()
+    likes = models.ManyToManyField(User, related_name='space_question_like')
+    dislikes = models.ManyToManyField(User, related_name='space_question_dislike')
+
+    def total_likes(self):
+        return self.likes.count()
+
+    def total_dislikes(self):
+        like=self.likes.count()
+        like=like-1
+        return self.dislikes.count()
+    
+    def userProfileImg(self):
+        user = Profile.objects.get(user=self.user)
+        return user.img
+
+    # when we call __str__, it will turn a text
+    def __str__(self):
+        return self.title
+
+
+class Answer(models.Model):
+    question = models.ForeignKey(Question, on_delete=models.CASCADE, related_name="space_question_answer")
+    user=models.ForeignKey(User,default=None, on_delete=models.CASCADE)
+    answer = tinymce_models.HTMLField()
+    published_date = models.DateTimeField(auto_now_add=True)
+    likes = models.ManyToManyField(User, related_name='space_question_answer_likes')
+    dislikes = models.ManyToManyField(User, related_name='space_question_answer_dislikes')
+
+    def total_likes(self):
+        return self.likes.count()
+
+    def total_dislikes(self):
+        like=self.likes.count()
+        like=like-1
+        return self.dislikes.count()
+    
+    def userProfileImg(self):
+        user = Profile.objects.get(user=self.user)
+        return user.img
+
+    def __str__(self):
+        return '%s - %s' % (self.question.title, self.answer)

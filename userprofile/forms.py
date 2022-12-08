@@ -1,6 +1,6 @@
 from django import forms
 
-from .models import Lecture, Profile,Course, Event, Comments
+from .models import Lecture, Profile,Course, Event, Comments, Question, Answer
 from django.forms import ModelForm, Select, TextInput, Form
 from taggit.forms import TagWidget
 from django.utils.safestring import mark_safe
@@ -118,4 +118,29 @@ class CommentsForm(forms.ModelForm):
          }
  
 
+class QuestionForm(forms.ModelForm):
+    class Meta:
+        model = Question
+        fields = ('title', 'question', 'tags')
+        widgets = {
+            'title': TextInput(attrs={
+                'class': "form-control",
+                'style': 'max-width: 300px;',
+                'placeholder': 'Title',
+                }),
+            'question': TinyMCEWidget(attrs={
+                'class': "form-control",
+                'style': 'max-width: 300px;',
+                'placeholder': 'Text',
+                }),
+            'tags': TagWidget(),}
+
+class AnswerForm(forms.ModelForm):
+
+    class Meta:
+        model = Answer
+        fields = ('answer',)
+        labels = {
+        'answer': (''),
+         }
     

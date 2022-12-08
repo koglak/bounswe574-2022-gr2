@@ -1,0 +1,146 @@
+{% extends 'blog/base.html' %}
+
+{% block title %}
+Forum
+{% endblock %}
+
+{% block content %}
+
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-sm-1">
+            <div class="btn-group-vertical mt-5" role="group">
+                <a href="{% url 'course_detail' title=course.title %}" class="btn btn-dark">Space Contents</a>
+                <a href="{% url 'quiz_page' title=course.title %}" type="button" class="btn btn-dark">Space Quizzes</a>
+                <a href="{% url 'case_page' title=course.title %}" type="button" class="btn btn-dark">Case Studies</a>
+                <a href="{% url 'event_list' title=course.title %}" type="button" class="btn btn-dark">Space Events</a>
+                <a href="{% url 'forum_page' title=course.title %}" type="button" class="btn btn-dark">Space Forum</a>
+            </div>
+        </div>
+
+        <div class="col-sm-11">
+            <!-- Search and create new question button-->
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-sm-6">
+                        <form class="form-inline my-2 my-lg-0" method=POST action="{% url 'space_search_question' title=course.title %}"
+                            style="margin:15px;padding-top: 20px;">
+                            {% csrf_token %}
+                            <input class="form-control mr-sm-2" style="width:250px; float:left; margin-right:10px"
+                                type="search" placeholder="Search" aria-label="Search" name="searched">
+                            <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+                        </form>
+                    </div>
+                    {% if user.is_authenticated %}
+                    <div class="col-sm-6" style="padding-top: 20px;">
+                        <a class="btn btn-success" href="{% url 'space_question_new' title=course.title %}" role="button">Ask A Question!</a>
+                    </div>
+                    {% endif %}
+
+                </div>
+                
+            </div>
+
+            <!--Questions are listed-->
+            {% for question in questions %}
+            <div class="container bootstrap snippets bootdey">
+                <div class="row">
+                    <div class="post-list">
+                        <div class="row">
+                            <!--Profile Picture-->
+                            <div class="col-sm-1">
+                                <div class="d-flex flex-start align-items-center">
+                                    {% if question.userProfileImg %}
+                                    <img class="rounded-circle shadow-1-strong me-3"
+                                        src="{{question.userProfileImg.url}}" alt="avatar" width="60" height="60" />
+                                    {% else %}
+                                    <img class="rounded-circle shadow-1-strong me-3"
+                                        src="http://cdn.onlinewebfonts.com/svg/img_24787.png" alt="avatar" width="60"
+                                        height="60" />
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <!--Author name & Follow Link-->
+                            <div class="col-sm-9">
+                                {% if user == question.user %}
+                                <a href="{% url 'user_profile' %}" class="question-user"
+                                    style="font-family: 'Poppins';font-size:18px; font-weight: 600px; margin-right:5px">{{question.user}}</a>
+                                {% else %}
+                                <a href="{% url 'other_user_profile' name=question.user %}" class="post-author"
+                                    style="font-family: 'Poppins';font-size:18px; font-weight: 600px; margin-right:5px">{{question.user}}</a>
+                                {% endif %}
+                                {% if user.is_authenticated %}
+                                <a href="#" class="link-success"
+                                    style="font-family: 'Poppins';font-style: normal;font-weight: 800;font-size: 16px;">Follow</a>
+                                {% endif %}
+                            </div>
+                            <!--Published Date-->
+                            <div class="col-sm-2">
+                                <date>
+                                    {{ question.published_date }}
+                                </date>
+                            </div>
+                        </div>
+                        <!--Question text-->
+                        <div class="row">
+                            <a href="{% url 'space_question_detail' pk=question.pk title=course.title %}" class="post-title">{{ question.title }}</a>
+                            <p class="post-text">{{question.question | safe}}</p>
+                        </div>
+                        <!--Question Footer-->
+                        <div class="row" style="padding: 4px; background: rgba(196, 196, 196, 0.22); margin-top:5px">
+                            <!--Like Button-->
+                            <div class="col-sm-1 col-lg-1 col-xl-1">
+                                <form action="{% url 'space_question_like' title=course.title pk=question.pk %}" method="POST">
+                                    {% csrf_token %}
+                                    {% if user.is_authenticated %}
+                                    <button type="submit" , name="post_id" , value="{{quesion.id}}" ,
+                                        class="btn btn-outline-primary btn-sm">Like</button>
+                                    {% else %}
+                                    <strong>Like: </strong>
+                                    {% endif %}
+                                    <p style="display: inline; font-weight: bold;">{{question.total_likes}}</p>
+                                </form>
+                            </div>
+                            <!--Disike Button-->
+                            <div class="col-sm-1 col-lg-1 col-xl-1">
+                                <form action="{% url 'space_question_dislike' title=course.title pk=question.pk %}" method="POST">
+                                    {% csrf_token %}
+                                    {% if user.is_authenticated %}
+                                    <button type="submit" , name="post_id" , value="{{question.id}}" ,
+                                        class="btn btn-outline-warning btn-sm">Dislike</button>
+                                    {% else %}
+                                    <strong>Dislike: </strong>
+                                    {% endif %}
+
+                                    <p style="display: inline; font-weight: bold;">{{question.total_dislikes}}</p>
+                                </form>
+                            </div>
+                            <!--Comment Button-->
+                            <div class="col-sm-2 col-lg-2 col-xl-2">
+                                {% if user.is_authenticated %}
+                                <a class="btn btn-outline-secondary btn-sm" href="{% url 'space_question_detail' pk=question.pk title=course.title %}" role="button">Comment</a>
+                                {% else %}
+                                <strong>Comment:</strong>
+                                {% endif %}
+                                <p style="display: inline; font-weight: bold;">{{question.space_question_answer.count}}
+                                </p>
+                            </div>
+                            <div class="col-sm-8 col-lg-8 col-xl-8" style="display: flex; justify-content: flex-end">
+                                {% for tag in question.tags.all %}
+                                <a href="#" type="button" class="btn btn-outline-dark btn-sm" style="margin-left:10px">
+                                    #{{tag}}</a>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+
+
+{% endblock %}

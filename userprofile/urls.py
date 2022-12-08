@@ -29,6 +29,18 @@ urlpatterns = [
     path('event_enroll/<int:pk>', views.event_enroll,name='event_enroll'),
     path('<int:pk>/event_delete',views.delete_event,name='delete_event'),
     path('event/<int:pk>',views.event_detail,name='event_detail'),
-
+    path('<str:title>/forum_page',views.forum_page,name='forum_page'),
+    path('<str:title>/forum_page/question_new/', views.question_new, name='space_question_new'),
+    path('<str:title>/forum_page/<int:pk>/', views.question_detail, name='space_question_detail'),
+    path('<str:title>/forum_page/<int:pk>/question_edit/', views.question_edit, name='space_question_edit'),
+    path('<str:title>/forum_page/<int:pk>/question_like', views.LikeView, name='space_question_detail_like'),
+    path('<str:title>/forum_page/<int:pk>/question_dislike', views.DislikeView, name='space_question_detail_dislike'),
+    path('<str:title>/forum_page/<int:pk>/<int:num>/answer_like', views.AnswerLikeView, name='space_question_detail_answer_like'),
+    path('<str:title>/forum_page/<int:pk>/<int:num>/answer_dislike', views.AnswerDislikeView, name='space_question_detail_answer_dislike'),
+    path('<str:title>/forum_page/<int:pk>/question_like/', views.LikeViewList, name='space_question_like'),
+    path('<str:title>/forum_page/<int:pk>/question_dislike/', views.DislikeViewList, name='space_question_dislike'),
+    path('<str:title>/forum_page/<int:pk>/delete_question/', views.delete_question, name='space_delete_question'),
+    path('<str:title>/forum_page/search_question/', views.search_question, name='space_search_question'),
+    path('<str:title>/space_metrics', views.metric_pages, name='metric_pages'),
 ]
 
