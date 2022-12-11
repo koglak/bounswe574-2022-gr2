@@ -14,12 +14,18 @@
 
     <p class="post-title">Title of the case study: <light style = "color: brown;">"{{case.title}}"</light></p>
     <p>has opened by {{case.user}}</light></p>
+    {% if user == case.user %}
+    <div>
+      <a href="{% url 'case_edit' title=case.title %}" class="btn btn-warning">Edit</a>
+      <a href="{% url 'case_delete' title=case.title %}" class="btn btn-danger">Delete</a>
+    </div>
+    {% endif %}
     <br><br>
     <hr>
     <strong>Description: </strong>
     <p class = "post-text">{{case.description | safe}}</p>
     <hr>
-    {% if submmission %}
+    {% if list.form.instance.upload and list_form.instance.user.is_authenticated %}
     <p class="post-author"> Upload Your Work:</p>
         <form method="POST" class="post-form" enctype="multipart/form-data">  
             {% csrf_token %}  
@@ -29,6 +35,7 @@
         </form>
     {% else %}
     <div>
+      <a href="{{ MEDIA_URL }}{{list_form.instance.upload.url}}">{{list_form.instance.upload}}</a>
       <a href="{% url 'delete_submission' title=case.title %}" class="btn btn-danger btn-danger">Delete</a>
     </div>
     {% endif %}
@@ -51,7 +58,7 @@
     <tbody>
       <form enctype="multipart/form-data" method="POST">
 
-        {{ list_formset }}
+        {{ list_formset.management_form }}
         {% csrf_token %}
 
         {% for list_form in list_formset %}
@@ -86,15 +93,7 @@
                   {% endif %}
                   <span style="font-family:'Poppins'; opacity:0.8">{{list_form.instance.averagereview|floatformat:'2' }}/5</span>      
               </form>
-
             </td>
-
-            <!--Only case owner can grade the case studies-->
-            <!--
-            {% if user == list_form.instance.case.user %}
-              {{ list_form }} 
-            {% endif %}
-            -->
           </tr>
 
         {% endfor %}
