@@ -1,35 +1,81 @@
 {% extends 'blog/base.html' %}
 
 {% block title %}
-    Create New Case Study
+    Case Study List
 {% endblock %}
 
 {% block content %}
-<div class="jumbotron container row">
 
-    <!--Page Navigation-->
-    <h5> Space: <a href="{% url 'course_detail' title=course.title %}"> {{course.title}} </a> > Case Page </h5>
-    <br><br>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-sm-3">
+            <!--Enroll & Drop Button-->
+            {% if user.is_authenticated %}
+                    {% include 'includes/enroll_drop.html' with course=course %}
+            {% endif %}
 
-    <p class="post-title">Title of the case study: <light style = "color: brown;">"{{case.title}}"</light></p>
-    <p>has opened by {{case.user}}</light></p>
-    <br><br>
-    <hr>
-    <strong>Description: </strong>
-    <p class = "post-text">{{case.description | safe}}</p>
-    <hr>
-    {% if user in case.user %}
-    <p class="post-author"> Upload Your Work:</p>
-        <form method="POST" class="post-form" enctype="multipart/form-data">  
-            {% csrf_token %}  
-            {{form.as_p}}
-            <button type="submit" class="save btn btn-success">Submit</button>  
-            <hr>
-        </form>
-    {% endif %}
-    <div>
-      <a href="#" class="btn btn-warning">Update</a>
-      <a href="{% url 'delete_submission' title=case.title %}" class="btn btn-danger">Delete</a>
-    </div>
+            <!-- Lecture List -->
+            {% include 'includes/sidebar.html' with course=course page="event" %}
+            <div class="text-end mt-3">
+                <a class="btn btn-primary" href="{% url 'event_new' title=course.title %}">Create Event</a>
+            </div>
+        </div>
+
+        <!--Case Content-->
+
+
+        <div class="col-sm-9">
+
+           <div class="row">
+            <div class="d-inline-flex flex-wrap">
+                {% for case in course.case_list.all  %}
+                <li class="list-group-item list-group-item-action">
+                    <a href="{% url 'case_detail' title=case.title %}" class="post-text" style="text-decoration:none"> Case: {{case.title}}</a>
+                    <p>Due date: {{case.due_date}}</p>
+                    <p>Created by: <a href="#">{{case.user}}</p></a>
+                </li> 
+                {% endfor %}
+            </div>    
+           </div>
+
+                <nav aria-label="Page navigation example">
+                    <ul class="pagination justify-content-end">
+                        {% if events.has_previous %}
+                            <li class="page-item">
+                                <a class="page-link" href="?page=1" tabindex="-1">&laquo; First</a>
+                            </li>
+                            <li class="page-item">
+                                <a class="page-link" href="?page={{ events.previous_page_number }}" tabindex="-1">Previous</a>
+                            </li>
+                        {% else %}
+                            <li class="page-item disabled">
+                                <a class="page-link" href="#" tabindex="-1">Previous</a>
+                            </li>
+                        {% endif %}
+                    
+                    <li class="page-item"><a class="page-link text-dark" >Page {{ events.number }} of {{ events.paginator.num_pages }}</a></li>
+            
+
+                    {% if events.has_next %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ events.next_page_number }}">Next</a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ events.paginator.num_pages }}">Last &raquo;</a>
+                        </li>
+                    {% else %}
+                        <li class="page-item disabled">
+                            <a class="page-link" href="#" tabindex="-1">Last</a>
+                        </li>
+                    {% endif %}
+                    </ul>
+                </nav>
+
+            </div>
+            
+        </div>
+
+    </div> 
 </div>
+
 {% endblock %}
