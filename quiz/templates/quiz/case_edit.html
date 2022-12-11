@@ -1,0 +1,18 @@
+{% extends 'blog/base.html' %}
+{% load crispy_forms_tags %}
+
+
+{% block title %}
+    Edit Case Study
+{% endblock %}
+
+{% block content %}
+<div class="w-50 mt-2">
+    <form method="POST" class="question-form" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{form.media}}
+        {{form.as_p}}
+        <button type="submit" class="save btn btn-success mt-4">Edit</button>
+    </form>
+</div>
+{% endblock %}
