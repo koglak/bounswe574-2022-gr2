@@ -25,7 +25,7 @@
                     <strong>Active users</strong>
                     <br>
                     {% for user in course.enrolled_users.all %}
-                    <a href="{% url 'other_user_profile' name=user %}">{% bs_icon 'person' size='1em'%}</a> {{user}} 
+                    <p><a href="{% url 'other_user_profile' name=user %}">{% bs_icon 'person' size='1.1em'%}</a>{{user}}</p> 
                     {% endfor %}
                     </li>
                 </div> 
@@ -47,91 +47,37 @@
                     <form class="form-inline" method=POST action="{% url 'search_case' %}" style="margin:15px; padding-top:20px;">
                         {% csrf_token %}
                         <input class="form-control mr-sm-2" style="width:650px; float:left; margin-right:10px" type="search"  placeholder="Search any case study" aria-label="Search" name="searched"> 
-                        <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+                        <button class="btn btn-outline-success my-2" type="submit">Search</button>
                     </form>      
                 </div>
                 {% endif %}
             </div>  
             {% if course.case_list.all != null %}
                 {% if user in course.enrolled_users.all %}
-                <br><br>
-                {% bs_icon 'envelope-open' size='1em' %} <a href = "#">Newly Opened Cases</a>
                     {% for case in course.case_list.all %}
-                        {% if case.publish_date_check %}
+                        {% if  3 > case.get_remaining_days %} 
                             <li class="list-group-item list-group-item-action">
                                 <a href="{% url 'case_detail' title=case.title %}" class="post-text" style="text-decoration:none"> Case: {{case.title}}</a>
-                                <p>Published date: {{case.published_date}}</p>
+                                
+                                {% if case.publish_date_check %}
+                                <p style = "color:green">Published date: {{case.published_date}}</p>
+                                {% elif case.get_remaining_days > -2 %}
+                                <p style = "color:red">Due date: {{case.due_date}}</p>
+                               
+                                {% endif %}
                                 <p>Created by: <a href="{% url 'other_user_profile' name=case.user %}">{{case.user}}</p></a>
                             </li> 
                         {% endif %}
                     {% endfor %}
-                <br><br>
-                {% bs_icon 'folder2-open' size='1em' %}<a href = "#">Cases In-progess</a> 
-                    {% for case in course.case_list.all %}
-                        {% if case.get_remaining_days %}
-                            <li class="list-group-item list-group-item-action">
-                                <a href="{% url 'case_detail' title=case.title %}" class="post-text" style="text-decoration:none"> Case: {{case.title}}</a>
-                                <p>Due date: {{case.due_date}}</p>
-                                <p>Created by: <a href="#">{{case.user}}</p></a>
-                            </li> 
-                        {% endif %}
-                    {% endfor %}    
-                <br><br>
-                    {% if 0 > case.get_remaining_days and case.averageview > 80 %}  
-                        {% bs_icon 'archive' size='1em' %} <a href = "#">Cases Closed</a> 
-                            {% for case in course.case_list.all %}
-                                <li class="list-group-item list-group-item-action">
-                                    <a href="{% url 'case_detail' title=case.title %}" class="post-text" style="text-decoration:none"> Case: {{case.title}}</a>
-                                    <p>Rating: {{case.score}}</p>
-                                    <p>Created by: <a href="#">{{case.user}}</p></a>
-                                </li> 
-                            {% endfor %}
-                    {% endif %}   
                 {% endif %} 
-        {% endif %}
+            {% else %}
+            There is no created case study yet.
+            {% endif %}
         <div class="row">  
            </div>
 
-                <nav aria-label="Page navigation example">
-                    <ul class="pagination justify-content-end">
-                        {% if events.has_previous %}
-                            <li class="page-item">
-                                <a class="page-link" href="?page=1" tabindex="-1">&laquo; First</a>
-                            </li>
-                            <li class="page-item">
-                                <a class="page-link" href="?page={{ events.previous_page_number }}" tabindex="-1">Previous</a>
-                            </li>
-                        {% else %}
-                            <li class="page-item disabled">
-                                <a class="page-link" href="#" tabindex="-1">Previous</a>
-                            </li>
-                        {% endif %}
-                    
-                    <li class="page-item"><a class="page-link text-dark" >Page {{ events.number }} of {{ events.paginator.num_pages }}</a></li>
-            
-
-                    {% if events.has_next %}
-                        <li class="page-item">
-                            <a class="page-link" href="?page={{ events.next_page_number }}">Next</a>
-                        </li>
-                        <li class="page-item">
-                            <a class="page-link" href="?page={{ events.paginator.num_pages }}">Last &raquo;</a>
-                        </li>
-                    {% else %}
-                        <li class="page-item disabled">
-                            <a class="page-link" href="#" tabindex="-1">Last</a>
-                        </li>
-                    {% endif %}
-                    </ul>
-                </nav>
-
             </div>
-                              
-     
-   
-        
 
-        
         <!--Course Block: Course2 Template-->
         <div class="col-sm-3">
             {% include 'includes/course2.html' with course=course select="course" %}
