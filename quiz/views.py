@@ -122,12 +122,24 @@ def case_create(request,title):
     return render(request, 'quiz/case_create.html', {'course': course, 'form':form})
 
 @login_required(login_url="/login")
-def case_delete(request, title):
-    case = Course.objects.get(title=title)
-    course= Course.objects.get(question_list__pk=case.pk)
+def case_edit(request, title):
+    case = get_object_or_404(Case, title=title)
+    if request.method == "POST":
+        form = CaseForm(request.POST, instance=case)
+        if form.is_valid():
+            instance=form.save(commit=False)
+            instance.user=request.user
+            instance.save()
+            return redirect('case_detail', title=case.course.title)
+    else:
+        form = CaseForm(instance=case)
+    return render(request, 'quiz/case_edit.html', {'form': form, 'title': case.title})
 
-    quiz.delete()
-    return redirect('case_delete', title=course.title)
+@login_required(login_url="/login")
+def case_delete(request, title):
+    case = Case.objects.get(title=title)
+    case.delete()
+    return redirect('case_delete', title=case.title)
 
 
 @login_required(login_url="/login")
@@ -149,27 +161,6 @@ def case_detail(request,title):
     else:  
         form= CaseResultForm()
         return render(request, 'quiz/case_detail.html', {'case':case, 'form': form, 'course': course})
-
-@login_required(login_url="/login")
-def case_list(request,title):
-    case=Case.objects.get(title=title)
-    course=Course.objects.get(case_list=case)
-
-    form= CaseResultForm()
-
-    if request.method == 'POST':  
-        form = CaseResultForm(request.POST, request.FILES)  
-        if form.is_valid():  
-            result = form.save(commit=False)
-            result.user=request.user
-            result.shared_date = timezone.now()
-            result.case=case
-            result.save()
-            return redirect('course_detail', title=course.title)  
-    else:  
-        form= CaseResultForm()
-        return render(request, 'quiz/case_list.html', {'case':case, 'form': form, 'course': course})
-
 
 @login_required(login_url="/login")
 def case_grade(request,title):
