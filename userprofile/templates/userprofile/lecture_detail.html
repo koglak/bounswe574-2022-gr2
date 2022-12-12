@@ -1,41 +1,53 @@
 {% extends 'blog/base.html' %}
 
 {% block title %}
-    Space Detail
+Space Detail
 {% endblock %}
 
 {% block content %}
 
 
 
-    <div class="container-fluid" style="margin-top: 10px;">
-        <div class="row">
-            <div class="col-sm-3">
-                <!--Enroll & Drop Button-->
-                {% if user.is_authenticated %}
-                        {% include 'includes/enroll_drop.html' with course=course %}
-                        
+<div class="container-fluid" style="margin-top: 10px;">
+    <div class="row">
+        <div class="col-sm-3">
+            <!--Enroll & Drop Button-->
+            {% if user.is_authenticated %}
+            {% include 'includes/enroll_drop.html' with course=course %}
+
+            {% endif %}
+
+            <!-- Side List -->
+            {% include 'includes/sidebar.html' with course=course page="lecture" %}
+
+            <div class="text-end mt-3">
+                {% if user in course.collaborative_members.all or user == course.user %}
+                <a href="{% url 'lecture_new' pk=course.pk %}" type="button" class="btn btn-primary">Create Content</a>
                 {% endif %}
-
-                <!-- Side List -->
-                {% include 'includes/sidebar.html' with course=course page="lecture" %}
-            
-                <div class="text-end mt-3">
-                    {% if user in course.collaborative_members.all or user == course.user %}
-                            <a href="{% url 'lecture_new' pk=course.pk %}" type="button" class="btn btn-primary">Create Content</a>
-                    {% endif %}
-                </div>
             </div>
+        </div>
 
-            <!--Lecture Content-->
-            <div class="col-sm-6">
+        <!--Lecture Content-->
+        <div class="col-sm-6">
+            <p>
                 {{lecture.content|safe}}
+            </p>
+            <div id="popup" class="rounded p-2" style="max-width: 90px; background-color:rgb(39, 39, 39);">
+                <a style="text-decoration: none; color: white" href="#">
+                    <img src="https://img.icons8.com/fluency-systems-filled/48/FFFFFF/pencil-tip.png" style="width: 30px; height:30px"/>
+                </a>
+                <span class="text-white"> | </span>
+                <a style="text-decoration: none; color: white" href="#">
+                    <img
+                        src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAeCAYAAAA7MK6iAAAABmJLR0QA/wD/AP+gvaeTAAAAiUlEQVRIie3WsQ3CQAxAUZsyrIAYgE2iDEGXsbIMYgM2cEZI/1PkhNDpOIF0vsp/AD+7s0gU9QiYgJX2GTB+WprBJiIXp7tMVa/fYJzQA1N9eydPqFbAAQcccMAB/wyvjpbV4NkJtzT7vwqvzAs4t9+vDm/AzR0twPcuaAYv3dAEP4AnMHSFPdoBRNa6vc3eiZwAAAAASUVORK5CYII=">
+                </a>
             </div>
+        </div>
 
-            <!--Course Block: Course2 Template-->
-            <div class="col-sm-3">
-                {% include 'includes/course2.html' with course=course select="course" %}
-            </div>
-        </div> 
+        <!--Course Block: Course2 Template-->
+        <div class="col-sm-3">
+            {% include 'includes/course2.html' with course=course select="course" %}
+        </div>
     </div>
+</div>
 {% endblock %}

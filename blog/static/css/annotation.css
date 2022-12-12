@@ -1,0 +1,8 @@
+.selected {
+    background: gray;
+    color: white;
+  }
+
+#popup { 
+    visibility:hidden; 
+}
