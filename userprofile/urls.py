@@ -42,5 +42,6 @@ urlpatterns = [
     path('<str:title>/forum_page/<int:pk>/delete_question/', views.delete_question, name='space_delete_question'),
     path('<str:title>/forum_page/search_question/', views.search_question, name='space_search_question'),
     path('<str:title>/space_metrics', views.metric_pages, name='metric_pages'),
+    path('lecture/save_annotation/', views.save_annotation, name='save_annotation'),
 ]
 

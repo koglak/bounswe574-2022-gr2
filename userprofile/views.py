@@ -1,5 +1,6 @@
 
 # Create your views here.
+import json
 from django.http import HttpResponse
 from django.utils import timezone
 from django.shortcuts import render
@@ -509,3 +510,24 @@ def metric_pages(request, title):
     course=get_object_or_404(Course, title=title)
     
     return render(request, "userprofile/space_metrics.html", {"course":course}) 
+
+def save_annotation(request):
+    context=request.GET["context"]
+    types=request.GET["type"]
+    id=request.GET["id"]
+    target=request.GET["target"]
+    body=request.GET["body"]
+
+    annotation={
+        "@context": json.loads(context),
+        "body": [json.loads(body)],
+        "id": "#" + json.loads(id),
+        "target":json.loads(target),
+        "type":json.loads(types)
+    }
+
+    print(annotation)
+    print("working...")
+
+    res = HttpResponse("successful")
+    return res

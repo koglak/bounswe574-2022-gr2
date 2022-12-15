@@ -33,7 +33,6 @@
     </head>
     <body>
         <script src='http://ajax.googleapis.com/ajax/libs/jquery/1.7/jquery.min.js'></script>
-        {% load static %}
         
         
         <script src="{% static 'js/recogito.min.js' %}"></script>
@@ -100,6 +99,42 @@
             <p class="text-center text-muted">© 2022 Company, Inc</p>
         </footer>
     </body>
+
+    <script type="text/javascript">
+        (function() {
+          var r = Recogito.init({
+            content: document.getElementById('content') // ID or DOM element
+          });
+    
+          // Add an event handler  
+          r.on('createAnnotation', function(annotation) { 
+            var created_annotation=annotation;
+
+            var context=JSON.stringify(created_annotation["@context"])
+            var type=JSON.stringify(created_annotation["type"])
+            var body=JSON.stringify(created_annotation["body"][0])
+            var target=JSON.stringify(created_annotation["target"])
+            var id=JSON.stringify(created_annotation["id"].replace("#",""))
+
+            // console.log(Object.keys(created_annotation))
+            // console.log(type)
+            // console.log(context)
+            // console.log(body)
+            // console.log(id)
+            // console.log(target)
+            console.log(created_annotation)
+           
+            r.loadAnnotations("save_annotation/?context=" + context + "&type=" + type + "&id=" + id +"&target=" + target + "&body=" + body).then(function(annotations) {
+                console.log("Success")
+                console.log(annotations)
+            });
+
+           });
+
+
+         
+        })();
+      </script>
     
     {{ form.media }}
 
