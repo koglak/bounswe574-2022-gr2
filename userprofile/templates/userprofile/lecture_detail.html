@@ -6,8 +6,6 @@
 
 {% block content %}
 
-
-
     <div class="container-fluid" style="margin-top: 10px;">
         <div class="row">
             <div class="col-sm-3">
@@ -28,9 +26,20 @@
             </div>
 
             <!--Lecture Content-->
-            <div class="col-sm-6">
+            <div class="col-sm-6" id="content">
                 {{lecture.content|safe}}
             </div>
+
+            <script type="text/javascript">
+                (function() {
+                    var r = Recogito.init({
+                    content: document.getElementById('content') // ID or DOM element
+                    });
+            
+                    // Add an event handler  
+                    r.on('createAnnotation', function(annotation) { /** **/ });
+                })();
+            </script>
 
             <!--Course Block: Course2 Template-->
             <div class="col-sm-3">
@@ -38,4 +47,5 @@
             </div>
         </div> 
     </div>
+
 {% endblock %}
