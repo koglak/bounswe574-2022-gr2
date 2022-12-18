@@ -15,99 +15,20 @@
     <p class="post-title">Title of the case study: <light style = "color: brown;">"{{case.title}}"</light></p>
     <p>has opened by {{case.user}}</light></p>
     {% if user == case.user %}
-    <div>
-      <a href="{% url 'case_edit' title=case.title %}" class="btn btn-warning">Edit</a>
-      <a href="{% url 'case_delete' title=case.title %}" class="btn btn-danger">Delete</a>
-    </div>
+      {% if case.get_remaining_days > 0%}
+      <div>
+        <a href="{% url 'case_edit' title=case.title %}" class="btn btn-warning">Edit</a>
+        <a href="{% url 'case_delete' title=case.title %}" class="btn btn-danger">Delete</a>
+        <a href="{% url 'case_grade' title=case.title %}" class="btn btn-outline-primary">Upload Your Work</a>
+      </div>
+      {% else %}
+      {% endif %}
     {% endif %}
     <br><br>
     <hr>
     <strong>Description: </strong>
     <p class = "post-text">{{case.description | safe}}</p>
-    <hr>
-    {% if list.form.instance.upload and list_form.instance.user.is_authenticated %}
-    <p class="post-author"> Upload Your Work:</p>
-        <form method="POST" class="post-form" enctype="multipart/form-data">  
-            {% csrf_token %}  
-            {{form.as_p}}
-            <button type="submit" class="save btn btn-success">Submit</button>  
-            <hr>
-        </form>
-    {% else %}
-    <div>
-      <a href="{{ MEDIA_URL }}{{list_form.instance.upload.url}}">{{list_form.instance.upload}}</a>
-      <a href="{% url 'delete_submission' title=case.title %}" class="btn btn-danger btn-danger">Delete</a>
-    </div>
-    {% endif %}
 </div>
-<br>
-<div class="jumbotron container row">
-<p class = "post-title"> Top rated studies </p>
-  <br>
-  <table class="table table-striped">
-    <thead>
-      <tr>
-        <th scope="col">#</th>
-        <th scope="col">User Name</th>
-        <th scope="col">Submission Date</th>
-        <th scope="col">File</th>
-        <th scope="col">Rated By Users</th>
-
-      </tr>
-    </thead>
-    <tbody>
-      <form enctype="multipart/form-data" method="POST">
-
-        {{ list_formset.management_form }}
-        {% csrf_token %}
-
-        {% for list_form in list_formset %}
-          <tr id="row_{{ list_form.instance.id }}">
-            <th scope="row">{{forloop.counter}}</th>
-            
-            <td> 
-              <a href="{% url 'other_user_profile' name=list_form.instance.user.username %}" class="post-author" style="font-family:'Poppins';font-size:18px; font-weight: 600px; margin-right:5px">
-                {{list_form.instance.user}}
-              </a>
-            </td>
-            
-            <td>{{ list_form.instance.shared_date }}</td>
-            
-            <td><a href="{{ MEDIA_URL }}{{list_form.instance.upload.url}}">See submitted work</a></td>
-            
-            <td>{{list_form.instance.score}}/100</td>
-
-            <td>
-              <!--All users can rate case studies-->
-              <form class="form-inline my-2 my-lg-0" action="{% url 'case_rate' pk=list_form.instance.pk %}" method="POST">
-                {% csrf_token %}
-                {% if user.is_authenticated %}
-                    <span class="star-rating">
-                        <input type="radio" name="rating" value="1"><i>1</i>
-                        <input type="radio" name="rating" value="2"><i>2</i>
-                        <input type="radio" name="rating" value="3"><i>3</i>
-                        <input type="radio" name="rating" value="4"><i>4</i>
-                        <input type="radio" name="rating" value="5"><i>5</i>
-                    </span>
-                    <button class="btn btn-outline-success my-2 my-sm-0 btn-sm" type="submit">Rate</button>
-                  {% endif %}
-                  <span style="font-family:'Poppins'; opacity:0.8">{{list_form.instance.averagereview|floatformat:'2' }}/5</span>      
-              </form>
-            </td>
-          </tr>
-
-        {% endfor %}
-
-        {% if user == list_form.instance.case.user %}
-          <button type="submit" class="save btn btn-success">Save</button>
-        {% endif %}
-      </form>
-    </tbody>
-  </table>
- 
-</div>
-<br><br>
-<hr>
 <div class = "container">
   <div class = "row">
       <div class = "mx-auto">
@@ -141,7 +62,7 @@
                 </div>
                 <!--Like Button-->
                 <div class="col-sm-1 col-lg-1 col-xl-1">
-                  <form action="{% url 'like_comment' pk=comment.pk %}" method="POST">
+                  <form action="" method="POST">
                       {% csrf_token %}
                           <button type="submit", name="post_id", value="{{post.id}}", class="btn btn-outline-primary btn-sm" >Like</button>
                           <p style="display: inline; font-weight: bold;">{{comment.total_likes}}</p>
@@ -150,19 +71,15 @@
                 <br>
                 <!--Disike Button-->
                 <div class="col-sm-1 col-lg-1 col-xl-1">
-                  <form action="{% url 'dislike_comment' pk=comment.pk %}" method="POST">
+                  <form action="" method="POST">
                       {% csrf_token %}
                           <button type="submit", name="post_id", value="{{post.id}}", class="btn btn-outline-warning btn-sm" >Dislike</button>
                           <p style="display: inline; font-weight: bold;">{{comment.total_dislikes}}</p>
                   </form>
                 </div>
                 <br>
-                <!--Comment Edit
-                <form method="POST" class="question-form">
-                    {% csrf_token %}
-                    <a class="btn btn-outline-danger" href="{% url 'comment'  %}">Delete</a>
-                </form>
-                -->
+                <!--Comment Edit-->
+               
               </div>
             </div>
           </div>
