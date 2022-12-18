@@ -118,7 +118,8 @@ def case_create(request,title):
             case.user = request.user
             case.course = course
             case.save()
-            return redirect('case_detail', title=case.title)
+            return redirect('case_list', title=case.course.title)
+
     return render(request, 'quiz/case_create.html', {'course': course, 'form':form})
 
 @login_required(login_url="/login")
@@ -130,40 +131,91 @@ def case_edit(request, title):
             instance=form.save(commit=False)
             instance.user=request.user
             instance.save()
-            return redirect('case_detail', title=case.course.title)
+            return redirect('case_list', title=case.course.title)
     else:
         form = CaseForm(instance=case)
     return render(request, 'quiz/case_edit.html', {'form': form, 'title': case.title})
 
 @login_required(login_url="/login")
 def case_delete(request, title):
-    case = Case.objects.get(title=title)
+    case = get_object_or_404(Case, title=title)
     case.delete()
-    return redirect('case_delete', title=case.title)
+    return redirect('case_list', title=case.course.title)
+
+@login_required(login_url="/login")
+def case_list(response, title):
+    startdate = datetime.today()
+    enddate = startdate + timedelta(days=365)
+    course=get_object_or_404(Course, title=title)
+    case_list= Case.objects.filter(course=course, published_date__range=[startdate, enddate])
+
+    form_date=DateFilterForm(response.POST or None)
+
+    if response.method == "POST":
+        # Date Sorting
+        if 'published_date' in response.POST:
+                form_date=DateFilterForm(response.POST)
+                if form_date.is_valid():
+                    date_filter= response.POST['published_date']
+                    if date_filter =="Ascending":
+                        case_list= Case.objects.filter(course=course, case_date__range=[startdate, enddate]).order_by('published_date__day', 'published_date__month')
+    # No post request
+    else:
+        form_date=DateFilterForm(use_required_attribute=False)
+
+    paginator = Paginator(case_list,10) 
+    page = response.GET.get('page')
+    cases= paginator.get_page(page)
+
+    return render(response, "quiz/case_list.html", {'course': course, ' cases': cases, "form_date": form_date})
 
 
 @login_required(login_url="/login")
-def case_detail(response,title):
-    case=Case.objects.get(title=title)
+def case_detail(response, title):
+    case = Case.objects.get(title=title)
+    ListFormSet = modelformset_factory(CaseResult, fields=('score',), extra=0)
     if response.method == "POST":
         form = CommentForm(response.POST)
         if form.is_valid():
+
             comment = form.save(commit=False)
             comment.case = case
             comment.author = response.user
             comment.save()
             form = CommentForm()
-
         else:
-            form = CommentForm()
-        context = {
-            'course': case.course,
-            'case': case,
-            'enrolled_users': Case.enrolled_users.through.objecs.all(),
-            'form': form,
-        }
+            list_formset.save()
+            return redirect('case_detail', title=case.title)  
+    else:
+        form = CommentForm()
+    context = {
+        'course': case.course,
+        'case': case,
+        #'enrolled_users': Case.enrolled_users.through.objects.all(),
+        'form': form,
+    }
 
-        return render(response, "quiz/case_detail.html", context)
+    return render(response, "quiz/case_detail.html", context)
+
+# def upload_work(request, title):
+#     case = Case.objects.get(title = title)
+#     course = Course.objects.get(case_list, case)
+
+#     form = CaseResultForm()
+
+#     if request.method == 'POST':
+#         form = CaseResultForm(request.POST, request.FILES)
+#         if form.is_valid():
+#             result = form.save(commit=False)
+#             result.user = request.user
+#             resul.shared_date = timezone.now()
+#             result.case = case
+#             result.save()
+#             return redirect('case_grade', title = case.title)
+
+#     else:
+#         form = CaseResultForm()
+#         return render(request, 'quiz/case_grade.html', {'case':case, 'form':form, 'course':course})
 
 @login_required(login_url="/login")
 def case_grade(request,title):
@@ -173,11 +225,11 @@ def case_grade(request,title):
         list_formset = ListFormSet(request.POST)
         if list_formset.is_valid():
             list_formset.save()
-            return redirect('case_detail', title=case.title)  
+            return redirect('case_grade', title=case.title)  
     else: 
         list_formset = ListFormSet(queryset=CaseResult.objects.filter(case=case).order_by('shared_date'))
         course=Course.objects.get(case_list=case)
-        return render(request, 'quiz/case_detail.html', {'list_formset': list_formset, 'course':course} )
+        return render(request, 'quiz/case_grade.html', {'list_formset': list_formset, 'course':course} )
     
 
 def delete_submission(request, title):
@@ -206,86 +258,10 @@ def case_rate(request, pk):
 
     return redirect('case_detail', title=case.title)
 
-
-def comment_detail(response, pk):
-    case = Case.objects.get(pk = pk)
-    #count_hit = True
-
-    if response.method == "POST":
-        form = CommentForm(response.POST)
-
-        if form.is_valid():
-            comment = form.save(commit=False)
-            commment.case = case
-            comment.author = request.user
-            #comments.count = Comment.objects.all().filter(comment = self.object.id).count()
-            comment.save()
-            form = CommentForm()
-
-    else:
-        form = CommentForm()
-    context = {
-        'course': case.course,
-        'case': case,
-        'enrolled_users': Case.enrolled_users.through.objects.all(),
-        'form': form
-    }
- 
-    return render(response, 'quiz/comment_detail.html', context)
-
-        
-def comment_edit(request, pk):
-    comment = get_object_or_404(Comment, pk=pk)
-    if request.method == "POST":
-        form = CommentForm(request.POST, instance=comment)
-        if form.is_valid():
-            comment = form.save(commit=False)
-            commment.published_date = timezone.now()
-            comment.author = request.user
-            comment.save()
-            form.save_m2m()
-
-            return redirect('comment_detail', pk=post.pk)
-    else:
-        form = CommentForm(instance=comment)
-    return render(request, 'quiz/comment_detail.html', {'form': form, 'pk': pk})
-
 def delete_comment(request, pk):
     comment = Comment.objects.get(pk=pk)
     comment.delete()
     return redirect('comment_detail')
-
-@login_required(login_url="/login")
-def LikeView_comment(request, pk):
-    comment = get_object_or_404(Comment, id=request.POST.get('comment_id'))
-    comment.likes.add(request.user)
-    comment.dislikes.remove(request.user)
-    return redirect('comment_detail', pk=pk)
-
-
-@login_required(login_url="/login")
-def LikeViewList_comment(request):
-    comment = get_object_or_404(Post, id=request.POST.get('comment_id'))
-    comment.likes.add(request.user)
-    comment.dislikes.remove(request.user)
-    return redirect('comment_detail')
-
-
-@login_required(login_url="/login")
-def DislikeView_comment(request, pk):
-    comment = get_object_or_404(Post, id=request.POST.get('comment_id'))
-    comment.dislikes.add(request.user)
-    comment.likes.remove(request.user)
-    return redirect('comment_detail', pk=pk)
-
-
-@login_required(login_url="/login")
-def DislikeViewList_comment(request):
-    comment = get_object_or_404(Post, id=request.POST.get('comment_id'))
-    comment.dislikes.add(request.user)
-    comment.likes.remove(request.user)
-    return redirect('comment_detail')
-
 
 def search_case(request):
     if request.method == "POST":
