@@ -55,7 +55,7 @@
             {% if course.case_list.all != null %}
                 {% if user in course.enrolled_users.all %}
                     {% for case in course.case_list.all %}
-                        {% if   case.get_remaining_days > -2 %} 
+                        {% if  case.get_remaining_days > 0 %} 
                             <li class="list-group-item list-group-item-action">
                                 <a href="{% url 'case_detail' title=case.title %}" class="post-text" style="text-decoration:none"> Case: {{case.title}}</a>
                                 <!-- <p>Description: {{ case.description | safe }}</p> -->
@@ -66,7 +66,8 @@
                                
                                 {% endif %}
                                 <p>Created by: <a href="{% url 'other_user_profile' name=case.user %}">{{case.user}}</p></a>
-                            </li> 
+                            </li>
+                        {% else %} 
                         {% endif %}
                     {% endfor %}
                 {% endif %} 
