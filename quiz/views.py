@@ -143,24 +143,27 @@ def case_delete(request, title):
 
 
 @login_required(login_url="/login")
-def case_detail(request,title):
+def case_detail(response,title):
     case=Case.objects.get(title=title)
-    course=Course.objects.get(case_list=case)
+    if response.method == "POST":
+        form = CommentForm(response.POST)
+        if form.is_valid():
+            comment = form.save(commit=False)
+            comment.case = case
+            comment.author = response.user
+            comment.save()
+            form = CommentForm()
 
-    form= CaseResultForm()
+        else:
+            form = CommentForm()
+        context = {
+            'course': case.course,
+            'case': case,
+            'enrolled_users': Case.enrolled_users.through.objecs.all(),
+            'form': form,
+        }
 
-    if request.method == 'POST':  
-        form = CaseResultForm(request.POST, request.FILES)  
-        if form.is_valid():  
-            result = form.save(commit=False)
-            result.user=request.user
-            result.shared_date = timezone.now()
-            result.case=case
-            result.save()
-            return redirect('course_detail', title=course.title)  
-    else:  
-        form= CaseResultForm()
-        return render(request, 'quiz/case_detail.html', {'case':case, 'form': form, 'course': course})
+        return render(response, "quiz/case_detail.html", context)
 
 @login_required(login_url="/login")
 def case_grade(request,title):
