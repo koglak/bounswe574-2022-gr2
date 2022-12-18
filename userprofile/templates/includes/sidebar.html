@@ -44,13 +44,13 @@
 
     {% elif page == 'case' %}
         <li class="list-group-item list-group-item-action">
-            <a href="#" class="post-text" style="text-decoration:none">Case Studies - Newly Created</a>{% bs_icon 'envelope-open' size='1em' %} 
+            <a href="{% url 'case_list' title=course.title %}" class="post-text" style="text-decoration:none">Case Studies - Newly Created</a>{% bs_icon 'envelope-open' size='1em' %} 
         </li> 
         <li class="list-group-item list-group-item-action">
-            <a href="#" class="post-text" style="text-decoration:none"> Case Studies - In-progress</a>{% bs_icon 'folder2-open' size='1em' %}
+            <a href="{% url 'case_inprogress_list' title=course.title %}" class="post-text" style="text-decoration:none"> Case Studies - In-progress</a>{% bs_icon 'folder2-open' size='1em' %}
         </li>
         <li class="list-group-item list-group-item-action">
-            <a href="#" class="post-text" style="text-decoration:none"> Case Studies - Closed</a>{% bs_icon 'archive' size='1em' %}
+            <a href="{% url 'case_closed_list' title=course.title %}" class="post-text" style="text-decoration:none"> Case Studies - Closed</a>{% bs_icon 'archive' size='1em' %}
         </li>
        
     {% elif page == 'event' %}
