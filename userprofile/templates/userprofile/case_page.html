@@ -22,7 +22,7 @@
             <div>
                 <div class = col-sm-12>
                     <li class="list-group-item list-group-item-action">
-                    <strong>Active users</strong>
+                    <strong>Active Users</strong>
                     <br>
                     {% for user in course.enrolled_users.all %}
                     <p><a href="{% url 'other_user_profile' name=user %}">{% bs_icon 'person' size='1.1em'%}</a>{{user}}</p> 
@@ -47,7 +47,7 @@
                     <form class="form-inline" method=POST action="{% url 'search_case' %}" style="margin:15px; padding-top:20px;">
                         {% csrf_token %}
                         <input class="form-control mr-sm-2" style="width:650px; float:left; margin-right:10px" type="search"  placeholder="Search any case study" aria-label="Search" name="searched"> 
-                        <button class="btn btn-outline-success my-2" type="submit">Search</button>
+                        <button class="btn btn-outline-success mr-sm-2" type="submit">Search</button>
                     </form>      
                 </div>
                 {% endif %}
@@ -58,7 +58,7 @@
                         {% if  3 > case.get_remaining_days %} 
                             <li class="list-group-item list-group-item-action">
                                 <a href="{% url 'case_detail' title=case.title %}" class="post-text" style="text-decoration:none"> Case: {{case.title}}</a>
-                                
+                                <!-- <p>Description: {{ case.description | safe }}</p> -->
                                 {% if case.publish_date_check %}
                                 <p style = "color:green">Published date: {{case.published_date}}</p>
                                 {% elif case.get_remaining_days > -2 %}
