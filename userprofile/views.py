@@ -316,8 +316,7 @@ def case_list(response, title):
     startdate = datetime.today()
     enddate = startdate + timedelta(days=365)
     course=get_object_or_404(Course, title=title)
-    case_list= Case.objects.filter(course=course, case_date__range=[startdate, enddate])
-    paginate_by = 2
+    case_list= Case.objects.filter(course=course, published_date__range=[startdate, enddate])
 
     form_date=DateFilterForm(response.POST or None)
 
@@ -329,17 +328,79 @@ def case_list(response, title):
                     date_filter= response.POST['published_date']
                     if date_filter =="Ascending":
                         case_list= Case.objects.filter(course=course, case_date__range=[startdate, enddate]).order_by('published_date__day', 'published_date__month')
-                    else:
-                        case_list= Case.objects.filter(course=course, case_date__range=[startdate, enddate]).order_by('-published_date__day', '-published_date__month')
     # No post request
     else:
         form_date=DateFilterForm(use_required_attribute=False)
 
-    paginator = Paginator(case_list,3) 
+    paginator = Paginator(case_list,10) 
     page = response.GET.get('page')
     cases= paginator.get_page(page)
 
-    return render(response, "userprofile/case_page.html", {'course': course, ' cases': cases, "form": form, "form_date": form_date})
+    return render(response, "userprofile/case_list.html", {'course': course, ' cases': cases, "form_date": form_date})
+
+@login_required(login_url="/login")
+def case_page(response, title):
+    course=get_object_or_404(Course, title=title)
+    score_list = Score.objects.filter(user=response.user)
+    return render(response, "userprofile/case_page.html", {'course': course, 'score_list': score_list})
+
+@login_required(login_url="/login")
+def case_inprogress_list(response, title):
+    startdate = datetime.today()
+    enddate = startdate + timedelta(days=365)
+    course=get_object_or_404(Course, title=title)
+    case_list= Case.objects.filter(course=course, due_date__range=[startdate, enddate])
+
+    form_date=DateFilterForm(response.POST or None)
+
+    if response.method == "POST":
+        # Date Sorting
+        if 'due_date' in response.POST:
+                form_date=DateFilterForm(response.POST)
+                if form_date.is_valid():
+                    date_filter= response.POST['due_date']
+                    if date_filter =="Ascending":
+                        case_list= Case.objects.filter(course=course, case_date__range=[startdate, enddate]).order_by('-due_date__day', '-due_date__month')
+    # No post request
+    else:
+        form_date=DateFilterForm(use_required_attribute=False)
+
+    paginator = Paginator(case_list,10) 
+    page = response.GET.get('page')
+    cases= paginator.get_page(page)
+
+    return render(response, "userprofile/case_inprogress_list.html", {'course': course, ' cases': cases, "form_date": form_date})
+
+login_required(login_url="/login")
+def case_closed_list(response, title):
+    startdate = datetime.today()
+    enddate = startdate + timedelta(days=365)
+    course=get_object_or_404(Course, title=title)
+    case_list= Case.objects.filter(course=course, due_date__range=[startdate, enddate])
+
+    form_date=DateFilterForm(response.POST or None)
+
+    if response.method == "POST":
+        # Date Sorting
+        if 'due_date' in response.POST:
+                form_date=DateFilterForm(response.POST)
+                if form_date.is_valid():
+                    date_filter= response.POST['due_date']
+                    if date_filter =="Ascending":
+                        case_list= Case.objects.filter(course=course, case_date__range=[startdate, enddate]).order_by('-due_date__day', '-due_date__month')
+                    else:
+                        print("else")
+                        case_list= Case.objects.filter(course=course, case_date__range=[startdate, enddate]).order_by('due_date__day', 'due_date__month')
+
+    # No post request
+    else:
+        form_date=DateFilterForm(use_required_attribute=False)
+
+    paginator = Paginator(case_list,10) 
+    page = response.GET.get('page')
+    cases= paginator.get_page(page)
+
+    return render(response, "userprofile/case_inprogress_list.html", {'course': course, ' cases': cases, "form_date": form_date})
 
 
 @login_required(login_url="/login")
