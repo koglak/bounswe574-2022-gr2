@@ -373,35 +373,21 @@ def case_inprogress_list(response, title):
 
 login_required(login_url="/login")
 def case_closed_list(response, title):
-    startdate = datetime.today()
-    enddate = startdate + timedelta(days=365)
+    enddate = datetime.today()
+    startdate = enddate - timedelta(days=365)
     course=get_object_or_404(Course, title=title)
-    case_list= Case.objects.filter(course=course, due_date__range=[startdate, enddate])
-
-    form_date=DateFilterForm(response.POST or None)
-
+    case_list= Case.objects.filter(course=course, due_date__range=[startdate, enddate]).order_by('-due_date')
+    
     if response.method == "POST":
-        # Date Sorting
-        if 'due_date' in response.POST:
-                form_date=DateFilterForm(response.POST)
-                if form_date.is_valid():
-                    date_filter= response.POST['due_date']
-                    if date_filter =="Ascending":
-                        case_list= Case.objects.filter(course=course, case_date__range=[startdate, enddate]).order_by('-due_date__day', '-due_date__month')
-                    else:
-                        print("else")
-                        case_list= Case.objects.filter(course=course, case_date__range=[startdate, enddate]).order_by('due_date__day', 'due_date__month')
-
-    # No post request
-    else:
-        form_date=DateFilterForm(use_required_attribute=False)
-
+        if form.is_valid():
+            searched = response.POST["searched"]
+            case_list=Case.objects.filter(course=course, title__icontains=searched, due_date__range=[startdate, enddate])
+    
     paginator = Paginator(case_list,10) 
     page = response.GET.get('page')
     cases= paginator.get_page(page)
 
-    return render(response, "userprofile/case_inprogress_list.html", {'course': course, ' cases': cases, "form_date": form_date})
-
+    return render(response, "userprofile/case_closed_list.html", {'course': course, 'cases':cases})
 
 @login_required(login_url="/login")
 def event_new(request, title):
