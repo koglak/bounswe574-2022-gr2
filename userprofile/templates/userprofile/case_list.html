@@ -1,0 +1,88 @@
+
+{% extends 'blog/base.html' %}
+{% load bootstrap_icons %}
+
+{% block title %}
+    Case Study Detail
+{% endblock %}
+
+{% block content %}
+
+<div class="container-fluid" style="margin-top: 10px;">
+    <div class="row">
+        <div class="col-sm-3">
+            <!--Enroll & Drop Button-->
+            {% if user.is_authenticated %}
+                    {% include 'includes/enroll_drop.html' with course=course %}
+            {% endif %}
+
+            <!-- Lecture List -->
+            {% include 'includes/sidebar.html' with course=course page="case" %}
+            <br>
+            <div>
+                <div class = col-sm-12>
+                    <li class="list-group-item list-group-item-action">
+                    <strong>Active Users</strong>
+                    <br>
+                    {% for user in course.enrolled_users.all %}
+                    <p><a href="{% url 'other_user_profile' name=user %}">{% bs_icon 'person' size='1.1em'%}</a>{{user}}</p> 
+                    {% endfor %}
+                    </li>
+                </div> 
+                <br><br><br>
+            </div>
+        </div>
+
+        <div class="col-sm-6">
+            <div class="col-sm-12">
+                {% if user in course.enrolled_users.all %}
+                    <a href="{% url 'case_create' title=course.title %}"  class="btn btn-primary">Create Case-Study</a>
+                {% else %}
+                <p>To create a case please follow the space</p>
+                {% endif %}
+                <hr>
+                 <!-- search by keyword -->
+                 {% if user in course.enrolled_users.all %}
+                 <div class="col-sm-16">
+                    <form class="form-inline" method=POST action="{% url 'search_case' %}" style="margin:15px; padding-top:20px;">
+                        {% csrf_token %}
+                        <input class="form-control mr-sm-2" style="width:650px; float:left; margin-right:10px" type="search"  placeholder="Search any case study" aria-label="Search" name="searched"> 
+                        <button class="btn btn-outline-success mr-sm-2" type="submit">Search</button>
+                    </form>      
+                </div>
+                {% endif %}
+            </div>  
+            {% if course.case_list.all != null %}
+                {% if user in course.enrolled_users.all %}
+                    {% for case in course.case_list.all %}
+                        {% if   case.get_remaining_days > -2 %} 
+                            <li class="list-group-item list-group-item-action">
+                                <a href="{% url 'case_detail' title=case.title %}" class="post-text" style="text-decoration:none"> Case: {{case.title}}</a>
+                                <!-- <p>Description: {{ case.description | safe }}</p> -->
+                                {% if case.publish_date_check %}
+                                <p style = "color:green">Published date: {{case.published_date}}</p>
+                                {% elif case.get_remaining_days > -2 %}
+                                <p style = "color:red">Due date: {{case.due_date}}</p>
+                               
+                                {% endif %}
+                                <p>Created by: <a href="{% url 'other_user_profile' name=case.user %}">{{case.user}}</p></a>
+                            </li> 
+                        {% endif %}
+                    {% endfor %}
+                {% endif %} 
+            {% else %}
+            There is no created case study yet.
+            {% endif %}
+        <div class="row">  
+           </div>
+
+            </div>
+
+        <!--Course Block: Course2 Template-->
+        <div class="col-sm-3">
+            {% include 'includes/course2.html' with course=course select="course" %}
+        </div>
+    </div> 
+</div>
+
+{% endblock %}
