@@ -29,11 +29,13 @@
            <div class="row">
             <div class="d-inline-flex flex-wrap">
                 {% for case in course.case_list.all  %}
-                <li class="list-group-item list-group-item-action">
-                    <a href="{% url 'case_detail' title=case.title %}" class="post-text" style="text-decoration:none"> Case: {{case.title}}</a>
-                    <p>Due date: {{case.due_date}}</p>
-                    <p>Created by: <a href="#">{{case.user}}</p></a>
-                </li> 
+                    {% if 0 > case.get_remaining_days %}
+                    <li class="list-group-item list-group-item-action">
+                        <a href="{% url 'case_detail' title=case.title %}" class="post-text" style="text-decoration:none"> Case: {{case.title}}</a>
+                        <p>Due date: {{case.due_date}}</p>
+                        <p>Created by: <a href="#">{{case.user}}</p></a>
+                    </li> 
+                    {% endif %}
                 {% endfor %}
             </div>    
            </div>
