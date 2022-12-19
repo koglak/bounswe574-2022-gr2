@@ -314,6 +314,83 @@ def case_page(response, title):
     score_list = Score.objects.filter(user=response.user)
     return render(response, "userprofile/case_page.html", {'course': course, 'score_list': score_list})
 
+@login_required(login_url="/login")
+def case_list(response, title):
+    startdate = datetime.today()
+    enddate = startdate + timedelta(days=365)
+    course=get_object_or_404(Course, title=title)
+    case_list= Case.objects.filter(course=course, published_date__range=[startdate, enddate])
+
+    form_date=DateFilterForm(response.POST or None)
+
+    if response.method == "POST":
+        # Date Sorting
+        if 'published_date' in response.POST:
+                form_date=DateFilterForm(response.POST)
+                if form_date.is_valid():
+                    date_filter= response.POST['published_date']
+                    if date_filter =="Ascending":
+                        case_list= Case.objects.filter(course=course, case_date__range=[startdate, enddate]).order_by('published_date__day', 'published_date__month')
+    # No post request
+    else:
+        form_date=DateFilterForm(use_required_attribute=False)
+
+    paginator = Paginator(case_list,10) 
+    page = response.GET.get('page')
+    cases= paginator.get_page(page)
+
+    return render(response, "userprofile/case_list.html", {'course': course, ' cases': cases, "form_date": form_date})
+
+@login_required(login_url="/login")
+def case_page(response, title):
+    course=get_object_or_404(Course, title=title)
+    score_list = Score.objects.filter(user=response.user)
+    return render(response, "userprofile/case_page.html", {'course': course, 'score_list': score_list})
+
+@login_required(login_url="/login")
+def case_inprogress_list(response, title):
+    startdate = datetime.today()
+    enddate = startdate + timedelta(days=365)
+    course=get_object_or_404(Course, title=title)
+    case_list= Case.objects.filter(course=course, due_date__range=[startdate, enddate])
+
+    form_date=DateFilterForm(response.POST or None)
+
+    if response.method == "POST":
+        # Date Sorting
+        if 'due_date' in response.POST:
+                form_date=DateFilterForm(response.POST)
+                if form_date.is_valid():
+                    date_filter= response.POST['due_date']
+                    if date_filter =="Ascending":
+                        case_list= Case.objects.filter(course=course, case_date__range=[startdate, enddate]).order_by('-due_date__day', '-due_date__month')
+    # No post request
+    else:
+        form_date=DateFilterForm(use_required_attribute=False)
+
+    paginator = Paginator(case_list,10) 
+    page = response.GET.get('page')
+    cases= paginator.get_page(page)
+
+    return render(response, "userprofile/case_inprogress_list.html", {'course': course, ' cases': cases, "form_date": form_date})
+
+login_required(login_url="/login")
+def case_closed_list(response, title):
+    enddate = datetime.today()
+    startdate = enddate - timedelta(days=365)
+    course=get_object_or_404(Course, title=title)
+    case_list= Case.objects.filter(course=course, due_date__range=[startdate, enddate]).order_by('-due_date')
+    
+    if response.method == "POST":
+        if form.is_valid():
+            searched = response.POST["searched"]
+            case_list=Case.objects.filter(course=course, title__icontains=searched, due_date__range=[startdate, enddate])
+    
+    paginator = Paginator(case_list,10) 
+    page = response.GET.get('page')
+    cases= paginator.get_page(page)
+
+    return render(response, "userprofile/case_closed_list.html", {'course': course, 'cases':cases})
 
 @login_required(login_url="/login")
 def event_new(request, title):
@@ -358,6 +435,7 @@ def delete_event(request, pk):
     event = Event.objects.get(pk=pk)
     event.delete()
     return redirect('event_list', title=event.course.title)
+
 
 @login_required(login_url="/login")
 def event_detail(response, pk):
@@ -531,3 +609,4 @@ def save_annotation(request):
 
     res = HttpResponse("successful")
     return res
+

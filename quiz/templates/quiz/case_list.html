@@ -1,0 +1,83 @@
+{% extends 'blog/base.html' %}
+
+{% block title %}
+    Case Study List
+{% endblock %}
+
+{% block content %}
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-sm-3">
+            <!--Enroll & Drop Button-->
+            {% if user.is_authenticated %}
+                    {% include 'includes/enroll_drop.html' with course=course %}
+            {% endif %}
+
+            <!-- Lecture List -->
+            {% include 'includes/sidebar.html' with course=course page="event" %}
+            <div class="text-end mt-3">
+                <a class="btn btn-primary" href="{% url 'event_new' title=course.title %}">Create Event</a>
+            </div>
+        </div>
+
+        <!--Case Content-->
+
+
+        <div class="col-sm-9">
+
+           <div class="row">
+            <div class="d-inline-flex flex-wrap">
+                {% for case in course.case_list.all  %}
+                    {% if 0 > case.get_remaining_days %}
+                    <li class="list-group-item list-group-item-action">
+                        <a href="{% url 'case_detail' title=case.title %}" class="post-text" style="text-decoration:none"> Case: {{case.title}}</a>
+                        <p>Due date: {{case.due_date}}</p>
+                        <p>Created by: <a href="#">{{case.user}}</p></a>
+                    </li> 
+                    {% endif %}
+                {% endfor %}
+            </div>    
+           </div>
+
+                <nav aria-label="Page navigation example">
+                    <ul class="pagination justify-content-end">
+                        {% if events.has_previous %}
+                            <li class="page-item">
+                                <a class="page-link" href="?page=1" tabindex="-1">&laquo; First</a>
+                            </li>
+                            <li class="page-item">
+                                <a class="page-link" href="?page={{ events.previous_page_number }}" tabindex="-1">Previous</a>
+                            </li>
+                        {% else %}
+                            <li class="page-item disabled">
+                                <a class="page-link" href="#" tabindex="-1">Previous</a>
+                            </li>
+                        {% endif %}
+                    
+                    <li class="page-item"><a class="page-link text-dark" >Page {{ events.number }} of {{ events.paginator.num_pages }}</a></li>
+            
+
+                    {% if events.has_next %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ events.next_page_number }}">Next</a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ events.paginator.num_pages }}">Last &raquo;</a>
+                        </li>
+                    {% else %}
+                        <li class="page-item disabled">
+                            <a class="page-link" href="#" tabindex="-1">Last</a>
+                        </li>
+                    {% endif %}
+                    </ul>
+                </nav>
+
+            </div>
+            
+        </div>
+
+    </div> 
+</div>
+
+{% endblock %}

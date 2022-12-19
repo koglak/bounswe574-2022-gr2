@@ -5,23 +5,10 @@ from django import forms
 class CommentForm(forms.ModelForm):
     class Meta:
         model = Comment
-        fields = ('text',)
-        widgets = {
-            'text': forms.Textarea(attrs={ 
-               'class': "form-control",
-                'style': 'max-width: 300px;',
-                'placeholder': 'Text',
-                })
-            }
-
-class ReplyForm(forms.ModelForm):
-    class Meta:
-        model = ReplyComment
         fields = ('body',)
         labels = {
-        'body': (''),
-         }
-
+            'body': (''),
+        }
  
 class QuestionForm(ModelForm):
     class Meta:
@@ -42,8 +29,24 @@ class CaseForm(ModelForm):
     class Meta:
         model=Case
         fields=('title','description', 'due_date')
+        widgets = {
+            'title': forms.TextInput(attrs={
+                'class': "form-control",
+                'style': 'max-width: 700px;',
+                'placeholder': 'Title',
+                }),
+            'due_date': forms.TextInput(attrs={
+                'class': "form-control",
+                'style': 'max-width: 700px;',
+                'placeholder': 'YYYY-MM-DD',
+                })
+        }
 
-
+class DateFilterForm(forms.Form):
+    DATE_CHOICES =(
+            ("Ascending", "Ascending"),
+            ("Descending", "Descending"),
+            )
 
 class CaseResultForm(ModelForm):
 

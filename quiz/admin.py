@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Question, QuestionList, Score, Case, CaseResult, CaseRating, Comment, ReplyComment
+from .models import Question, QuestionList, Score, Case, CaseResult, CaseRating, Comment
 
 
 # Register your models here.
@@ -10,6 +10,6 @@ admin.site.register(Case)
 admin.site.register(CaseResult)
 admin.site.register(CaseRating)
 admin.site.register(Comment)
-admin.site.register(ReplyComment)
+#admin.site.register(ReplyComment)
 
 
