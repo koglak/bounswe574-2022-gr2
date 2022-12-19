@@ -1,10 +1,12 @@
 {% extends 'blog/base.html' %}
 
 {% block title %}
-    Space Detail
+    Space Metrics
 {% endblock %}
 
 {% block content %}
+
+
 
     <div class="container-fluid" style="margin-top: 10px;">
         <div class="row">
@@ -12,22 +14,26 @@
                 <!--Enroll & Drop Button-->
                 {% if user.is_authenticated %}
                         {% include 'includes/enroll_drop.html' with course=course %}
-                        
                 {% endif %}
 
                 <!-- Side List -->
                 {% include 'includes/sidebar.html' with course=course page="lecture" %}
-            
-                <div class="text-end mt-3">
-                    {% if user in course.collaborative_members.all or user == course.user %}
-                            <a href="{% url 'lecture_new' pk=course.pk %}" type="button" class="btn btn-primary">Create Content</a>
-                    {% endif %}
-                </div>
             </div>
 
-            <!--Lecture Content-->
-            <div class="col-sm-6" id="content">
-                {{lecture.content|safe}}
+            <div class="col-sm-6">
+                <h3>Space Metrics</h3>
+                <strong>Enrolled Users: </strong> {{course.enrolled_users.count}}
+                <br/>
+                <strong>Resources:</strong> {{course.lecture.count}}
+                <br/>
+                <strong>Case Studies:</strong> {{course.case_list.count}} 
+                <br/>
+                <strong>Events:</strong>{{course.event_list.count}}
+                <br/>
+                <strong>Quizzes:</strong> {{course.question_list.count}} 
+                <br/>
+                <strong> Questions: </strong> {{course.space_question.count}}
+
             </div>
 
             <!--Course Block: Course2 Template-->
@@ -36,5 +42,4 @@
             </div>
         </div> 
     </div>
-
 {% endblock %}

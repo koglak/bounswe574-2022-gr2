@@ -1,0 +1,213 @@
+{% extends 'blog/base.html' %}
+
+{% block title %}
+    Helloworld - Questions
+{% endblock %}
+
+{% block content %}
+
+
+<div class="container bootstrap snippets bootdey">
+  <div class="row mt-2 p-2">
+    <!--Page Navigation-->
+    <h5> <a href="{% url 'course_detail' title=course.title %}"> Space: {{course.title}} </a>
+        >
+        <a href="{% url 'forum_page' title=course.title %}"> Forum </a>
+        >
+        {{question.title}}
+    </h5>
+</div>
+  <div class="row">
+      <div class="post-list">
+          <div class="row">
+            <div class="col-sm-1">
+                <div class="d-flex flex-start align-items-center">
+
+                  {% if question.userProfileImg %}
+                    <img class="rounded-circle shadow-1-strong me-3"
+                    src="{{question.userProfileImg.url}}" alt="avatar" width="60"
+                    height="60" />
+                 {% else %}
+                    <img class="rounded-circle shadow-1-strong me-3"
+                    src="http://cdn.onlinewebfonts.com/svg/img_24787.png" alt="avatar" width="60"
+                    height="60" />
+                  {% endif %}
+                </div>
+              </div>
+            <div class="col-sm-9">
+                  {% if user == question.user %}
+                    <a href="{% url 'user_profile' %}" class="post-author" style="font-family: 'Poppins';font-size:18px; font-weight: 600px; margin-right:5px">{{question.user}}</a>
+                  {% else %}
+                    <a href="{% url 'other_user_profile' name=question.user %}" class="post-author" style="font-family: 'Poppins';font-size:18px; font-weight: 600px; margin-right:5px">{{question.user}}</a>
+                  {% endif %}
+                  {% if user.is_authenticated %}
+                  <a href="#" class="link-success" style="font-family: 'Poppins';font-style: normal;font-weight: 800;font-size: 16px;">Follow</a>
+                  {% endif %}
+              </div>
+            <div class="col-sm-2">
+                {% if question.published_date %}
+                  <date class="date">
+                    {{ question.published_date }}
+                  </date>
+                {% endif %}
+           </div>
+          </div>
+          <div class="row">
+                <aside class="actions">
+                  <a href="#" class="post-title">{{ question.title }}</a>
+                  {% if user.is_authenticated and user == question.user %}
+                      <a class="btn btn-secondary btn-sm" href="{% url 'space_question_edit' pk=question.pk title=course.title %}">
+                          Edit
+                      </a>
+                  {% endif %}
+                </aside>
+                <p class="post-text">{{question.text | safe}}</p>    
+          </div>
+          <div class="row", style="padding: 4px; background: rgba(196, 196, 196, 0.22); margin-top:5px" >
+            <!--Like Button-->
+            <div class="col-sm-1 col-lg-1 col-xl-1">
+                <form action="{% url 'space_question_detail_like' pk=question.pk title=course.title %}" method="POST">
+                    {% csrf_token %}
+                        <button type="submit", name="post_id", value="{{question.id}}", class="btn btn-outline-primary btn-sm" >Like</button>
+                        <p style="display: inline; font-weight: bold;">{{question.total_likes}}</p>
+                </form>
+            </div>
+            <!--Disike Button-->
+            <div class="col-sm-1 col-lg-1 col-xl-1">
+                <form action="{% url 'space_question_detail_dislike' pk=question.pk title=course.title %}" method="POST">
+                    {% csrf_token %}
+                        <button type="submit", name="post_id", value="{{question.id}}", class="btn btn-outline-warning btn-sm" >Dislike</button>
+                        <p style="display: inline; font-weight: bold;">{{question.total_dislikes}}</p>
+                </form>
+            </div>
+            <!--Comment Button-->
+            <div class="col-sm-2 col-lg-2 col-xl-2">
+                <a class="btn btn-outline-secondary btn-sm"  href="#" role="button">Comment</a>
+                <p style="display: inline; font-weight: bold;">{{question.space_question_answer.count}}</p>
+            </div>
+            <div class="col-sm-8 col-lg-8 col-xl-8" style="display: flex; justify-content: flex-end">
+              {% for tag in question.tags.all  %}                     
+                <a href="#" type="button" class="btn btn-outline-dark btn-sm" style="margin-left:10px"> #{{tag}}</a>
+              {% endfor %}
+            </div>
+          </div>              
+        </div>
+</div>
+<hr>
+
+<!--Comment Section-->
+<section style="background-color: white;">
+    <div class="container my-5 py-5" style="margin-top:0px !important; padding:0px !important">
+      <div class="row d-flex justify-content-center">
+        <div class="col-md-12 col-lg-12 col-xl-12">
+          <div class="card">
+            <div class="card-body">
+
+                {% if not question.space_question_answer.all %}
+                    No Comments Yet ... 
+                {% else %}
+                    {% for answer in question.space_question_answer.all %}
+                          
+                      <div style=" margin: 5px; padding:3px">
+                            <form method="POST" style="float: right; opacity: 0.5;">
+                              <a class="btn btn-outline-danger btn-sm" href="#">Delete</a>
+                            </form>
+                          <div class="d-flex flex-start align-items-center">
+                            
+                            {% if answer.userProfileImg %}
+                              <img class="rounded-circle shadow-1-strong me-3"
+                              src="{{answer.userProfileImg.url}}" alt="avatar" width="60"
+                              height="60" />
+                            {% else %}
+                              <img class="rounded-circle shadow-1-strong me-3"
+                              src="http://cdn.onlinewebfonts.com/svg/img_24787.png" alt="avatar" width="60"
+                              height="60" />
+                            {% endif %}
+                              
+                              <div>
+                                <div style="float:left; margin-right:10px">
+                                    {% if user == answer.user %}
+                                    <a href="{% url 'user_profile' %}" class="post-author" style="font-family: 'Poppins';font-size:18px; font-weight: 600px; margin-right:5px">{{answer.user}}</a>
+                                    {% else %}
+                                    <a href="{% url 'other_user_profile' name=answer.user.username %}" class="post-author" style="font-family: 'Poppins';font-size:18px; font-weight: 600px; margin-right:5px">{{answer.user}}</a>
+                                    {% endif %}
+                                </div>
+
+
+                                  <div style="float:clear">
+
+                                      <a href="#" class="link-success" style="font-family: 'Poppins';font-style: normal;font-weight: 800;font-size: 16px;">Follow</a>
+                                    </div>
+
+                                <p class="text-muted small mb-0">
+                                  {{answer.published_date}}
+                                </p>
+                               
+                              </div>
+                              
+                          </div>
+                           <hr>
+                          <p class="mt-3 mb-4">
+                            {{answer.answer | safe}}
+                          </p>
+
+                          <div class="row" style="padding: 4px; background: rgba(196, 196, 196, 0.22); margin-top:5px" >
+                            <!--Like Button-->
+                            <div class="col-sm-1 col-lg-1 col-xl-1">
+                                <form action="{% url 'space_question_detail_answer_like' num=answer.pk title=course.title pk=question.pk  %}" method="POST">
+                                        {% csrf_token %}
+                                        {% if user.is_authenticated %}
+                                        <button type="submit", name="answer_id", value="{{answer.id}}", class="btn btn-outline-primary btn-sm" >Like</button>
+                                        {% else %}
+                                        <strong>Like:</strong>
+                                        {% endif %}
+                                        <p style="display: inline; font-weight: bold;">{{answer.total_likes}}</p>
+                                </form>
+                            </div>
+                            <!--Disike Button-->
+                            <div class="col-sm-1 col-lg-1 col-xl-1">
+                                <form action="{% url 'space_question_detail_answer_dislike' num=answer.pk title=course.title pk=question.pk %}" method="POST">
+                                        {% csrf_token %}
+                                        {% if user.is_authenticated %}
+                                        <button type="submit", name="answer_id", value="{{answer.id}}", class="btn btn-outline-warning btn-sm" >Dislike</button>
+                                        {% else %}
+                                        <strong>Dislike:</strong>
+                                        {% endif %}
+                                        <p style="display: inline; font-weight: bold;">{{answer.total_dislikes}}</p>
+                                </form>
+                            </div>
+                        </div>
+                    {% endfor %}
+                {% endif %}
+              
+              
+            </div>
+            {% if user.is_authenticated %}
+
+            <div class="card-footer py-3 border-0" style="background-color: #f8f9fa;">
+              <div class="d-flex flex-start w-100">
+                <img class="rounded-circle shadow-1-strong me-3"
+                  src="http://cdn.onlinewebfonts.com/svg/img_24787.png" alt="avatar" width="40"
+                  height="40" />
+                <div class="form-outline w-100">
+                  <form method="POST" class="post-form">
+                    {% csrf_token %}
+                    {{ form }}
+                    <br>
+                    <button type="submit" class="btn btn-outline-success">Answer!</button>
+                  </form>
+                </div>
+              </div>
+              
+            </div>
+            {% endif %}
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  
+
+
+{% endblock %}

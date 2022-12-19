@@ -25,12 +25,18 @@
         <link href="http://fonts.cdnfonts.com/css/mogra" rel="stylesheet">
         <link href='https://fonts.googleapis.com/css?family=Roboto Mono' rel='stylesheet'>
         <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Poppins" />
+        <link rel="stylesheet" href="{% static 'css/recogito.min.css' %}" type="text/css" />
 
         {% block head %}
         {% endblock %}
         
     </head>
     <body>
+        <script src='http://ajax.googleapis.com/ajax/libs/jquery/1.7/jquery.min.js'></script>
+        
+        
+        <script src="{% static 'js/recogito.min.js' %}"></script>
+
         
         <nav class="navbar navbar-expand-lg navbar-light bg-light">
             <div class="container-fluid">
@@ -74,6 +80,7 @@
             {% endblock %}
         </main>
 
+
         <footer class="my-4 border-top">
             <div class="nav justify-content-center mt-3">
                 <a class="btn btn-primary m-1" style="background-color: #3b5998;" href="#!" role="button">
@@ -91,9 +98,44 @@
             </div>
             <p class="text-center text-muted">© 2022 Company, Inc</p>
         </footer>
-
-        
     </body>
+
+    <script type="text/javascript">
+        (function() {
+          var r = Recogito.init({
+            content: document.getElementById('content') // ID or DOM element
+          });
+    
+          // Add an event handler  
+          r.on('createAnnotation', function(annotation) { 
+            var created_annotation=annotation;
+
+            var context=JSON.stringify(created_annotation["@context"])
+            var type=JSON.stringify(created_annotation["type"])
+            var body=JSON.stringify(created_annotation["body"][0])
+            var target=JSON.stringify(created_annotation["target"])
+            var id=JSON.stringify(created_annotation["id"].replace("#",""))
+
+            // console.log(Object.keys(created_annotation))
+            // console.log(type)
+            // console.log(context)
+            // console.log(body)
+            // console.log(id)
+            // console.log(target)
+            console.log(created_annotation)
+           
+            r.loadAnnotations("save_annotation/?context=" + context + "&type=" + type + "&id=" + id +"&target=" + target + "&body=" + body).then(function(annotations) {
+                console.log("Success")
+                console.log(annotations)
+            });
+
+           });
+
+
+         
+        })();
+      </script>
+    
     {{ form.media }}
 
     {% block script %}

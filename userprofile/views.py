@@ -1,18 +1,21 @@
 
 # Create your views here.
+import json
 from django.http import HttpResponse
 from django.utils import timezone
 from django.shortcuts import render
 from blog.models import Post
 from quiz.models import Case, Question, QuestionList, Score
-from .models import Course, Profile, Rating, Lecture, Event
-from .forms import CourseForm, ProfileForm, LectureForm, EventForm, CategorySortingForm, DateFilterForm
+from .models import Course, Profile, Rating, Lecture, Event, Question, Answer
+from .forms import CourseForm, ProfileForm, LectureForm, EventForm, CategorySortingForm, DateFilterForm, CommentsForm, QuestionForm, AnswerForm
 from django.shortcuts import redirect, get_object_or_404
 from taggit.models import Tag
 from django.template.defaultfilters import slugify
 from django.contrib.auth.decorators import login_required
 from datetime import datetime, timedelta, time
 from django.core.paginator import Paginator
+from django.urls import reverse
+
 
 @login_required(login_url="/login")
 def user_profile(response):
@@ -434,5 +437,176 @@ def delete_event(request, pk):
     return redirect('event_list', title=event.course.title)
 
 
+@login_required(login_url="/login")
+def event_detail(response, pk):
+    event = Event.objects.get(pk=pk)
+    if response.method == "POST":
+        form = CommentsForm(response.POST)
+        if form.is_valid():
 
+            comment = form.save(commit=False)
+            comment.event = event
+            comment.user = response.user
+            comment.save()
+            form = CommentsForm()
+    else:
+        form = CommentsForm()
+    context = {
+        'course': event.course,
+        'event': event,
+        'enrolled_users': Event.enrolled_users.through.objects.all(),
+        'form': form,
+    }
+
+    return render(response, "userprofile/event_detail.html", context)
+
+@login_required(login_url="/login")
+def forum_page(response, title):
+    course=get_object_or_404(Course, title=title)
+    questions= Question.objects.filter(course=course).order_by('-published_date')
+    return render(response, 'userprofile/forum_page.html', {'course': course, 'questions': questions})
+
+@login_required(login_url="/login")
+def question_new(request,title):
+    if request.method == "POST":
+        course=get_object_or_404(Course, title=title)
+        questions= Question.objects.filter(course=course).order_by('-published_date')
+        form = QuestionForm(request.POST)
+
+        if form.is_valid():
+            question = form.save(commit=False)
+            question.user = request.user
+            question.course = course
+            question.published_date = timezone.now()
+            question.save()
+
+            return redirect('forum_page', {'course': course, 'questions': questions})
+    else:
+        form = QuestionForm()
+        pk ="none"
+    return render(request, 'userprofile/question_edit.html', {'form': form,'pk': pk})
+
+
+@login_required(login_url="/login")
+def question_detail(request, pk, title):
+    course=get_object_or_404(Course, title=title)
+    question = get_object_or_404(Question, pk=pk)
+    if request.method == "POST":
+        form = AnswerForm(request.POST)
+        if form.is_valid():
+            answer = form.save(commit=False)
+            answer.question = question
+            answer.user = request.user
+            answer.published_date = timezone.now()
+            answer.save()
+    else:
+        form = AnswerForm()
+    return render(request, 'userprofile/question_detail.html', {'question': question, "form":form, "course": course})
+
+@login_required(login_url="/login")
+def question_edit(request, pk, title):
+    course=get_object_or_404(Course, title=title)
+    question = get_object_or_404(Question, pk=pk)
+    if request.method == "POST":
+        form = QuestionForm(request.POST, instance=question)
+        if form.is_valid():
+            question = form.save(commit=False)
+            question.user = request.user
+            question.course = course
+            question.published_date = timezone.now()
+            question.save()
+            form.save_m2m()
+
+            return redirect(f'/myspace/{course.title}/forum_page/{question.pk}')
+    else:
+        form = QuestionForm(instance=question)
+    return render(request, 'userprofile/question_edit.html', {'form': form, 'pk': pk, "course": course, "question": question})
+
+@login_required(login_url="/login")
+def LikeView(request, pk, title):
+    question = get_object_or_404(Question, pk=pk)
+    question.likes.add(request.user)
+    question.dislikes.remove(request.user)
+    return redirect(f'/myspace/{title}/forum_page/{pk}')
+
+@login_required(login_url="/login")
+def DislikeView(request, pk, title):
+    question = get_object_or_404(Question, pk=pk)
+    question.dislikes.add(request.user)
+    question.likes.remove(request.user)
+    return redirect(f'/myspace/{title}/forum_page/{pk}')
+
+@login_required(login_url="/login")
+def AnswerLikeView(request, pk, title,num):
+    answer = get_object_or_404(Answer, pk=num)
+    answer.likes.add(request.user)
+    answer.dislikes.remove(request.user)
+    return redirect(f'/myspace/{title}/forum_page/{pk}')
+
+
+@login_required(login_url="/login")
+def AnswerDislikeView(request,pk,title,num ):
+    answer = get_object_or_404(Answer, pk=num)
+    answer.dislikes.add(request.user)
+    answer.likes.remove(request.user)
+    return redirect(f'/myspace/{title}/forum_page/{pk}')
+
+
+@login_required(login_url="/login")
+def LikeViewList(request, pk, title):
+    question = get_object_or_404(Question, pk=pk)
+    question.likes.add(request.user)
+    question.dislikes.remove(request.user)
+    return redirect("forum_page", title=title)
+
+@login_required(login_url="/login")
+def DislikeViewList(request, pk, title):
+    question = get_object_or_404(Question, pk=pk)
+    question.likes.remove(request.user)
+    question.dislikes.add(request.user)
+    return redirect("forum_page", title=title)
+
+@login_required(login_url="/login")
+def delete_question(request, pk, title):
+    question = Question.objects.get(pk=pk)
+    question.delete()
+    return redirect("forum_page", title=title)
+
+@login_required(login_url="/login")
+def search_question(request, title):
+    course=get_object_or_404(Course, title=title)
+    if request.method == "POST":
+        searched = request.POST["searched"]
+        results=Question.objects.filter(course=course, title__icontains=searched)
+
+        return render(request, 'userprofile/forum_page.html', {'course': course, 'questions': results}) 
+    else:
+        return render(request, "userprofile/forum_page.html", {'course': course}) 
+
+@login_required(login_url="/login")
+def metric_pages(request, title):
+    course=get_object_or_404(Course, title=title)
+    
+    return render(request, "userprofile/space_metrics.html", {"course":course}) 
+
+def save_annotation(request):
+    context=request.GET["context"]
+    types=request.GET["type"]
+    id=request.GET["id"]
+    target=request.GET["target"]
+    body=request.GET["body"]
+
+    annotation={
+        "@context": json.loads(context),
+        "body": [json.loads(body)],
+        "id": "#" + json.loads(id),
+        "target":json.loads(target),
+        "type":json.loads(types)
+    }
+
+    print(annotation)
+    print("working...")
+
+    res = HttpResponse("successful")
+    return res
 

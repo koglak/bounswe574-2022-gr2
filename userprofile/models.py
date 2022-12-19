@@ -74,7 +74,8 @@ class Event(models.Model):
     ("Social", "Social"),
     ("Presentation", "Presentation"),
     ("Introductory", "Introductory"),
-    ("Training", "Training")
+    ("Training", "Training"),
+    ("Others", "Others")
     )
 
     title = models.CharField(max_length=200)
@@ -92,7 +93,7 @@ class Event(models.Model):
     img = models.ImageField(upload_to='images', help_text="event_image", null=True)
     quota = models.PositiveIntegerField(default=0, blank=True)
     published_date = models.DateTimeField(blank=True, null=True, default=timezone.now)  
-    duration = models.PositiveIntegerField( default=0, blank=True)
+    duration = models.CharField(max_length=10)
 
 
     def get_remaining_days(self):
@@ -107,9 +108,73 @@ class Event(models.Model):
     
     def publish_date_check(self):
         return (datetime.datetime.today() - self.published_date).days < 1
-         
-    
+
     def __str__(self):
         return self.title
 
 
+
+class Comments(models.Model):
+    event = models.ForeignKey(Event, on_delete=models.CASCADE, related_name="comments")
+    user=models.ForeignKey(User,default=None, on_delete=models.CASCADE)
+    body = models.TextField()
+    date_added = models.DateTimeField(auto_now_add=True)
+
+    def userProfileImg(self):
+        user = Profile.objects.get(user=self.user)
+        return user.img
+
+    def __str__(self):
+        return self.event.title
+
+
+class Question(models.Model):
+   
+    course=models.ForeignKey(Course,default=None, on_delete=models.CASCADE, related_name="space_question")
+    user=models.ForeignKey(User,default=None, on_delete=models.CASCADE)
+    title = models.CharField(max_length=255)
+    question = tinymce_models.HTMLField()
+    published_date=models.DateTimeField(blank=True, null=True)
+    tags = TaggableManager()
+    likes = models.ManyToManyField(User, related_name='space_question_like')
+    dislikes = models.ManyToManyField(User, related_name='space_question_dislike')
+
+    def total_likes(self):
+        return self.likes.count()
+
+    def total_dislikes(self):
+        like=self.likes.count()
+        like=like-1
+        return self.dislikes.count()
+    
+    def userProfileImg(self):
+        user = Profile.objects.get(user=self.user)
+        return user.img
+
+    # when we call __str__, it will turn a text
+    def __str__(self):
+        return self.title
+
+
+class Answer(models.Model):
+    question = models.ForeignKey(Question, on_delete=models.CASCADE, related_name="space_question_answer")
+    user=models.ForeignKey(User,default=None, on_delete=models.CASCADE)
+    answer = tinymce_models.HTMLField()
+    published_date = models.DateTimeField(auto_now_add=True)
+    likes = models.ManyToManyField(User, related_name='space_question_answer_likes')
+    dislikes = models.ManyToManyField(User, related_name='space_question_answer_dislikes')
+
+    def total_likes(self):
+        return self.likes.count()
+
+    def total_dislikes(self):
+        like=self.likes.count()
+        like=like-1
+        return self.dislikes.count()
+    
+    def userProfileImg(self):
+        user = Profile.objects.get(user=self.user)
+        return user.img
+
+    def __str__(self):
+        return '%s - %s' % (self.question.title, self.answer)
