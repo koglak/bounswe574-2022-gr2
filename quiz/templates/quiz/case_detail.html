@@ -15,11 +15,12 @@
     <p class="post-title">Title of the case study: <light style = "color: brown;">"{{case.title}}"</light></p>
     <p>has opened by {{case.user}}</light></p>
     {% if user == case.user %}
-      {% if case.get_remaining_days > 0%}
+      {% if case.get_remaining_days >= 0%}
       <div>
         <a href="{% url 'case_edit' title=case.title %}" class="btn btn-warning">Edit</a>
         <a href="{% url 'case_delete' title=case.title %}" class="btn btn-danger">Delete</a>
-        <a href="{% url 'case_grade' title=case.title %}" class="btn btn-outline-primary">Upload Your Work</a>
+        <a href="{% url 'case_grade' title=case.title %}" class="btn btn-outline-primary">Ratings</a>
+        <a href="{% url 'submit_assignment' title=case.title %}" class="btn btn-outline-success">Upload Your Work</a>
       </div>
       {% else %}
       {% endif %}
@@ -42,16 +43,16 @@
               {% endif %}
             </div>
           {% for comment in case.comments.all %}
-          <div class = "col-lg-12 mt-4">
+          <div class = "col-lg-8 mt-4">
             <div class = card>
               <div class = "row">
                 {% if comment.authorProfileImg %}
-                <div class = "col-12">
+                <div class = "col-8">
                   <img class="rounded-circle shadow-1-strong me-3" src="{{enrolled_user.userProfileImg.url}}" alt="avatar" width="60" height="60" />                  
                   <strong>{{ comment.author }}</strong> <i>said</i>
                 </div>
                 {% else %}
-                <div class = "col-12">
+                <div class = "col-8">
                   <img class="rounded-circle shadow-1-strong me-3" src="http://cdn.onlinewebfonts.com/svg/img_24787.png" alt="avatar" width="60" height="60" />                 
                   <strong>{{ comment.author }}</strong> <i>said</i>
                 </div>
@@ -64,7 +65,7 @@
                 <div class="col-sm-1 col-lg-1 col-xl-1">
                   <form action="" method="POST">
                       {% csrf_token %}
-                          <button type="submit", name="post_id", value="{{post.id}}", class="btn btn-outline-primary btn-sm" >Like</button>
+                          <button type="submit", name="post_id", value="", class="btn btn-outline-primary btn-sm" >Like</button>
                           <p style="display: inline; font-weight: bold;">{{comment.total_likes}}</p>
                   </form>
                 </div>
@@ -73,7 +74,7 @@
                 <div class="col-sm-1 col-lg-1 col-xl-1">
                   <form action="" method="POST">
                       {% csrf_token %}
-                          <button type="submit", name="post_id", value="{{post.id}}", class="btn btn-outline-warning btn-sm" >Dislike</button>
+                          <button type="submit", name="post_id", value="", class="btn btn-outline-warning btn-sm" >Dislike</button>
                           <p style="display: inline; font-weight: bold;">{{comment.total_dislikes}}</p>
                   </form>
                 </div>

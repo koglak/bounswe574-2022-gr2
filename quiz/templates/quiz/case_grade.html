@@ -1,24 +1,15 @@
 {% extends 'blog/base.html' %}
 
 {% block title %}
-   Work
+    Ratings
 {% endblock %}
 
 {% block content %}
 
   <!--Page Navigation-->
-  <h5> <a href="{% url 'course_detail' title=course.title %}"> Space: {{course.title}} </a> > Case Page</h5>
+  <h5> Space: <a href="{% url 'course_detail' title=course.title %}"> {{course.title}} </a> > Case Page: </h5>  
   <br>
-  <div class="jumbotron container row"></div>
-  <p class="post-author"> Upload Your Work:</p>
-  <form method="POST" class="post-form" enctype="multipart/form-data">  
-      {% csrf_token %}  
 
-      {{form.as_p}}
-      <button type="submit" class="save btn btn-success">Submit</button>  
-      <hr>
-  </form>
-</div>
   <table class="table table-striped">
     <thead>
       <tr>
@@ -26,7 +17,6 @@
         <th scope="col">User Name</th>
         <th scope="col">Submission Date</th>
         <th scope="col">File</th>
-        <th scope="col">Rated By Owner</th>
         <th scope="col">Rated By Users</th>
 
       </tr>
@@ -49,10 +39,9 @@
             
             <td>{{ list_form.instance.shared_date }}</td>
             
-            <td><a href="{{ MEDIA_URL }}{{list_form.instance.upload.url}}">Download</a></td>
+            <td><a href="{{ MEDIA_URL }}{{list_form.instance.upload.url}}">Preview</a></td>
             
-            <td>{{list_form.instance.score}}/100</td>
-
+            
             <td>
               <!--All users can rate case studies-->
               <form class="form-inline my-2 my-lg-0" action="{% url 'case_rate' pk=list_form.instance.pk %}" method="POST">
@@ -69,7 +58,15 @@
                   {% endif %}
                   <span style="font-family:'Poppins'; opacity:0.8">{{list_form.instance.averagereview|floatformat:'2' }}/5</span>      
               </form>
+
             </td>
+
+            <!--Only case owner can grade the case studies-->
+            <!--
+            {% if user == list_form.instance.case.user %}
+              {{ list_form }} 
+            {% endif %}
+            -->
           </tr>
 
         {% endfor %}
@@ -83,5 +80,4 @@
     </tbody>
   </table>
 {% endblock %}
-
 
