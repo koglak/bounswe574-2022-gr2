@@ -223,6 +223,7 @@ def case_grade(request,title):
     ListFormSet = modelformset_factory(CaseResult, fields=('score',), extra=0)
     if request.method == 'POST':
         list_formset = ListFormSet(request.POST)
+        form = CaseResultForm(request.POST, request.FILES) 
         if list_formset.is_valid():
             list_formset.save()
             return redirect('case_grade', title=case.title)  
@@ -230,11 +231,30 @@ def case_grade(request,title):
         list_formset = ListFormSet(queryset=CaseResult.objects.filter(case=case).order_by('shared_date'))
         course=Course.objects.get(case_list=case)
         return render(request, 'quiz/case_grade.html', {'list_formset': list_formset, 'course':course} )
-    
 
-def delete_submission(request, title):
+def submit_assignment(request, title):
     case=Case.objects.get(title=title)
-    success_url = reverse_lazy('delete_submission')
+    course=Course.objects.get(case_list=case)
+    form = CaseResultForm()
+    if request.method == 'POST':  
+        form = CaseResultForm(request.POST, request.FILES)  
+        if form.is_valid():  
+            result = form.save(commit=False)
+            result.user=request.user
+            result.shared_date = timezone.now()
+            result.case=case
+            result.save()
+            return redirect('case_grade', title=course.title)  
+    else:  
+        form= CaseResultForm()
+        return render(request, 'quiz/submit_assignment.html', {'case':case, 'form': form, 'course': course})
+
+
+# def delete_submission(request, title):
+#     case = get_object_or_404(Case, title=title)
+#     case.delete()
+#     return redirect('delete_submission', title=case.course.title)
+
 
 
 @login_required(login_url="/login")
@@ -256,7 +276,7 @@ def case_rate(request, pk):
             obj.save()
             case_result.averagereview()
 
-    return redirect('case_detail', title=case.title)
+    return redirect('case_grade', title=case.title)
 
 def delete_comment(request, pk):
     comment = Comment.objects.get(pk=pk)
