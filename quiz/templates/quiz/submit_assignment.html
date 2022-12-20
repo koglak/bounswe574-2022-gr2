@@ -1,0 +1,33 @@
+{% extends 'blog/base.html' %}
+
+{% block title %}
+    Submit your work
+{% endblock %}
+
+{% block content %}
+<div class="jumbotron container row">
+
+    <!--Page Navigation-->
+    <h5> <a href="{% url 'course_detail' title=course.title %}"> Space: {{course.title}} </a> > Case Page </h5>
+    <br>
+
+    <p class="post-title">Title "{{case.title}}"</p>
+    <p class="post-title">Description: {{case.description|safe}}</p>
+
+    <br>
+    <hr>
+    {% if user in list_form.instance.user %}
+    You have submitted.
+    {% else %}
+    <p class="post-author"> Upload Your Work:</p>
+    <form method="POST" class="post-form" enctype="multipart/form-data">  
+        {% csrf_token %}  
+
+        {{form.as_p}}
+        <button type="submit" class="save btn btn-success">Submit</button>  
+    
+    </form>
+    {% endif %}
+</div>
+
+{% endblock %}
