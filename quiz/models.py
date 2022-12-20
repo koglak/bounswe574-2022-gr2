@@ -76,7 +76,7 @@ class Case(models.Model):
 
 class Comment(models.Model):
     author = models.ForeignKey(User, on_delete=models.CASCADE)
-    body = models.TextField(blank = True, null = True, default = None)
+    body = models.TextField(blank = True, null = True)
     case = models.ForeignKey(Case, on_delete=models.CASCADE, related_name = "comments")
     #created_date = models.DateTimeField(default=timezone.now)
     published_date = models.DateTimeField(default=timezone.now)
@@ -127,13 +127,13 @@ class CaseResult(models.Model):
         os.remove(os.path.join(settings.MEDIA_ROOT, self.upload.name))
         super().delete(*args, **kwargs)
 
-    def case_assignment(self, score):
-        self.score = score
-        self.rated = True
-        self.save()
+    # def case_assignment(self, score):
+    #     self.score = score
+    #     self.rated = True
+    #     self.save()
 
     def __str__(self):
-        return str(self.case)
+        return str(self.score)
 
 class CaseRating(models.Model):
 
