@@ -50,7 +50,6 @@ INSTALLED_APPS = [
     'fontawesomefree',
     'activity',
     'tinymce',
-    'django_filters',
 ]
 
 MIDDLEWARE = [
