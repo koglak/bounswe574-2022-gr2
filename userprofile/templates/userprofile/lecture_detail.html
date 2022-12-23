@@ -31,14 +31,121 @@
             </div>
 
             <script type="text/javascript">
+                
+
+                var myAnnotation = {
+                    '@context': 'http://www.w3.org/ns/anno.jsonld',
+                    'id': 'https://www.example.com/recogito-js-example/foo',
+                    'type': 'Annotation',
+                    'body': [{
+                      'type': 'TextualBody',
+                      'value': 'This annotation was added via JS.'
+                    }],
+                    'target': {
+                      'selector': [{
+                        'type': 'TextQuoteSelector',
+                        'exact': 'that ingenious hero'
+                      }, {
+                        'type': 'TextPositionSelector',
+                        'start': 38,
+                        'end': 57
+                      }]
+                    }
+                  };
+
+
                 (function() {
                     var r = Recogito.init({
-                    content: document.getElementById('content') // ID or DOM element
+                      content: document.getElementById('content') // ID or DOM element
                     });
-            
-                    // Add an event handler  
-                    r.on('createAnnotation', function(annotation) { /** **/ });
-                })();
+                    
+                    fetchAnnotations()
+                    r.loadAnnotations('http://localhost:3000/annotations').then(function(annotations) {
+                        annotations.forEach(function(annotation) {
+                          r.addAnnotation(Object.assign({}, annotation, {
+                            'body': [{
+                              'type': 'TextualBody',
+                              'value': annotation.content
+                            }],
+                            'target': {
+                              'selector': [{
+                                'type': 'TextQuoteSelector',
+                                'exact': 'rked by vast expansion of Roman territory. During the 5th century BCE, Rome gained regional dominance in Latium. With the Punic Wars from 264 to 146 BCE, ancient Rome gained dominance over the Western Mediterranean, displacing Carthage as the dominant regional power.The Roman Empire followed the Republic, which waned with the rise of Julius Caesar, and by all measures concluded after a period of civil war and the victory'
+                              }, {
+                                'type': 'TextPositionSelector',
+                                'start': 681,
+                                'end': 1105
+                              }]
+                            }
+                          }));
+                        });
+                      });
+                      
+
+                   
+                  
+                    // Add an event handler
+                    r.on('createAnnotation', function(annotation) {
+                      // Convert the annotation to JSON-LD format
+                      const jsonld = {
+                        "@context": "http://www.w3.org/ns/anno.jsonld",
+                        "@type": "Annotation",
+                        "content": annotation.body[0].value,
+                        "tags": annotation.tags,
+                        "created": new Date().toISOString(),
+                        "modified": new Date().toISOString(),
+                        "creator": {
+                          "@type": "Person",
+                          "name": "{{user.username}}",
+                          "email": "john@example.com"
+                        },
+                        "motivation": "commenting",
+                        "target": {
+                            "uri": window.location.href,
+                            "selector": [{
+                                "TextQuoteSelector": {
+                                    "@type": "TextQuoteSelector",
+                                    "exact": annotation.target.selector[0].exact,
+                                  },
+                                "TextPositionSelector": {
+                                  "@type": "TextPositionSelector",
+                                  "start": annotation.target.selector[1].start,
+                                  "end": annotation.target.selector[1].end
+                                },
+                              }]
+
+                        }
+                            
+                      };
+
+                     
+
+                      var url = 'http://localhost:3000/annotations'
+
+                      var storestring = JSON.stringify(annotation);
+                      console.log(storestring);
+                      // Send the annotation to the server
+                      fetch('http://localhost:3000/annotations', {
+                        method: 'POST',
+                        headers: {
+                          'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(jsonld)
+                      });
+                    });
+                  })();
+                  
+                  function fetchAnnotations() {
+                    // Send an HTTP GET request to the /annotations endpoint
+                    fetch('http://localhost:3000/annotations')
+                      .then(response => response.json())
+                      .then(annotations => {
+                        // Process the annotations here
+                        console.log(annotations);
+                      });
+                  }
+                
+                  
             </script>
 
             <!--Course Block: Course2 Template-->
