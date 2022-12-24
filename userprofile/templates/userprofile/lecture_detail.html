@@ -20,133 +20,113 @@
             
                 <div class="text-end mt-3">
                     {% if user in course.collaborative_members.all or user == course.user %}
-                            <a href="{% url 'lecture_new' pk=course.pk %}" type="button" class="btn btn-primary">Create Content</a>
+                            <a href="{% url 'lecture_new' pk=course.pk %}" type="button" class="btn btn-primary">Create Resource</a>
                     {% endif %}
                 </div>
             </div>
 
-            <!--Lecture Content-->
+            <!--Lecture Resource-->
             <div class="col-sm-6" id="content">
                 {{lecture.content|safe}}
             </div>
 
             <script type="text/javascript">
-                
-
-                var myAnnotation = {
-                    '@context': 'http://www.w3.org/ns/anno.jsonld',
-                    'id': 'https://www.example.com/recogito-js-example/foo',
-                    'type': 'Annotation',
-                    'body': [{
-                      'type': 'TextualBody',
-                      'value': 'This annotation was added via JS.'
-                    }],
-                    'target': {
-                      'selector': [{
-                        'type': 'TextQuoteSelector',
-                        'exact': 'that ingenious hero'
-                      }, {
-                        'type': 'TextPositionSelector',
-                        'start': 38,
-                        'end': 57
-                      }]
-                    }
-                  };
-
-
                 (function() {
                     var r = Recogito.init({
                       content: document.getElementById('content') // ID or DOM element
                     });
                     
-                    fetchAnnotations()
-                    r.loadAnnotations('http://localhost:3000/annotations').then(function(annotations) {
-                        annotations.forEach(function(annotation) {
-                          r.addAnnotation(Object.assign({}, annotation, {
-                            'body': [{
-                              'type': 'TextualBody',
-                              'value': annotation.content
-                            }],
-                            'target': {
-                              'selector': [{
-                                'type': 'TextQuoteSelector',
-                                'exact': 'rked by vast expansion of Roman territory. During the 5th century BCE, Rome gained regional dominance in Latium. With the Punic Wars from 264 to 146 BCE, ancient Rome gained dominance over the Western Mediterranean, displacing Carthage as the dominant regional power.The Roman Empire followed the Republic, which waned with the rise of Julius Caesar, and by all measures concluded after a period of civil war and the victory'
-                              }, {
-                                'type': 'TextPositionSelector',
-                                'start': 681,
-                                'end': 1105
-                              }]
-                            }
-                          }));
-                        });
+                    r.loadAnnotations('http://localhost:3000/annotationsquery?uri='+ window.location.href ).then(function(annotations) {
+                        console.log(annotations);
                       });
                       
-
-                   
-                  
                     // Add an event handler
                     r.on('createAnnotation', function(annotation) {
-                      // Convert the annotation to JSON-LD format
-                      const jsonld = {
-                        "@context": "http://www.w3.org/ns/anno.jsonld",
-                        "@type": "Annotation",
-                        "content": annotation.body[0].value,
-                        "tags": annotation.tags,
-                        "created": new Date().toISOString(),
-                        "modified": new Date().toISOString(),
-                        "creator": {
-                          "@type": "Person",
-                          "name": "{{user.username}}",
-                          "email": "john@example.com"
-                        },
-                        "motivation": "commenting",
-                        "target": {
-                            "uri": window.location.href,
-                            "selector": [{
-                                "TextQuoteSelector": {
-                                    "@type": "TextQuoteSelector",
-                                    "exact": annotation.target.selector[0].exact,
-                                  },
-                                "TextPositionSelector": {
-                                  "@type": "TextPositionSelector",
-                                  "start": annotation.target.selector[1].start,
-                                  "end": annotation.target.selector[1].end
-                                },
-                              }]
+                      
+                        annotation.uri = window.location.href;
+                        
+                        
+                        for (let i = 0; i < annotation.body.length; i++) {
+                            annotation.body[i].created = new Date().toISOString();
+                            annotation.body[i].creator = {
+                                id: "{{user.id}}",
+                                name: "{{user.username}}",
+                                type: "Person"
+                            };
+                          }
 
-                        }
-                            
-                      };
+                        console.log(annotation);
 
-                     
-
-                      var url = 'http://localhost:3000/annotations'
-
-                      var storestring = JSON.stringify(annotation);
-                      console.log(storestring);
                       // Send the annotation to the server
                       fetch('http://localhost:3000/annotations', {
                         method: 'POST',
                         headers: {
                           'Content-Type': 'application/json'
                         },
-                        body: JSON.stringify(jsonld)
+                        body: JSON.stringify(annotation)
                       });
+
                     });
-                  })();
-                  
-                  function fetchAnnotations() {
-                    // Send an HTTP GET request to the /annotations endpoint
-                    fetch('http://localhost:3000/annotations')
-                      .then(response => response.json())
-                      .then(annotations => {
-                        // Process the annotations here
-                        console.log(annotations);
+
+                    r.on('selectAnnotation', function(a, element) {
+                        console.log('selected', a);
+                        console.log('selected', element);
                       });
-                  }
+                    
+                    
+                    r.on('deleteAnnotation', function(a) {
+                        console.log('deleted', a);
+                        fetch('http://localhost:3000/annotations/' + a._id, {
+                            method: 'DELETE',
+                            headers: {
+                                'Content-Type': 'application/json'
+                              }
+                          });
+                      });
+                      
+
+                    r.on('updateAnnotation', function(annotation, previous) {
+
+                        fetch('http://localhost:3000/annotations/' + previous._id, {
+                            method: 'DELETE',
+                            headers: {
+                                'Content-Type': 'application/json'
+                              }
+                          });
+                        
+                        annotation.uri = window.location.href;
+                        for (let i = 0; i < annotation.body.length; i++) {
+                            if (annotation.body[i].created == null)
+                            {
+                                annotation.body[i].created = new Date().toISOString();
+                                annotation.body[i].creator = {
+                                    id: "{{user.id}}",
+                                    name: "{{user.username}}",
+                                    type: "Person"
+                                };
+                            }
+                          }
+                        
+                        fetch('http://localhost:3000/annotations', {
+                            method: 'POST',
+                            headers: {
+                              'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify(annotation)
+                          });
+
+                        console.log('updated', previous, 'with', annotation);
+
+                      });
+
+                  })();  
+                  
                 
                   
             </script>
+              
+            </body>
+            </html>
 
             <!--Course Block: Course2 Template-->
             <div class="col-sm-3">
