@@ -23,6 +23,9 @@
         <a href="{% url 'submit_assignment' title=case.title %}" class="btn btn-outline-success">Upload Your Work</a>
       </div>
       {% else %}
+      <div>
+        <a href="{% url 'case_grade' title=case.title %}" class="btn btn-outline-primary">Ratings</a>
+      </div>
       {% endif %}
     {% endif %}
     <br><br>
