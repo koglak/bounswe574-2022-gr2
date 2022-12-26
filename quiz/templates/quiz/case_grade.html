@@ -1,13 +1,13 @@
 {% extends 'blog/base.html' %}
 
 {% block title %}
-    Create New Case Study
+    Ratings
 {% endblock %}
 
 {% block content %}
 
   <!--Page Navigation-->
-  <h5> <a href="{% url 'course_detail' title=course.title %}"> Space: {{course.title}} </a> > Case Page </h5>
+  <h5> Space: <a href="{% url 'course_detail' title=course.title %}"> {{course.title}} </a> > Case Page: </h5>  
   <br>
 
   <table class="table table-striped">
@@ -17,7 +17,6 @@
         <th scope="col">User Name</th>
         <th scope="col">Submission Date</th>
         <th scope="col">File</th>
-        <th scope="col">Rated By Owner</th>
         <th scope="col">Rated By Users</th>
 
       </tr>
@@ -40,10 +39,9 @@
             
             <td>{{ list_form.instance.shared_date }}</td>
             
-            <td><a href="{{ MEDIA_URL }}{{list_form.instance.upload.url}}">Download</a></td>
+            <td><a href="{{ MEDIA_URL }}{{list_form.instance.upload.url}}">Preview</a></td>
             
-            <td>{{list_form.instance.score}}/100</td>
-
+            
             <td>
               <!--All users can rate case studies-->
               <form class="form-inline my-2 my-lg-0" action="{% url 'case_rate' pk=list_form.instance.pk %}" method="POST">
@@ -82,5 +80,4 @@
     </tbody>
   </table>
 {% endblock %}
-
 

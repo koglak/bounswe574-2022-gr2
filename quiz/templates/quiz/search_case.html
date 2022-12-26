@@ -1,0 +1,50 @@
+{% extends 'blog/base.html' %}
+{% load bootstrap_icons %}
+
+{% block title %}
+    Case Study Detail
+{% endblock %}
+
+{% block content %}
+
+<div class="container-fluid" style="margin-top: 10px;">
+    <div class="row">
+        <div class="col-sm-3">
+            <div>
+                <div class = col-sm-12>
+                </div> 
+            </div>
+        </div>
+
+        <div class="col-sm-6">
+            <div class="col-sm-12">
+                 <!-- search by keyword -->
+                 {% if user in course.enrolled_users.all %}
+                 <div class="col-sm-16">
+                    <form class="form-inline" method=POST action="{% url 'search_case' %}" style="margin:15px; padding-top:20px;">
+                        {% csrf_token %}
+                        <input class="form-control mr-sm-2" style="width:650px; float:left; margin-right:10px" type="search"  placeholder="Search any case study" aria-label="Search" name="searched"> 
+                        <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+                    </form>      
+                </div>
+                {% endif %}
+            </div>  
+            <h2>Search Results</h2>
+            <hr>
+            {% if searched %}
+                You searched for "{{searched}}"
+        
+                <ul class="list-group">
+                <br>
+                {% for result in results %}
+                    <li class="list-group-item"><a href="{% url 'case_detail' title=result.title %}" class="post-title">{{result}}</a></li>
+                {% endfor %}
+                </ul>
+            {% else %}
+                Hey! You forgot to search!
+            {% endif %}
+        </div>
+    </div> 
+</div>
+
+{% endblock %}

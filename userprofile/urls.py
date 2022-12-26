@@ -24,6 +24,9 @@ urlpatterns = [
     path('<str:title>/past_events',views.past_event,name='past_event'),
     path('<str:title>/quiz_page',views.quiz_page,name='quiz_page'),
     path('<str:title>/case_page',views.case_page,name='case_page'),
+    path('<str:title>/case_list',views.case_list,name='case_list'),
+    path('<str:title>/case_inprogress_list',views.case_inprogress_list,name='case_inprogress_list'),
+    path('<str:title>/case_closed_list',views.case_closed_list,name='case_closed_list'),
     path('<str:title>/event_new/', views.event_new,name='event_new'),
     path('event_edit/<int:pk>', views.event_edit,name='event_edit'),
     path('event_enroll/<int:pk>', views.event_enroll,name='event_enroll'),
@@ -42,5 +45,6 @@ urlpatterns = [
     path('<str:title>/forum_page/<int:pk>/delete_question/', views.delete_question, name='space_delete_question'),
     path('<str:title>/forum_page/search_question/', views.search_question, name='space_search_question'),
     path('<str:title>/space_metrics', views.metric_pages, name='metric_pages'),
+    path('lecture/save_annotation/', views.save_annotation, name='save_annotation'),
 ]
 

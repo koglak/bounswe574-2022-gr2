@@ -51,6 +51,7 @@ INSTALLED_APPS = [
     'activity',
     'tinymce',
     'corsheaders',
+
 ]
 
 MIDDLEWARE = [
