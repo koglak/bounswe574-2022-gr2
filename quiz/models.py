@@ -76,7 +76,7 @@ class Case(models.Model):
 
 class Comment(models.Model):
     author = models.ForeignKey(User, on_delete=models.CASCADE)
-    body = models.TextField(blank = True, null = True)
+    body = models.TextField()
     case = models.ForeignKey(Case, on_delete=models.CASCADE, related_name = "comments")
     #created_date = models.DateTimeField(default=timezone.now)
     published_date = models.DateTimeField(default=timezone.now)

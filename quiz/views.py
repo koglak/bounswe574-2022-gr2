@@ -173,7 +173,6 @@ def case_list(response, title):
 @login_required(login_url="/login")
 def case_detail(response, title):
     case = Case.objects.get(title=title)
-    ListFormSet = modelformset_factory(CaseResult, fields=('score',), extra=0)
     if response.method == "POST":
         form = CommentForm(response.POST)
         if form.is_valid():
@@ -183,9 +182,7 @@ def case_detail(response, title):
             comment.author = response.user
             comment.save()
             form = CommentForm()
-        else:
-            list_formset.save()
-            return redirect('case_detail', title=case.title)  
+
     else:
         form = CommentForm()
     context = {
