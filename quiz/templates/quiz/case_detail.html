@@ -15,7 +15,7 @@
     <p class="post-title">Title of the case study: <light style = "color: brown;">"{{case.title}}"</light></p>
     <p>has opened by {{case.user}}</light></p>
     {% if user == case.user %}
-      {% if case.get_remaining_days >= 0%}
+      {% if case.get_remaining_days > -10 %}
       <div>
         <a href="{% url 'case_edit' title=case.title %}" class="btn btn-warning">Edit</a>
         <a href="{% url 'case_delete' title=case.title %}" class="btn btn-danger">Delete</a>

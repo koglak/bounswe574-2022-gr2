@@ -220,7 +220,6 @@ def case_grade(request,title):
     ListFormSet = modelformset_factory(CaseResult, fields=('score',), extra=0)
     if request.method == 'POST':
         list_formset = ListFormSet(request.POST)
-        form = CaseResultForm(request.POST, request.FILES) 
         if list_formset.is_valid():
             list_formset.save()
             return redirect('case_grade', title=case.title)  
@@ -241,7 +240,7 @@ def submit_assignment(request, title):
             result.shared_date = timezone.now()
             result.case=case
             result.save()
-            return redirect('case_grade', title=course.title)  
+            return redirect('course_detail', title=course.title)  
     else:  
         form= CaseResultForm()
         return render(request, 'quiz/submit_assignment.html', {'case':case, 'form': form, 'course': course})
