@@ -55,12 +55,11 @@
             {% if course.case_list.all != null %}
                 {% if user in course.enrolled_users.all %}
                     {% for case in course.case_list.all %}
-                        {% if 5  > case.get_remaining_days %} 
+                        {% if  case.get_remaining_days >= 0%} 
                             <li class="list-group-item list-group-item-action">
                                 <a href="{% url 'case_detail' title=case.title %}" class="post-text" style="text-decoration:none"> Case: {{case.title}}</a>
                                 <!-- <p>Description: {{ case.description | safe }}</p> -->
                                 {% if case.publish_date_check %}
-                                {{case.get_remaining_days}}
                                 <p style = "color:green">Published date: {{case.published_date}}</p>
                                 {% elif 0 > case.get_remaining_days  %} 
                                 <p style = "box-lines:red">Case is closed</p> Due date was "{{case.due_date}}"
