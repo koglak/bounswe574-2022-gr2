@@ -1,14 +1,14 @@
 {% load bootstrap_icons %}
 
 <div class="btn-group" role="group">
-    <a href="{% url 'course_detail' title=course.title %}" class="btn btn-dark">Space Resources</a>
+    <a href="{% url 'course_detail' title=course.title %}" type="button" class="btn btn-dark">Space Resources</a>
     <a href="{% url 'quiz_page' title=course.title %}" type="button" class="btn btn-dark">Space Quizzes</a>
     <a href="{% url 'case_page' title=course.title %}" type="button" class="btn btn-dark">Case Studies</a>
 </div>
 <div class="btn-group" role="group">
-    <a href="{% url 'event_list' title=course.title %}" type="button" class="btn btn-dark">Space Events</a>
+    <a href="{% url 'event_list' title=course.title %}" type="button" class="btn btn-dark">Space Events &nbsp &nbsp</a>
     <a href="{% url 'forum_page' title=course.title %}" type="button" class="btn btn-dark">Space Forum</a>
-    <a href="{% url 'metric_pages' title=course.title %}" type="button" class="btn btn-dark">Space Metrics</a>
+    <a href="{% url 'metric_pages' title=course.title %}" type="button" class="btn btn-dark">Space Metrics &nbsp</a>
 </div>
 
 <!-- Create Lecture & Quiz & Case Study Button-->
