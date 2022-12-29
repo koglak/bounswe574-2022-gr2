@@ -12,7 +12,7 @@ from .forms import PostForm, AnswerForm
 from django.shortcuts import redirect
 from django.urls import reverse,reverse_lazy
 from django.contrib.auth.decorators import login_required
-
+from django.core.paginator import Paginator
 
 
 # Create your views here.
@@ -102,6 +102,11 @@ def home(response):
     common_tags = Course.tags.most_common()[:5]
     num_of_courses = len(Course.objects.filter(timestamp=timezone.now() - timedelta(days=7)))
     num_of_users = len(Profile.objects.filter(timestamp=timezone.now() - timedelta(days=7)))
+
+    paginator = Paginator(courses,4) 
+    page = response.GET.get('page')
+    courses= paginator.get_page(page)
+
 
     return render(response, "blog/home.html", {'courses': courses, 'common_tags': common_tags,'num_of_courses':num_of_courses, 'num_of_users':num_of_users, 'quizes':quizes, 'cases':cases})
 

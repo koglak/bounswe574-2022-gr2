@@ -29,6 +29,40 @@
                 {% include 'includes/course2.html' with course=course select="home" %}
             {% endfor %}
         </div>
+
+        <nav aria-label="Page navigation example">
+            <ul class="pagination justify-content-end">
+                {% if courses.has_previous %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page=1" tabindex="-1">&laquo; First</a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ courses.previous_page_number }}" tabindex="-1">Previous</a>
+                    </li>
+                {% else %}
+                    <li class="page-item disabled">
+                        <a class="page-link" href="#" tabindex="-1">Previous</a>
+                    </li>
+                {% endif %}
+            
+            <li class="page-item"><a class="page-link text-dark" >Page {{ courses.number }} of {{ courses.paginator.num_pages }}</a></li>
+    
+
+            {% if courses.has_next %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ courses.next_page_number }}">Next</a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ courses.paginator.num_pages }}">Last &raquo;</a>
+                </li>
+            {% else %}
+                <li class="page-item disabled">
+                    <a class="page-link" href="#" tabindex="-1">Last</a>
+                </li>
+            {% endif %}
+            </ul>
+        </nav>
+
         <div class="row"> 
         <div class="col-sm-4">
             <h4 class="block">New Quizes</h4>
