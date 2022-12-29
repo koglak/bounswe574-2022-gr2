@@ -90,9 +90,9 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'postgres',
-        'USER': 'psqladmin',
-        'PASSWORD': 'Swe574gr2',
-        'HOST': 'swe574-f22-gr2-psql.postgres.database.azure.com',
+        'USER': 'postgres',
+        'PASSWORD': 'postgres',
+        'HOST': 'db',
         'PORT': 5432,
     }
 }
