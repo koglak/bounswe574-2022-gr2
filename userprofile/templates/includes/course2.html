@@ -24,13 +24,14 @@
 
             <!--Author name & Follow Link-->
             <div class="col-sm-9" style="display: flex;justify-content: center;align-items: center; ">
-                {% if user == course.user %}
-                    <a href="{% url 'user_profile' %}" class="post-author" style="font-family: 'Poppins';font-size:18px; font-weight: 600px; margin-right:5px">{{course.user}}</a>
-                {% else %}
-                    <a href="{% url 'other_user_profile' name=course.user %}" class="post-author" style="font-family: 'Poppins';font-size:18px; font-weight: 600px; margin-right:5px">{{course.user}}</a>
-                {% endif %}
                 {% if user.is_authenticated %}
-                    <a href="#" class="link-success" style="font-family: 'Poppins';font-style: normal;font-weight: 800;font-size: 16px;">Follow</a>
+                    {% if user == course.user %}
+                        <a href="{% url 'user_profile' %}" class="post-author" style="font-family: 'Poppins';font-size:18px; font-weight: 600px; margin-right:5px">{{course.user}}</a>
+                    {% else %}
+                        <a href="{% url 'other_user_profile' name=course.user %}" class="post-author" style="font-family: 'Poppins';font-size:18px; font-weight: 600px; margin-right:5px">{{course.user}}</a>
+                    {% endif %}
+                    
+                        <a href="#" class="link-success" style="font-family: 'Poppins';font-style: normal;font-weight: 800;font-size: 16px;">Follow</a>
                 {% endif %}
             </div>            
         </div>

@@ -9,6 +9,7 @@ from django.core.validators import MaxValueValidator, MinValueValidator
 from django.utils import timezone
 
 
+
 OPTION_CHOICES = (
     ('option1','option1'),
     ('option2', 'option2'),
@@ -35,6 +36,7 @@ class QuestionList(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     course=models.ForeignKey(Course, default=None, on_delete=models.CASCADE, related_name='question_list')
     question_list = models.ManyToManyField(Question, blank=True)
+    timestamp = models.DateTimeField(auto_now_add=True,blank=True, null=True)
 
 
     def __str__(self):
@@ -60,6 +62,7 @@ class Case(models.Model):
     description=models.TextField()
     published_date = models.DateTimeField(default=timezone.now)
     due_date = models.DateTimeField(blank = True, null = True)
+    
 
     def __str__(self):
         return self.title

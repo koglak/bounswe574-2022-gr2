@@ -29,5 +29,59 @@
                 {% include 'includes/course2.html' with course=course select="home" %}
             {% endfor %}
         </div>
+        <div class="row"> 
+        <div class="col-sm-4">
+            <h4 class="block">New Quizes</h4>
+            <table class="table table-striped" >
+                <thead>
+                <tr>
+                    <th scope="col" >Quiz</th>
+                    <th scope="col" >Created On</th>
+                    <th scope="col" >Learning Space</th>
+                </tr>
+                </thead>
+                
+                <tbody>
+                      {% for quiz in quizes %}
+                        <tr>
+                          <td scope="row"> <a href="{% url 'quiz_detail' title=quiz.title %}"> {{ quiz.title }} </a></td>
+                          <td scope="row"> {{ quiz.timestamp }} </td>
+                          <td scope="row"><a href="{% url 'course_detail' title=quiz.course.title %}">{{quiz.course.title}}</a></td>
+                        </tr>
+                      {% endfor %}
+                  </tbody>
+
+            </table>
+        </div>
+        <div class="col-sm-4" >
+            <h4 class="block">This Week</h4>
+            <h6 class="block"> {{ num_of_users }} Users Joined</h6>
+            <h6 class="block"> {{ num_of_courses }} Learning Space Created</h6>
+
+        </div>
+        <div class="col-sm-4">
+            <h4 class="block">New Case Studies</h4>
+            <table class="table table-striped" >
+              <thead>
+              <tr>
+                  <th scope="col" >Case Study</th>
+                  <th scope="col" >Created On</th>
+                  <th scope="col" >Learning Space</th>
+              </tr>
+              </thead>
+              
+              <tbody>
+                {% for case in cases %}
+                <tr>
+                  <td scope="row"> <a href="{% url 'event_list' title=case.title %}"> {{ case.title }} </a></td>
+                  <td scope="row"> {{ case.published_date }} </td>
+                  <td scope="row"><a href="{% url 'event_list' title=case.course.title %}">{{case.course.title}}</a></td>
+                </tr>
+              {% endfor %}
+                </tbody>
+
+          </table>
+        </div>
+    </div>
     </div>
 {% endblock%}
