@@ -138,6 +138,39 @@ Forum
                 </div>
             </div>
             {% endfor %}
+
+            <nav aria-label="Page navigation example">
+                <ul class="pagination justify-content-end">
+                    {% if questions.has_previous %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page=1" tabindex="-1">&laquo; First</a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ questions.previous_page_number }}" tabindex="-1">Previous</a>
+                        </li>
+                    {% else %}
+                        <li class="page-item disabled">
+                            <a class="page-link" href="#" tabindex="-1">Previous</a>
+                        </li>
+                    {% endif %}
+                
+                <li class="page-item"><a class="page-link text-dark" >Page {{ questions.number }} of {{ questions.paginator.num_pages }}</a></li>
+        
+
+                {% if questions.has_next %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ questions.next_page_number }}">Next</a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ questions.paginator.num_pages }}">Last &raquo;</a>
+                    </li>
+                {% else %}
+                    <li class="page-item disabled">
+                        <a class="page-link" href="#" tabindex="-1">Last</a>
+                    </li>
+                {% endif %}
+                </ul>
+            </nav>
         </div>
     </div>
 </div>

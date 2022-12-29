@@ -464,7 +464,10 @@ def event_detail(response, pk):
 def forum_page(response, title):
     course=get_object_or_404(Course, title=title)
     questions= Question.objects.filter(course=course).order_by('-published_date')
-    return render(response, 'userprofile/forum_page.html', {'course': course, 'questions': questions})
+    paginator = Paginator(questions,3) 
+    page = response.GET.get('page')
+    question_list= paginator.get_page(page)
+    return render(response, 'userprofile/forum_page.html', {'course': course, 'questions': question_list})
 
 @login_required(login_url="/login")
 def question_new(request,title):
