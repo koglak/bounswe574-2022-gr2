@@ -1,9 +1,10 @@
-import re
+from datetime import timedelta
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 
-from quiz.models import QuestionList
-from .models import Answer, Post
+from quiz.models import Case, QuestionList
+import userprofile
+from .models import Answer, Post, Profile
 from userprofile.models import Course
 from django.utils import timezone
 from django.shortcuts import render, get_object_or_404
@@ -84,11 +85,29 @@ def question_tag_detail(response,tag):
     posts = Post.objects.filter(tags__name__in=[tag])
     return render(response, "blog/question_tag_details.html", {'posts': posts, 'tag': tag})
 
-
 def home(response):
     courses = Course.objects.all()
-    common_tags = Course.tags.most_common()[:4]
-    return render(response, "blog/home.html", {'courses': courses, 'common_tags': common_tags})
+    enrolled_courses = Course.objects.all()
+    ids = (course.id for course in enrolled_courses)
+    quizes = QuestionList.objects.filter(course__in=ids)    
+    cases = Case.objects.filter(course__in=ids)
+
+    if response.user.is_authenticated:
+        courses = Course.objects.filter(enrolled_users=response.user)[:5]
+        enrolled_courses = Course.objects.filter(enrolled_users=response.user)
+        ids = (course.id for course in enrolled_courses)
+        quizes = QuestionList.objects.filter(course__in=ids)    
+        cases = Case.objects.filter(course__in=ids)
+
+        
+      
+    common_tags = Course.tags.most_common()[:5]
+    num_of_courses = len(Course.objects.filter(timestamp=timezone.now() - timedelta(days=7)))
+    num_of_users = len(Profile.objects.filter(timestamp=timezone.now() - timedelta(days=7)))
+
+    quizes = QuestionList.objects.filter(course__in=ids)    
+    cases = Case.objects.filter(course__in=ids)
+    return render(response, "blog/home.html", {'courses': courses, 'common_tags': common_tags,'num_of_courses':num_of_courses, 'num_of_users':num_of_users, 'quizes':quizes, 'cases':cases})
 
 
 @login_required(login_url="/login")

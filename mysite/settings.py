@@ -12,7 +12,7 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 
 import os
 from pathlib import Path
-from socketserver import ThreadingUnixStreamServer
+#from socketserver import ThreadingUnixStreamServer
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -28,8 +28,8 @@ SECRET_KEY = 'django-insecure-3e1wfu=fx^(0-vu$(+b@a0^4qbxi%(=phw$4=em8tn5das#6&z
 DEBUG = True
 
 ALLOWED_HOSTS = ['*']
-
-
+# 
+CSRF_TRUSTED_ORIGINS=['https://swe574-f22-gr2.azurewebsites.net']
 
 # Application definition
 

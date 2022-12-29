@@ -16,9 +16,13 @@ class Profile(models.Model):
     bio = tinymce_models.HTMLField()
     img = models.ImageField(upload_to='images')
     followers = models.ManyToManyField(User, related_name='followers', blank=True)
+    timestamp = models.DateTimeField(auto_now_add=True,blank=True, null=True)
 
     def __str__(self):
         return self.bio
+
+    def last_7_days_users(self):
+        return Profile.objects.filter(date_joined__gte=timezone.now()-datetime.timedelta(days=7)).count()
 
 class Course(models.Model):
    
@@ -31,6 +35,7 @@ class Course(models.Model):
     collaborative_members = models.ManyToManyField(User, blank=True, related_name='collaborative_members')
     enrolled_users = models.ManyToManyField(User, blank=True, related_name='enrolled_users')
     tags = TaggableManager()
+    timestamp = models.DateTimeField(auto_now_add=True,blank=True, null=True)
 
     def averagereview(self):
         rating = Rating.objects.filter(course=self).aggregate(avarage=Avg('rating'))
@@ -45,6 +50,14 @@ class Course(models.Model):
 
     def __str__(self):
         return self.title
+
+    #write a model which returns the number of Courses created in the last 7 days
+    def last_7_days(self):
+        return Course.objects.filter(timestamp__gte=timezone.now()-datetime.timedelta(days=7)).count()
+
+    #write a model which returns the number of Users created in the last 7 days
+    
+
 
 class Rating(models.Model):
 
