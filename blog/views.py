@@ -90,23 +90,19 @@ def home(response):
     enrolled_courses = Course.objects.all()
     ids = (course.id for course in enrolled_courses)
     quizes = QuestionList.objects.filter(course__in=ids)    
-    cases = Case.objects.filter(course__in=ids)
+    cases = Case.objects.all()[:5]
 
     if response.user.is_authenticated:
         courses = Course.objects.filter(enrolled_users=response.user)[:5]
         enrolled_courses = Course.objects.filter(enrolled_users=response.user)
         ids = (course.id for course in enrolled_courses)
         quizes = QuestionList.objects.filter(course__in=ids)    
-        cases = Case.objects.filter(course__in=ids)
+        cases = Case.objects.all()[:5]
 
-        
-      
     common_tags = Course.tags.most_common()[:5]
     num_of_courses = len(Course.objects.filter(timestamp=timezone.now() - timedelta(days=7)))
     num_of_users = len(Profile.objects.filter(timestamp=timezone.now() - timedelta(days=7)))
 
-    quizes = QuestionList.objects.filter(course__in=ids)    
-    cases = Case.objects.filter(course__in=ids)
     return render(response, "blog/home.html", {'courses': courses, 'common_tags': common_tags,'num_of_courses':num_of_courses, 'num_of_users':num_of_users, 'quizes':quizes, 'cases':cases})
 
 
