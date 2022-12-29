@@ -16,6 +16,7 @@ Forum
                 <a href="{% url 'case_page' title=course.title %}" type="button" class="btn btn-dark">Case Studies</a>
                 <a href="{% url 'event_list' title=course.title %}" type="button" class="btn btn-dark">Space Events</a>
                 <a href="{% url 'forum_page' title=course.title %}" type="button" class="btn btn-dark">Space Forum</a>
+                <a href="{% url 'metric_pages' title=course.title %}" type="button" class="btn btn-dark">Space Metrics</a>
             </div>
         </div>
 
@@ -44,7 +45,7 @@ Forum
 
             <!--Questions are listed-->
             {% for question in questions %}
-            <div class="container bootstrap snippets bootdey">
+            <div class="container-fluid bootstrap snippets bootdey">
                 <div class="row">
                     <div class="post-list">
                         <div class="row">
