@@ -22,13 +22,26 @@
                     <a href="{% url 'quiz_create' title=course.title %}" class="btn btn-primary">Create Quiz</a>
                 {% endif %}
               </div>
-
-
         </div>
 
         <!--Quiz Content-->
         <div class="col-sm-6">
-            Quizzes score etc. will be displayed here!!
+            {% for quiz in course.question_list.all %}
+                <div class="border border-black p-2 m-2">
+                    <a href="{% url 'quiz_detail' title=quiz.title %}" style="font-size: 20px; font-weight: bolder; text-decoration: none; color: black">{{quiz.title}}</a>
+                    {% for score in quiz.score_list.all %}
+                    <li> 
+                        {% if score.user == user %}
+                            <a href="{% url 'user_profile' %}" class="post-author" style="font-family: 'Poppins';font-size:18px; font-weight: 600px; margin-right:5px">{{score.user}}</a>
+                        {% else %}
+                            <a href="{% url 'other_user_profile' name=course.user %}" class="post-author" style="font-family:'Poppins';font-size:18px; font-weight: 600px; margin-right:5px">{{score.user}}</a>
+                        {% endif %}
+                        - {{score.score}}
+                    </li> 
+                    {% endfor %}
+                </div>
+
+            {% endfor %}
         </div>
 
         

@@ -47,7 +47,7 @@ class QuestionList(models.Model):
 class Score(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     score = models.CharField(max_length=200,null=True)
-    quiz =models.ForeignKey(QuestionList, default=None, on_delete=models.CASCADE)
+    quiz =models.ForeignKey(QuestionList, default=None, on_delete=models.CASCADE, related_name="score_list")
 
     @register.filter
     def get_all_scores(self,quiz):
