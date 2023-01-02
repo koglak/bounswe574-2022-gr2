@@ -31,13 +31,13 @@ Project Team
 
         cd C:\Users\<user>\<folder>\bounswe574-2022-gr2
    
-3.In order to work with annotation server, first cd into /Annotation-Server path
+3. In order to work with annotation server, first cd into /Annotation-Server path
 
-4.Run below commands in terminal
+4. Run below commands in terminal
         docker build -t my-app .
         docker-compose up
         
-5.Now cd back to the main repository 
+5. Now cd back to the main repository 
         
 6. Activate virtual environment:
       
