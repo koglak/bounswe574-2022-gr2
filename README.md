@@ -34,7 +34,9 @@ Project Team
 3. In order to work with annotation server, first cd into /Annotation-Server path
 
 4. Run below commands in terminal
+        
         docker build -t my-app .
+        
         docker-compose up
         
 5. Now cd back to the main repository 
