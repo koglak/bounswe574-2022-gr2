@@ -30,29 +30,39 @@ Project Team
 2. Go to new project file:
 
         cd C:\Users\<user>\<folder>\bounswe574-2022-gr2
+   
+3.In order to work with annotation server, first cd into /Annotation-Server path
+
+4.Run below commands in terminal
+        docker build -t my-app .
+        docker-compose up
         
-3. Activate virtual environment:
+5.Now cd back to the main repository 
+        
+6. Activate virtual environment:
       
         python3 -m venv myvenv
         
-4. Run requirments:
+7. Run requirments:
 
         pip install -r requirements.txt
         
-5. Create docker images:
+8. Create docker images:
 
         docker build . -t project_web
         
-6. Run docker container: 
+9. Run docker container: 
 
         docker-compose up
 
-7. Go to your local host: [http://localhost:8000/](http://127.0.0.1:8000/)
+10. Go to your local host: [http://localhost:8000/](http://127.0.0.1:8000/)
 
-8. Get your container id
+11. Get your container id
 
         docker container ls
         
-9. Create superuser for django admin
+12. Create superuser for django admin
 
         docker exec -it container_id python manage.py createsuperuser
+        
+13. In the end you should have two containers. App is running on Localhost:8000 server is running on Localhost:3000
